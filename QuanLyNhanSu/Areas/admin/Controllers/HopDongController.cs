@@ -195,7 +195,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
             Response.ClearContent();
             Response.Buffer = true;
 
-            Response.AddHeader("content-disposition", "attachment; filename=danh-sach.xls");
+            Response.AddHeader("content-disposition", "attachment; filename=danh-sach-hop-dong.xls");
             Response.ContentType = "application/ms-excel";
 
             Response.Charset = "";

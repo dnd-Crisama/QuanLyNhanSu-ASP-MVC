@@ -1,0 +1,233 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.SlideImage>
+
+@{
+    ViewBag.Title = "Cài Đặt";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cài đặt</h2>
+<style>
+    .form-horizontal .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-horizontal .control-label {
+        text-align: left;
+    }
+
+    .table {
+        margin-top: 20px;
+        width: 100%;
+        border: 1px solid #ddd;
+    }
+
+        .table img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .table img:hover {
+                opacity: 0.7;
+            }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    #caption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    .modal-content,
+    #caption {
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    @@keyframes zoom {
+        from {
+            transform: scale(0)
+        }
+
+        to {
+            transform: scale(1)
+        }
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    @@media only screen and (max-width: 1400px) {
+        .modal-content {
+            width: 100%;
+        }
+    }
+</style>
+
+<!-- Add new slide image section -->
+<h4>Add or Edit Slide Image</h4>
+@using (Html.BeginForm("Save", "CaiDat", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    <input type="hidden" name="id" value="0" />
+
+    <div class="form-group">
+        <label for="newTitle" class="control-label col-md-2">Image Title</label>
+        <div class="col-md-6">
+            <input type="text" name="title" id="newTitle" class="form-control" placeholder="Image Title" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="file" class="control-label col-md-2">Upload Image</label>
+        <div class="col-md-6">
+            <input type="file" name="file" class="form-control" required id="fileInput" />
+            <!-- Preview Image -->
+            <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 300px; margin-top: 10px;" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-6">
+            <button type="submit" class="btn btn-success">Add New Image</button>
+        </div>
+    </div>
+}
+
+<hr />
+
+<!-- Display list of existing slide images -->
+<h4>Existing Slide Images</h4>
+
+<div class="table-responsive">
+    <table id="table-taikhoan" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var image in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="~/Content/images/@image.src" alt="@image.title" class="clickable-image" data-title="@image.title" />
+                    </td>
+                    <td>@image.title</td>
+                    <td>
+                        <!-- Edit form inside the table -->
+                        @using (Html.BeginForm("Save", "CaiDat", FormMethod.Post, new { @class = "form-inline", enctype = "multipart/form-data" }))
+                        {
+                            <input type="hidden" name="id" value="@image.id" />
+                            <input type="text" name="title" value="@image.title" class="form-control" style="width:200px;" required />
+                            <input type="file" name="file" class="form-control" style="width:200px;" />
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        }
+
+                        <!-- Delete form -->
+                        @using (Html.BeginForm("Delete", "CaiDat", FormMethod.Post))
+                        {
+                            <input type="hidden" name="id" value="@image.id" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa slide này?');">Delete</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="myModal" class="modal">
+
+    <span class="close">&times;</span>
+
+    <img class="modal-content" id="img01">
+
+    <div id="caption"></div>
+</div>
+
+<script>
+    // Preview Image
+    document.getElementById('fileInput').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            document.getElementById('imagePreview').src = event.target.result;
+            document.getElementById('imagePreview').style.display = 'block';
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+    });
+
+    var modal = document.getElementById("myModal");
+
+    var clickableImages = document.querySelectorAll(".clickable-image");
+
+    clickableImages.forEach(function (img) {
+        img.onclick = function () {
+            modal.style.display = "block";
+            var modalImg = document.getElementById("img01");
+            var captionText = document.getElementById("caption");
+            modalImg.src = this.src;
+            captionText.innerHTML = this.getAttribute('data-title');
+        }
+    });
+
+    var span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>

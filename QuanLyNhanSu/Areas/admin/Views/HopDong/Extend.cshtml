@@ -1,0 +1,35 @@
+﻿@model QuanLyNhanSu.Models.HopDong
+
+@{
+    ViewBag.Title = "Extend";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Gia Hạn Hợp Đồng</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaHopDong, "Mã Hợp Đồng", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p>@Model.MaHopDong</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Ngày Kết Thúc Mới", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="date" name="newEndDate" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Gia Hạn" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+}

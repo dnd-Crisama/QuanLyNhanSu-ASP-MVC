@@ -1,0 +1,580 @@
+﻿body {
+    position: relative;
+    background: #222;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+
+:root {
+}
+.anime-grill-center, .anime-grill-offcenter {
+    position: absolute;
+    top: 25px; /* Hoặc giá trị chính xác mà bạn muốn căn chỉnh */
+    left: 0;
+}
+.anime-grill-center {
+    width: 750px;
+    margin-top: 25px;
+    height: 210px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    /*background: url(https://i.ibb.co/KhPyknY/mona-genshin-colorfill.png);*/
+    background-size: cover;
+    position: relative;
+    z-index: 1;
+}
+
+.anime-grill-offcenter {
+    position: absolute;
+    top: 80px; 
+    left: 40%; 
+    transform: translateX(-50%); 
+    width: 750px;
+    height: 750px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    /*background: url(https://i.ibb.co/ckwG4CX/mona-genshin-colorfill-white.png);*/
+    background-size: cover;
+    z-index: 0;
+    filter: brightness(25%);
+}
+
+.text-lines {
+    z-index: 3;
+    position: absolute;
+    top: 80px;
+    font: 900 100px/80px montserrat;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px #eee;
+}
+
+    .text-lines .line-2 {
+        color: #eee;
+        -webkit-text-stroke: 0px #eee;
+    }
+.line-1 {
+    margin-bottom: 20px;
+}
+.line-2 {
+    margin-bottom: 20px;
+}
+.line-3 {
+    margin-bottom: 20px;
+}
+.site-body {
+    width: 1150px;
+    padding: 50px;
+    font: 600 12px montserrat;
+    color: #777;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.15);
+    z-index: 2;
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("../images/slide4.jpg");
+    background-size: cover;
+}
+
+    .site-body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+        filter: blur(500px);
+        z-index: -1; 
+    }
+
+.login {
+    width: 500px;
+    height: 320px;
+    border: 1px solid #CCC;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("../images/slide4.jpg");
+    background-size: cover;
+    background-position: center;
+    margin: 30px auto;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+}
+
+    .login .form {
+        width: 100%;
+        height: 100%;
+        padding: 15px 25px;
+    }
+
+        .login .form h2 {
+            color: #FFF;
+            text-align: center;
+            font-weight: normal;
+            font-size: 18px;
+            margin-top: 60px;
+            margin-bottom: 80px;
+        }
+
+        .login .form input {
+            width: 70%;
+            height: 40px;
+            margin-top: 20px;
+            background: rgba(255,255,255,.5);
+            border: 1px solid rgba(255,255,255,.1);
+            padding: 0 15px;
+            color: #FFF;
+            border-radius: 5px;
+            font-size: 14px;
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+            .login .form input:focus {
+                border: 1px solid rgba(255,255,255,.8);
+                outline: none;
+            }
+
+::-webkit-input-placeholder {
+    color: #DDD;
+}
+
+.login .form input.submit {
+    background: rgba(255,255,255,.9);
+    color: #444;
+    font-size: 15px;
+    margin-top: 40px;
+    font-weight: bold;
+}
+
+.login {
+    z-index: 1;
+    background: rgba(26,26,26,0.8);
+    text-align: center;
+    box-shadow: -1px 92px 99px -62px rgba(3, 107, 255, 0.27), 0 1px 6px 0 rgba(10, 48, 255, 0.48);
+    border-radius: 5px;
+}
+
+    .login h1 {
+        color: white;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .login input[type = "text"], .login input[type = "password"] {
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid #3498db;
+        padding: 14px 10px;
+        width: 200px;
+        outline: none;
+        color: white;
+        border-radius: 24px;
+        transition: 0.25s;
+        width: 50%;
+    }
+
+    .login input[type = "submit"] {
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid #3498db;
+        padding: 14px 10px;
+        width: 200px;
+        outline: none;
+        color: white;
+        border-radius: 24px;
+        transition: 0.25s;
+        width: 40%;
+    }
+
+    .login input[type="text"]:focus,
+    .login input[type="password"]:focus {
+        width: 300px;
+        -webkit-animation: colorChange 9s alternate;
+        transition: height 0.3s, width 0.3s 0.1s, border-color 0.3s ease-in-out;
+        border: 2px solid #000; 
+    }
+
+    .login input:focus ~ .border {
+        border-color: #f00; 
+        transition: border-color 0.3s ease-in-out;
+    }
+
+@-webkit-keyframes colorChange {
+    0% {
+        background-color: #fff;
+    }
+
+    100% {
+        background-color: #f00;
+    }
+}
+
+    .login input[type = "submit"] {
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        border: 2px solid #2ecc71;
+        padding: 14px 40px;
+        outline: none;
+        color: white;
+        text-align:center;
+        border-radius: 24px;
+        transition: 0.25s;
+        cursor: pointer;
+    }
+
+    .login input[type = "submit"]:hover {
+        background: #2ecc71;
+    }
+
+
+h1 {
+    display: block;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+
+@-webkit-keyframes colorChange {
+    0% {
+        border-color: #007bff;
+    }
+
+    5% {
+        border-color: #6610f2;
+    }
+
+    10% {
+        border-color: #6f42c1;
+    }
+
+    15% {
+        border-color: #e83e8c;
+    }
+
+    20% {
+        border-color: #dc3545;
+    }
+
+    25% {
+        border-color: #fd7e14;
+    }
+
+    30% {
+        border-color: #ffc107;
+    }
+
+    35% {
+        border-color: #28a745;
+    }
+
+    40% {
+        border-color: #20c997;
+    }
+
+    45% {
+        border-color: #17a2b8;
+    }
+
+    50% {
+        border-color: #6c757d;
+    }
+
+    55% {
+        border-color: #343a40;
+    }
+
+    60% {
+        border-color: #007bff;
+    }
+
+    65% {
+        border-color: #6c757d;
+    }
+
+    70% {
+        border-color: #28a745;
+    }
+
+    75% {
+        border-color: #17a2b8;
+    }
+
+    80% {
+        border-color: #ffc107;
+    }
+
+    85% {
+        border-color: #dc3545;
+    }
+
+    90% {
+        border-color: #343a40;
+    }
+
+    95% {
+        border-color: #28a745;
+    }
+
+    100% {
+        border-color: #20c997;
+    }
+}
+/**************line*************/
+
+.lines {
+    position:absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    margin: auto;
+    width: 60vw;
+    z-index: -1
+}
+
+    .lines .line {
+        position:absolute;
+        width: 1px;
+        height: 100%;
+        top: 0;
+        left: 50%;
+        background: rgba(255,255,255,.06);
+        overflow: hidden
+    }
+
+        .lines .line::after {
+            content: "";
+            display: block;
+            position: absolute;
+            height: 15vh;
+            width: 100%;
+            top: -50%;
+            left: 0;
+            background: -webkit-gradient(linear,left top,left bottom,from(rgba(255,255,255,0)),color-stop(75%,#fff),to(#fff));
+            background: linear-gradient(to bottom,rgba(255,255,255,0) 0%,#fff 75%,#fff 100%);
+            -webkit-animation: run 7s 0s infinite;
+            animation: run 7s 0s infinite;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+            -webkit-animation-timing-function: cubic-bezier(.4,.26,0,.97);
+            animation-timing-function: cubic-bezier(.4,.26,0,.97)
+        }
+
+        .lines .line:nth-child(1) {
+            margin-left: -45%
+        }
+
+            .lines .line:nth-child(1)::after {
+                -webkit-animation-delay: .5s;
+                animation-delay: .5s
+            }
+
+        .lines .line:nth-child(3) {
+            margin-left: 45%
+        }
+
+            .lines .line:nth-child(3)::after {
+                -webkit-animation-delay: 1s;
+                animation-delay: 1s
+            }
+
+        .lines .line:nth-child(4) {
+            margin-left: 40%
+        }
+
+            .lines .line:nth-child(4)::after {
+                -webkit-animation-delay: 1.5s;
+                animation-delay: 1.5s
+            }
+
+        .lines .line:nth-child(5) {
+            margin-left: -40%
+        }
+
+            .lines .line:nth-child(5)::after {
+                -webkit-animation-delay: 2s;
+                animation-delay: 2s
+            }
+
+        .lines .line:nth-child(6) {
+            margin-left: 35%
+        }
+
+            .lines .line:nth-child(6)::after {
+                -webkit-animation-delay: 2.5s;
+                animation-delay: 2.5s
+            }
+
+        .lines .line:nth-child(7) {
+            margin-left: -35%
+        }
+
+            .lines .line:nth-child(7)::after {
+                -webkit-animation-delay: 3s;
+                animation-delay: 3s
+            }
+
+        .lines .line:nth-child(8) {
+            margin-left: 30%
+        }
+
+            .lines .line:nth-child(8)::after {
+                -webkit-animation-delay: 3.5s;
+                animation-delay: 3.5s
+            }
+
+        .lines .line:nth-child(9) {
+            margin-left: -30%
+        }
+
+            .lines .line:nth-child(9)::after {
+                -webkit-animation-delay: 4s;
+                animation-delay: 4s
+            }
+
+        .lines .line:nth-child(10) {
+            margin-left: 25%
+        }
+
+            .lines .line:nth-child(10)::after {
+                -webkit-animation-delay: 4.5s;
+                animation-delay: 4.5s
+            }
+
+        .lines .line:nth-child(11) {
+            margin-left: -25%
+        }
+
+            .lines .line:nth-child(11)::after {
+                -webkit-animation-delay: 5s;
+                animation-delay: 5s
+            }
+
+        .lines .line:nth-child(12) {
+            margin-left: 20%
+        }
+
+            .lines .line:nth-child(12)::after {
+                -webkit-animation-delay: 5.5s;
+                animation-delay: 5.5s
+            }
+
+        .lines .line:nth-child(13) {
+            margin-left: -20%
+        }
+
+            .lines .line:nth-child(13)::after {
+                -webkit-animation-delay: 6s;
+                animation-delay: 6s
+            }
+
+        .lines .line:nth-child(14) {
+            margin-left: 15%
+        }
+
+            .lines .line:nth-child(14)::after {
+                -webkit-animation-delay: 6.5s;
+                animation-delay: 6.5s
+            }
+
+        .lines .line:nth-child(15) {
+            margin-left: -15%
+        }
+
+            .lines .line:nth-child(15)::after {
+                -webkit-animation-delay: 7s;
+                animation-delay: 7s
+            }
+
+        .lines .line:nth-child(16) {
+            margin-left: 10%
+        }
+
+            .lines .line:nth-child(16)::after {
+                -webkit-animation-delay: 7.5s;
+                animation-delay: 7.5s
+            }
+
+        .lines .line:nth-child(17) {
+            margin-left: -10%
+        }
+
+            .lines .line:nth-child(17)::after {
+                -webkit-animation-delay: 8s;
+                animation-delay: 8s
+            }
+
+        .lines .line:nth-child(18) {
+            margin-left: 5%
+        }
+
+            .lines .line:nth-child(18)::after {
+                -webkit-animation-delay: 8.5s;
+                animation-delay: 8.5s
+            }
+
+        .lines .line:nth-child(19) {
+            margin-left: -5%
+        }
+
+            .lines .line:nth-child(19)::after {
+                -webkit-animation-delay: 9s;
+                animation-delay: 9s
+            }
+
+@-webkit-keyframes run {
+    0% {
+        top: -50%
+    }
+
+    100% {
+        top: 110%
+    }
+}
+
+@keyframes run {
+    0% {
+        top: -50%
+    }
+
+    100% {
+        top: 110%
+    }
+}
+
+.section-title-bg {
+    color: #f0f0f0;
+    font-size: 85px;
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+    opacity: .8;
+    font-family: Monoton,cursive;
+    text-transform: uppercase;
+    right: 0;
+    transform: translateY(-50%)
+}
+

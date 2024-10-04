@@ -1,0 +1,60 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.HopDong>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+    QuanLyNhanSu.Models.QuanLyNhanSuEntities db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
+
+}
+
+<h2>Quản lý Hợp Đồng</h2>
+
+<a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
+    Xuất danh sách nhân viên
+</a>
+@if (Model == null)
+{
+    <div class="alert alert-warning">
+        Không có hợp đồng nào để hiển thị.
+    </div>
+}
+else
+{
+         
+<div class="table-responsive">
+    <table id="table-taikhoan" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Mã Hợp Đồng</th>
+                <th>Loại Hợp Đồng</th>
+                <th>Ngày Bắt Đầu</th>
+                <th>Ngày Kết Thúc</th>
+                <th>Ghi Chú</th>
+                <th>Mã Nhân Viên</th>
+                <th>Tên Nhân Viên</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaHopDong</td>
+                    <td>@item.LoaiHopDong</td>
+                    <td>@item.NgayBatDau</td>
+                    <td>@item.NgayKetThuc</td>
+                    <td>@item.GhiChu</td>
+                    <td>@item.MaHopDong</td>
+                    <td>@db.NhanViens.Where(h => h.MaNhanVien != "admin").SingleOrDefault(n => n.MaHopDong == item.MaHopDong).HoTen</td>
+
+                    <td>
+                        @Html.ActionLink("Sửa", "Edit", new { id = item.MaHopDong }, new { @class = "btn btn-primary" }) |
+                        @Html.ActionLink("Gia Hạn", "Extend", new { id = item.MaHopDong }, new { @class = "btn btn-warning" }) |
+                        @Html.ActionLink("Hủy hợp đồng", "Delete", new { id = item.MaHopDong }, new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+ </div>
+    }

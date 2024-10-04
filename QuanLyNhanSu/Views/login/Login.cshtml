@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Đăng nhập";
+}
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="~/Content/css/login.css">
+<div class="anime-grill-center">
+</div>
+<div class="anime-grill-offcenter"></div>
+<div class="text-lines">
+    @*<div class="line-1">Welcome to </div>*@
+    <div class="line-2">Quản lý nhân sự</div>
+    <div class="line-3">LOGIN</div>
+</div>
+<div class="site-body">
+    <form method="post" action="" role="form">
+        @Html.AntiForgeryToken()
+        <div class="login">
+            <div class="form">
+                <h1>Welcome</h1>
+                <input type="text" placeholder="Tài khoản" name="MaNhanVien" autofocus required>
+                <input type="password" placeholder="Mật khẩu" name="MatKhau">
+                <input type="submit" value="Sign In" class="submit">
+            </div>
+        </div>
+        <span class="text-danger"> @ViewBag.err</span>
+    </form>
+    <div class="lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+</div>
+@section FooterPartial{
+    @Html.Action("FooterPartial")
+}

@@ -1,0 +1,45 @@
+﻿@model QuanLyNhanSu.Models.HopDong
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Xóa hợp đồng</h2>
+
+<div class="alert alert-danger">
+    <h4>Bạn có chắc muốn hủy hợp đồng này không?</h4>
+    <h5>Hủy hợp đồng sẽ hủy mọi thông tin về nhân viên và tài khoản</h5>
+</div>
+
+<div class="form-horizontal">
+    <h4>Chi tiết hợp đồng:</h4>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dt>Mã hợp đồng:</dt>
+        <dd>@Model.MaHopDong</dd>
+
+        <dt>Loại hợp đồng:</dt>
+        <dd>@Model.LoaiHopDong</dd>
+
+        <dt>Ngày bắt đầu:</dt>
+        <dd>@Model.NgayBatDau.ToString()</dd>
+
+        <dt>Ngày kết thúc:</dt>
+        <dd>@Model.NgayKetThuc.ToString()</dd>
+
+        <dt>Ghi chú:</dt>
+        <dd>@Model.GhiChu</dd>
+    </dl>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions">
+        <input type="text" hidden name="id" value="@Model.MaHopDong" />
+        <input type="submit" value="Hùy hợp đồng" class="btn btn-danger" />
+        @Html.ActionLink("Hủy bỏ", "Index", null, new { @class = "btn btn-default" })
+    </div>
+}

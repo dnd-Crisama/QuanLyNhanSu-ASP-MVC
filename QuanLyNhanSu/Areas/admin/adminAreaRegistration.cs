@@ -114,6 +114,12 @@ namespace QuanLyNhanSu.Areas.admin
             url: "Admin/hopdong/{action}/{id}",
             defaults: new { controller = "HopDong", action = "Index", id = UrlParameter.Optional }
         );
+            //========================HoSoNhanVien=================================
+           context.MapRoute(
+           name: "admin_hoso",
+           url: "admin/ho-so-nhan-vien/{action}/{id}",
+           defaults: new { controller = "HoSoNhanVien", action = "Index", id = UrlParameter.Optional }
+);
             //==========================default===================================
             context.MapRoute(
                 "admin_default",

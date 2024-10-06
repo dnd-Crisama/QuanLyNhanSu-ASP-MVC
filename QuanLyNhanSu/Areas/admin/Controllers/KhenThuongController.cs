@@ -4,7 +4,7 @@ using System.Web.Mvc;
 
 namespace QuanLyNhanSu.Areas.admin.Controllers
 {
-    public class KhenThuongController : Controller
+    public class KhenThuongController : AuthorController
     {
         QuanLyNhanSuEntities db = new QuanLyNhanSuEntities();
         //

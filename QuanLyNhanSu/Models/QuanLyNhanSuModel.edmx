@@ -159,6 +159,9 @@
           <Property Name="MaChuyenNganh" Type="varchar" MaxLength="30" />
           <Property Name="MaTrinhDoHocVan" Type="varchar" MaxLength="30" />
           <Property Name="CMND" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Bio" Type="nvarchar(max)" />
+          <Property Name="Facebookk" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="PhongBans">
           <Key>
@@ -705,6 +708,9 @@
           <NavigationProperty Name="ThoiViec" Relationship="QuanLyNhanSuModel.FK__ThoiViec__MaNhanVien" FromRole="NhanVien" ToRole="ThoiViec" />
           <NavigationProperty Name="TrinhDoHocVan" Relationship="QuanLyNhanSuModel.FK_NhanVien_TrinhDoHocVan" FromRole="NhanVien" ToRole="TrinhDoHocVan" />
           <NavigationProperty Name="HopDongs" Relationship="QuanLyNhanSuModel.FK_HopDongs_NhanViens" FromRole="NhanVien" ToRole="HopDong" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Bio" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Facebookk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PhongBan">
           <Key>
@@ -1096,6 +1102,9 @@
           <EntitySetMapping Name="NhanViens">
             <EntityTypeMapping TypeName="QuanLyNhanSuModel.NhanVien">
               <MappingFragment StoreEntitySet="NhanViens">
+                <ScalarProperty Name="Facebookk" ColumnName="Facebookk" />
+                <ScalarProperty Name="Bio" ColumnName="Bio" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="CMND" ColumnName="CMND" />
                 <ScalarProperty Name="MaTrinhDoHocVan" ColumnName="MaTrinhDoHocVan" />
                 <ScalarProperty Name="MaChuyenNganh" ColumnName="MaChuyenNganh" />

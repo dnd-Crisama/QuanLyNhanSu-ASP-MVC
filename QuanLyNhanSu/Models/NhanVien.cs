@@ -62,6 +62,12 @@ public partial class NhanVien
 
     public string CMND { get; set; }
 
+    public string Email { get; set; }
+
+    public string Bio { get; set; }
+
+    public string Facebookk { get; set; }
+
 
 
     public virtual ICollection<CapNhatTrinhDoHocVan> CapNhatTrinhDoHocVans { get; set; }

@@ -45,5 +45,11 @@ namespace QuanLyNhanSu.Models
         [RegularExpression(@"[A-Za-z0-9]*$", ErrorMessage = "Chứa kí tự đặc biệt")]
         [MaxLength(15, ErrorMessage = "sdt tối đa 15 số")]
         public string CMND { get; set; }
+
+        public string Email { get; set; }
+
+        public string Bio { get; set; }
+
+        public string Facebookk { get; set; }
     }
 }

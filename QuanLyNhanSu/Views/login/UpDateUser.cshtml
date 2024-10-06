@@ -187,7 +187,33 @@
                     @Html.ValidationMessageFor(model => model.CMND)
                 </div>
             </div>
-
+            <div class="form-group">
+                <div class="control-label col-md-4 col-sm-4">
+                    <label>Email</label>
+                </div>
+                <div class="col-md-8 col-sm-8">
+                    <input class="form-control" type="text" name="Email" value="@Model.Email" />
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label col-md-4 col-sm-4">
+                    <label>Link facebook</label>
+                </div>
+                <div class="col-md-8 col-sm-8">
+                    <input class="form-control" type="text" name="Facebookk" value="@Model.Facebookk" />
+                    @Html.ValidationMessageFor(model => model.Facebookk)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label col-md-4 col-sm-4">
+                    <label>Giới thiệu</label>
+                </div>
+                <div class="col-md-8 col-sm-8">
+                    <input class="form-control" type="text" name="Bio" value="@Model.Bio" />
+                    @Html.ValidationMessageFor(model => model.Bio)
+                </div>
+            </div>
             <div class="form-group">
                 <div class="col-md-offset-4 col-md-4">
                     <input type="submit" value="Cập nhật" class="btn btn-primary btn-lg" />

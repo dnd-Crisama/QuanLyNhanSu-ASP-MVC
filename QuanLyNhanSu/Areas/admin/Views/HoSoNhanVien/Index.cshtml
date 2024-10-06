@@ -27,13 +27,14 @@
 
 <div>
     <div style="padding:10px">
-        <a class="btn btn-primary" href="@Url.Action("ThemUser", "QuanLyUser")">
-            Thêm nhân viên
-        </a>
+        @* <a class="btn btn-primary" href="@Url.Action("ThemUser", "QuanLyUser")">
+                Thêm nhân viên
+            </a>
 
-        <a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
-            Xuất danh sách nhân viên
-        </a>
+            <a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
+                Xuất danh sách nhân viên
+            </a>
+        *@
     </div>
 </div>
 
@@ -51,7 +52,10 @@
                     Họ tên
                 </th>
                 <th>
-                    Trình độ văn hóa
+                    Phòng ban
+                </th>
+                <th>
+                    Chức vụ
                 </th>
                 <th>
                     Giới tính
@@ -105,11 +109,13 @@
                         </td>
                         <td>@item.MaNhanVien</td>
                         <td>@item.HoTen</td>
-                        <td>@tenTrinhDo</td>
+                        <td>@item.PhongBan.TenPhongBan</td>
+                        <td>@item.ChucVuNhanVien.TenChucVu</td>
                         <td>@gioitinh</td>
                         <td>
-                                @String.Format("{0:dd/MM/yyyy}", @item.HopDong.NgayBatDau);
-                            @{ 
+
+                            @String.Format("{0:dd/MM/yyyy}", @item.HopDong.NgayBatDau)
+                            @{
                                 DateTime ngaydau = Convert.ToDateTime(@item.HopDong.NgayBatDau);
                                 DateTime ngaysau = DateTime.Now.Date;
                                 TimeSpan Times = ngaysau - ngaydau;
@@ -119,17 +125,11 @@
 
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="@Url.Action("QuaTrinhCongTac", "QuanLyUser", new { id = item.MaNhanVien })">
-                                <i class="fa fa-address-book"></i> Quá trình công tác
+                            <a class="btn btn-primary" href="@Url.Action("Detail", "HoSoNhanVien", new { id = item.MaNhanVien })">
+                                <i class="fa fa-address-book"></i> Chi tiết hồ sơ
                             </a>
-                            <a class="btn btn-info" href="@Url.Action("QuaTrinhHoc", "QuanLyUser", new { id = item.MaNhanVien })">
-                                Học vấn
-                            </a>
-                            <a class="btn btn-warning" href="@Url.Action("UpdateUser", "QuanLyUser", new { id = item.MaNhanVien })">
-                                <i class="fa fa-pencil-square-o x5" aria-hidden="true"></i> Sửa
-                            </a>
-                            <a class="btn btn-danger" href="@Url.Action("XoaUser", "QuanLyUser", new { id = item.MaNhanVien })">
-                                <i class="fa fa-trash-o"></i> Xóa
+                            <a class="btn btn-danger" href="@Url.Action("Delete", "HopDong", new { id = item.MaHopDong })">
+                                <i class="fa fa-trash-o"></i> Hủy hợp đồng
                             </a>
                         </td>
                     </tr>

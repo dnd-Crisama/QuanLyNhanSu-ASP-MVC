@@ -85,6 +85,9 @@ namespace QuanLyNhanSu.Controllers
                 up.DanToc = us.DanToc;
                 up.sdt_NhanVien = us.sdt_NhanVien;
                 up.MaChuyenNganh = us.MaChuyenNganh;
+                up.Email = us.Email;
+                up.Facebookk = us.Facebookk;
+                up.Bio = us.Bio;
 
                 up.CMND = us.CMND;
 
@@ -112,6 +115,9 @@ namespace QuanLyNhanSu.Controllers
                 up.MaChuyenNganh = us.MaChuyenNganh;
 
                 up.CMND = us.CMND;
+                up.Email = us.Email;
+                up.Facebookk = us.Facebookk;
+                up.Bio = us.Bio;
 
                 DateTime dateOfBirth;
                 if (!DateTime.TryParseExact(us.NgaySinh.ToString(), "MM-dd-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth))

@@ -68,6 +68,9 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
             userVal.MaPhongBan = user.MaPhongBan;
 
             userVal.CMND = user.CMND;
+            userVal.Email = user.Email;
+            userVal.Facebookk = user.Facebookk;
+            userVal.Bio = user.Bio;
             userVal.XacNhanMatKhau = user.MatKhau;
 
             return View(userVal);
@@ -108,7 +111,11 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                     us.MaChuyenNganh = upUser.MaChuyenNganh;
                     us.MaTrinhDoHocVan = upUser.MaTrinhDoHocVan;
                     us.MaPhongBan = upUser.MaPhongBan;
+                    
                     us.CMND = upUser.CMND;
+                    us.Email = upUser.Email;
+                    us.Facebookk = upUser.Facebookk;
+                    us.Bio = upUser.Bio;
 
                     var trinhdo = db.TrinhDoHocVans.Where(n => n.MaTrinhDoHocVan.Equals(us.MaTrinhDoHocVan)).FirstOrDefault();
 

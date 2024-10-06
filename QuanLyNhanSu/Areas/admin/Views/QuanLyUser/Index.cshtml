@@ -7,6 +7,7 @@
 @{
     QuanLyNhanSuEntities db = new QuanLyNhanSuEntities();
     var td = db.TrinhDoHocVans.ToList();
+    string trangthai;
 }
 
 <div class="">
@@ -27,12 +28,15 @@
 
 <div>
     <div style="padding:10px">
-        <a class="btn btn-primary" href="@Url.Action("ThemUser", "QuanLyUser")">
+        <a class="btn btn-primary" href="@Url.Action("ThemUser ", "QuanLyUser ")">
             Thêm nhân viên
         </a>
 
-        <a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
+        <a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser ")">
             Xuất danh sách nhân viên
+        </a>
+        <a class="btn btn-primary " href="@Url.Action("Index", "QuanLyUser", new {showDisable = !ViewBag.showDisable})">
+            Hiện nhân viên đã ngừng hoạt động
         </a>
     </div>
 </div>
@@ -58,6 +62,9 @@
                 </th>
                 <th>
                     Ngày bắt đầu
+                </th>
+                <th>
+                    Trạng thái
                 </th>
                 <th>
                     Số lượng: @Model.Count
@@ -108,7 +115,7 @@
                         <td>@tenTrinhDo</td>
                         <td>@gioitinh</td>
                         <td>
-                                @String.Format("{0:dd/MM/yyyy}", @item.HopDong.NgayBatDau);
+                                @String.Format("{0:dd/MM/yyyy}", @item.HopDong.NgayBatDau)
                             @{ 
                                 DateTime ngaydau = Convert.ToDateTime(@item.HopDong.NgayBatDau);
                                 DateTime ngaysau = DateTime.Now.Date;
@@ -117,6 +124,24 @@
                                 int sonam = (int)Times.Days / 365;
                             }
 
+                        </td>
+                        <td>
+                            @{ 
+                                switch (item.TrangThai)
+                                {
+                                    case true:
+                                        trangthai = "Hoạt động";
+                                        break;
+                                    case false:
+                                        trangthai = "Ngưng hoạt động";
+                                        break;
+                                    default:
+                                        trangthai = "hên xui";
+                                        break;
+                                }
+                                
+                            }
+                            @trangthai
                         </td>
                         <td>
                             <a class="btn btn-primary" href="@Url.Action("QuaTrinhCongTac", "QuanLyUser", new { id = item.MaNhanVien })">
@@ -128,7 +153,7 @@
                             <a class="btn btn-warning" href="@Url.Action("UpdateUser", "QuanLyUser", new { id = item.MaNhanVien })">
                                 <i class="fa fa-pencil-square-o x5" aria-hidden="true"></i> Sửa
                             </a>
-                            <a class="btn btn-danger" href="@Url.Action("XoaUser", "QuanLyUser", new { id = item.MaNhanVien })">
+                            <a class="btn btn-danger" href="@Url.Action("Xoa", "QuanLyUser", new { id = item.MaNhanVien })">
                                 <i class="fa fa-trash-o"></i> Xóa
                             </a>
                         </td>

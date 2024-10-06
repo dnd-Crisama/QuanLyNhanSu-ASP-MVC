@@ -16,7 +16,14 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         // GET: /admin/QuanLyUser/
         public ActionResult Index()
         {
-            var user = db.NhanViens.Where(x => x.MaNhanVien != "admin" && x.TrangThai == true).ToList();
+            var user = db.NhanViens
+                 .Where(x => x.MaNhanVien != "admin" && x.TrangThai == true)
+                 .ToList()
+                 .OrderBy(m => {
+                     int id;
+                     return int.TryParse(m.MaNhanVien, out id) ? id : int.MaxValue;
+                 })
+                 .ToList();
             return View(user);
         }
         public ActionResult Detail(string id)

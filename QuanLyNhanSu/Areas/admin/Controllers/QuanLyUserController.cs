@@ -17,20 +17,47 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         QuanLyNhanSuEntities db = new QuanLyNhanSuEntities();
         //
         // GET: /admin/QuanLyUser/
-        public ActionResult Index()
+        public ActionResult Index(bool? showDisable = false)
         {
-            var user = db.NhanViens.Where(x => x.MaNhanVien != "admin" && x.TrangThai == true).ToList();
+            ViewBag.showDisable = showDisable;
+            var user = db.NhanViens
+                .Where(x => x.MaNhanVien != "admin" && (showDisable == true || x.TrangThai == true))
+                .ToList()
+                .OrderBy(m => {
+                    int id;
+                    return int.TryParse(m.MaNhanVien, out id) ? id : int.MaxValue;
+                })
+                .ToList();
             return View(user);
         }
+        [HttpGet]
+        public ActionResult Xoa(string id)
+        {
+            var user = db.NhanViens.SingleOrDefault(x => x.MaNhanVien == id);
+            if (user == null)
+            {
+                return HttpNotFound("Employee not found");
+            }
 
+            return View("XoaUser",user);  // Render the XacNhanXoa.cshtml view
+        }
 
-        public ActionResult XoaUser(String id)
+        [HttpPost]
+        public ActionResult XoaUser(String id,string lydo)
         {
 
             var a = db.NhanViens.Where(x => x.MaNhanVien == id).SingleOrDefault();
             var hd = db.HopDongs.Where(x => x.MaHopDong == id).SingleOrDefault();
             var luong = db.Luongs.Where(x => x.MaNhanVien == id).SingleOrDefault();
             var ctLuong = db.ChiTietLuongs.Where(x => x.MaNhanVien == id).ToList();
+            var nghiViec = new ThoiViec
+            {
+                MaNhanVien = a.MaNhanVien,
+                TenNhanVien = a.HoTen,
+                Lydo = lydo,
+                NgayThoiViec = DateTime.Now 
+            };
+            db.ThoiViecs.Add(nghiViec);
             foreach (var item in ctLuong)
             {
                 db.ChiTietLuongs.Remove(item);
@@ -39,7 +66,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
             db.Luongs.Remove(luong);
             db.NhanViens.Remove(a);
             db.HopDongs.Remove(hd);
-
+            
             db.SaveChanges();
             return Redirect("~/admin/QuanLyUser");
         }
@@ -307,6 +334,17 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         {
             var ht = db.CapNhatTrinhDoHocVans.Where(n => n.MaNhanVien == id).ToList();
             return View(ht);
+        }
+        public ActionResult NgungHoatDong(string id)
+        {
+            var obj = db.NhanViens.SingleOrDefault(n => n.MaNhanVien == id);
+
+            if (obj != null)
+            {
+                obj.TrangThai = false;
+                db.SaveChanges();
+            }
+            return Redirect("/admin/QuanLyUser");
         }
 
     }   //end lass

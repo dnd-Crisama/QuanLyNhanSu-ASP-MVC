@@ -93,7 +93,7 @@
                             </label>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 @*Mật khẩu*@
@@ -114,7 +114,7 @@
                             </label>
                         </div>
                     </div>
-                   
+
                 </div>
 
                 @* trinh do hoc van *@
@@ -151,11 +151,14 @@
                             string check2 = string.Empty;
                             switch (@Model.GioiTinh)
                             {
-                                case 0: check0 = "checked";
+                                case 0:
+                                    check0 = "checked";
                                     break;
-                                case 1: check1 = "checked";
+                                case 1:
+                                    check1 = "checked";
                                     break;
-                                default: check2 = "checked";
+                                default:
+                                    check2 = "checked";
                                     break;
                             }
                         }
@@ -170,6 +173,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Trạng thái</label>
+                    <div class="col-sm-8">
+                        @{
+                            string checkActive = string.Empty;
+                            string checkInactive = string.Empty;
+
+                            // Check the current value of TrangThai in the Model
+                            if (Model.TrangThai == true)
+                            {
+                                checkActive = "checked";
+                            }
+                            else
+                            {
+                                checkInactive = "checked";
+                            }
+                        }
+                        <div class="radio-inline">
+                            <label><input type="radio" name="TrangThai" value="True" @checkActive> Hoạt động</label>
+                        </div>
+                        <div class="radio-inline">
+                            <label><input type="radio" name="TrangThai" value="False" @checkInactive> Ngừng hoạt động</label>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="hidden">
                     <input type="text" name="QueQuan" value="@Model.QueQuan" />
@@ -178,7 +207,7 @@
                     <input type="text" name="sdt_NhanVien" value="@Model.sdt_NhanVien" />
                     <input type="text" name="MaHopDong" value="@Model.MaHopDong" />
                     <input type="text" name="NgaySinh" value="@Model.NgaySinh" />
-                    @Html.TextBoxFor(n => n.TrangThai)
+                    @*@Html.TextBoxFor(n => n.TrangThai)*@
 
                     <input type="text" name="MaChuyenNganh" value="@Model.MaChuyenNganh" />
                     <input type="text" name="MaPhongBan" value="@Model.MaPhongBan" />

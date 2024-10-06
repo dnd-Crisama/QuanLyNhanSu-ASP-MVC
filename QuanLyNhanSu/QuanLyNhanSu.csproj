@@ -463,16 +463,10 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\images\ca.jpg" />
-    <Content Include="Content\images\canv1.jpg" />
     <Content Include="Content\images\icon.jpg" />
     <Content Include="Content\images\icon\icon-top.png" />
     <Content Include="Content\images\icon\shop-online-icon.png" />
-    <Content Include="Content\images\loop Java.png" />
-    <Content Include="Content\images\oppo-f1-hero.png" />
-    <Content Include="Content\images\slide1.jpg" />
     <Content Include="Content\images\slide2.jpg" />
-    <Content Include="Content\images\slide3.png" />
     <Content Include="Content\images\slide4.jpg" />
     <Content Include="Content\login.css" />
     <Content Include="Content\sb-admin.css" />

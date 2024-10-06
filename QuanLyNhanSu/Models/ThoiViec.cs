@@ -24,6 +24,8 @@ public partial class ThoiViec
 
     public System.DateTime NgayThoiViec { get; set; }
 
+    public string TenNhanVien { get; set; }
+
 
 
     public virtual NhanVien NhanVien { get; set; }

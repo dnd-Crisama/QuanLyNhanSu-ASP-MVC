@@ -9,7 +9,7 @@ body {
     background:none;
 }
 .profile-header {
-    background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("../images/slide4");
+    background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("../images/slide4.jpg") no-repeat;
     background-size: cover;
     padding: 30px;
     margin-top: 60px;
@@ -20,7 +20,7 @@ body {
 
     .profile-header::after {
         content: '';
-        background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("../images/slide4");
+        background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("../images/slide4.jpg") no-repeat;
         position: absolute;
         top: 0;
         left: 0;

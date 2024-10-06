@@ -201,6 +201,7 @@
           <Property Name="MaNhanVien" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Lydo" Type="nvarchar(max)" />
           <Property Name="NgayThoiViec" Type="datetime" Nullable="false" />
+          <Property Name="TenNhanVien" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="TrinhDoHocVans">
           <Key>
@@ -740,6 +741,7 @@
           <Property Name="Lydo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="NgayThoiViec" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__ThoiViec__MaNhanVien" FromRole="ThoiViec" ToRole="NhanVien" />
+          <Property Name="TenNhanVien" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TrinhDoHocVan">
           <Key>
@@ -1148,6 +1150,7 @@
           <EntitySetMapping Name="ThoiViecs">
             <EntityTypeMapping TypeName="QuanLyNhanSuModel.ThoiViec">
               <MappingFragment StoreEntitySet="ThoiViecs">
+                <ScalarProperty Name="TenNhanVien" ColumnName="TenNhanVien" />
                 <ScalarProperty Name="NgayThoiViec" ColumnName="NgayThoiViec" />
                 <ScalarProperty Name="Lydo" ColumnName="Lydo" />
                 <ScalarProperty Name="MaNhanVien" ColumnName="MaNhanVien" />

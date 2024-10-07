@@ -23,15 +23,15 @@
                 @Model.Bio
             </p>
             <div class="social-icons">
-                <a href="@Model.Facebookk">
+                <a href="@Model.Facebookk" target="_blank">
                     <i class="fab fa-facebook-f">
                     </i>
                 </a>
-                <a href="#">
+                <a href="#" target="_blank">
                     <i class="fab fa-twitter">
                     </i>
                 </a>
-                <a href="#">
+                <a href="#" target="_blank">
                     <i class="fab fa-linkedin-in">
                     </i>
                 </a>
@@ -105,7 +105,7 @@
                         Ngày sinh
                     </span>
                     <p>
-                        @Model.NgaySinh
+                        @String.Format("{0:dd/MM/yyyy}", Model.NgaySinh)
                     </p>
                 </div>
             </div>

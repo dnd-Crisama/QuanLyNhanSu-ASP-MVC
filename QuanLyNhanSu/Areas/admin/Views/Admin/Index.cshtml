@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Newtonsoft.Json
+@{
     ViewBag.Title = "Admin";
 }
 
@@ -6,6 +7,8 @@
 @{
     QuanLyNhanSuEntities db = new QuanLyNhanSuEntities();
 }
+@model AdminDashboardViewModel
+
 <!-- Navigation -->
 
 <div id="page-wrapper">
@@ -14,7 +17,7 @@
         <div class="">
             <div class="">
                 <h1 class="page-header">
-                   Tổng quan hệ thống quản lý 
+                    Tổng quan hệ thống quản lý
                 </h1>
                 <ol class="breadcrumb">
                     <li>
@@ -35,7 +38,7 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 @{
-                                    var count = db.NhanViens.Where(n=>n.TrangThai==true).ToList().Count - 1;
+                                    var count = db.NhanViens.Where(n => n.TrangThai == true).ToList().Count - 1;
                                 }
                                 <div class="huge">@count</div>
 
@@ -58,19 +61,19 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
-                            
-                                <div class="col-xs-3">
 
-                                    <i class="fa fa-money fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
+                            <div class="col-xs-3">
+
+                                <i class="fa fa-money fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
                                 @{
                                     var luong = db.Luongs.ToList();
                                     double tong = 0;
                                     foreach (var item in luong)
                                     {
-                                        double tienthue = 0, phucap = 0,luongcb=0,xh=0,yt=0,tn=0;
-                                       
+                                        double tienthue = 0, phucap = 0, luongcb = 0, xh = 0, yt = 0, tn = 0;
+
                                         item.HeSoLuong = item.HeSoLuong == null ? 0 : item.HeSoLuong;
                                         luongcb = item.LuongToiThieu * (double)item.HeSoLuong;
 
@@ -86,18 +89,18 @@
 
                                         item.PhuCap = item.PhuCap == null ? 0 : item.PhuCap;
                                         phucap = item.LuongToiThieu * (double)item.PhuCap;
-                                    
+
                                         item.ThueThuNhap = item.ThueThuNhap == null ? 0 : item.ThueThuNhap;
                                         tienthue = item.LuongToiThieu * (int)item.ThueThuNhap / 100;
-                                       
+
                                         tong = tong + (double)luongcb - (double)(xh + yt + tn) - (double)tienthue + (double)phucap;
-                                       
+
                                     }
 
                                 }
 
                                 <div class="huge">
-                                <span> @luong.Count</span>
+                                    <span> @luong.Count</span>
                                 </div>
                                 <div>Tổng số bảng lương</div>
                             </div>
@@ -139,9 +142,9 @@
                     </a>
                 </div>
             </div>
-           
+
             <!--tuoi  trung binh nhan vien -->
-             <div class="col-lg-3 col-md-6">
+            <div class="col-lg-3 col-md-6">
                 <div class="panel panel-red">
                     <div class="panel-heading">
                         <div class="row">
@@ -168,7 +171,190 @@
             </div>
         </div>
         <!-- /.row -->
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> Biểu đồ thống kê
+            </li>
+        </ol>
+        <div class="row chart-row">
+            <div class="col-lg-6 chart-container">
+                <h3 class="breadcrumb">Top 10 Nhân viên Gigachad</h3>
+                <canvas id="employeeSalaryChart"></canvas>
+            </div>
+            <div class="col-lg-6 chart-container">
+                <h3 class="breadcrumb">Nhân sự theo Phòng Ban</h3>
+                <canvas id="departmentEmployeeChart"></canvas>
+            </div>
+        </div>
+        <div class="row chart-row">
+            <div class="col-lg-6 chart-container">
+                <h3 class="breadcrumb">Thống kê Loại Hợp Đồng</h3>
+                <canvas id="contractTypeChart"></canvas>
+            </div>
+            <div class="col-lg-6 chart-container">
+                <h3 class="breadcrumb">Thống kê Chức Vụ</h3>
+                <canvas id="employeeRoleChart"></canvas>
+            </div>
+        </div>
     </div>
     <!-- /.container-fluid -->
 </div>
 <!-- /#page-wrapper -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Employee top 10
+    var ctx = document.getElementById('employeeSalaryChart').getContext('2d');
+    var employeeSalaryChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Encode(Model.TopEmployees.Select(e => e.NameEmployee))),
+            datasets: [{
+                label: 'Total Salary',
+                data: @Html.Raw(Json.Encode(Model.TopEmployees.Select(e => e.SumSalary))),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Department Employee Chart
+    var departmentCtx = document.getElementById('departmentEmployeeChart').getContext('2d');
+    new Chart(departmentCtx, {
+        type: 'pie',
+        data: {
+            labels: @Html.Raw(Json.Encode(Model.DepartmentEmployeeCounts.Select(dec => dec.DepartmentName))),
+            datasets: [{
+                data: @Html.Raw(Json.Encode(Model.DepartmentEmployeeCounts.Select(dec => dec.EmployeeCount))),
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(153, 102, 255)',
+                    'rgb(255, 159, 64)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    // Contract Type Chart
+    var contractCtx = document.getElementById('contractTypeChart').getContext('2d');
+    new Chart(contractCtx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Encode(Model.ContractTypeCounts.Select(ctc => ctc.ContractType))),
+            datasets: [{
+                label: 'Số lượng hợp đồng',
+                data: @Html.Raw(Json.Encode(Model.ContractTypeCounts.Select(ctc => ctc.Count))),
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Employee Role Chart
+    var roleCtx = document.getElementById('employeeRoleChart').getContext('2d');
+    new Chart(roleCtx, {
+        type: 'doughnut',
+        data: {
+            labels: @Html.Raw(Json.Encode(Model.EmployeeRoleCounts.Select(erc => erc.RoleName))),
+            datasets: [{
+                data: @Html.Raw(Json.Encode(Model.EmployeeRoleCounts.Select(erc => erc.Count))),
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(153, 102, 255)',
+                    'rgb(255, 159, 64)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Phân bố chức vụ nhân viên'
+                }
+            }
+        }
+    });
+</script>
+
+<style>
+    .chart-container {
+        position: relative;
+        margin: auto;
+        height: 80vh;
+        width: 670px; /* Make it full width */
+        max-width: 1600px; /* Set a max-width for better layout */
+        padding: 20px; /* Add padding around the chart */
+        border: 1px solid #ccc; /* Optional: add a border for separation */
+        border-radius: 10px; /* Optional: round corners */
+        background-color: #f9f9f9; /* Optional: add background color */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+    }
+
+    .row {
+        margin-bottom: 30px;
+    }
+
+    .chart-row {
+        display: flex; /* Use flexbox for row layout */
+        justify-content: space-around; /* Space out the charts */
+        flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    }
+
+    h3 {
+        font-size: 24px; /* Adjust the font size */
+        color: #333; /* Change text color */
+        margin: 20px 0; /* Margin above and below the heading */
+        text-align: center; /* Center the text */
+    }
+
+    .panel {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+
+        .panel:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+    .panel-footer {
+        background-color: #f5f5f5;
+    }
+
+        .panel-footer:hover {
+            background-color: #e0e0e0;
+        }
+</style>

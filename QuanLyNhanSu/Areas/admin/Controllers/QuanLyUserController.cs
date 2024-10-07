@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+
 //using cExcel = Microsoft.Office.Interop.Excel;
 using System.IO;
 using System.Linq;
@@ -45,25 +47,29 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         [HttpPost]
         public ActionResult XoaUser(String id,string lydo)
         {
+            var employee = db.NhanViens.SingleOrDefault(x => x.MaNhanVien == id);
 
             var a = db.NhanViens.Where(x => x.MaNhanVien == id).SingleOrDefault();
             var hd = db.HopDongs.Where(x => x.MaHopDong == id).SingleOrDefault();
             var luong = db.Luongs.Where(x => x.MaNhanVien == id).SingleOrDefault();
             var ctLuong = db.ChiTietLuongs.Where(x => x.MaNhanVien == id).ToList();
-            var nghiViec = new ThoiViec
-            {
-                MaNhanVien = a.MaNhanVien,
-                TenNhanVien = a.HoTen,
-                Lydo = lydo,
-                NgayThoiViec = DateTime.Now 
-            };
-            db.ThoiViecs.Add(nghiViec);
+
+            // bang mot cach nao do ma tao khong dung remove duoc nen execute bang sql command
+            string sql = "INSERT INTO ThoiViecs (MaNhanVien, TenNhanVien, NgayThoiViec, Lydo) VALUES (@MaNhanVien, @TenNhanVien, @NgayThoiViec, @Lydo)";
+            db.Database.ExecuteSqlCommand(sql, new SqlParameter("@MaNhanVien", a.MaNhanVien),
+                new SqlParameter("@TenNhanVien", a.HoTen),
+                new SqlParameter("@NgayThoiViec", DateTime.Now),
+                new SqlParameter("@Lydo", lydo));
+
+            db.SaveChanges();
+
             foreach (var item in ctLuong)
             {
                 db.ChiTietLuongs.Remove(item);
             }
 
             db.Luongs.Remove(luong);
+            
             db.NhanViens.Remove(a);
             db.HopDongs.Remove(hd);
             

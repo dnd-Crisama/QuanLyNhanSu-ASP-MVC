@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using System.Web.Mvc;
 using System.Web.Security;
+using Microsoft.Ajax.Utilities;
 
 namespace QuanLyNhanSu.Areas.admin.Controllers
 {
@@ -14,51 +15,90 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         // GET: /admin/Admin/
         public ActionResult Index()
         {
-            QuanLyNhanSuEntities db = new QuanLyNhanSuEntities();
+            var viewModel = new AdminDashboardViewModel();
 
-            // Employee fluctuations over the last 6 months (new hires and removals)
-            var lastSixMonths = DateTime.Now.AddMonths(-6);
+            var luongs = db.Luongs.ToList();
 
-            // New employees (hired within the last 6 months)
-            var newEmployees = db.NhanViens
-                .Where(nv => nv.TrangThai == true && nv.HopDong.NgayBatDau >= lastSixMonths)
-                .GroupBy(nv => new { nv.HopDong.NgayBatDau.Value.Month, nv.HopDong.NgayBatDau.Value.Year })
-                .Select(group => new { Month = group.Key.Month, Year = group.Key.Year, Count = group.Count() })
+            // Calculate total salary in memory
+            var topEmployees = luongs
+                .Select(item => new
+                {
+                    NameEmployee = item.NhanVien.HoTen, 
+                    SumSalary = CalculateTotalSalary(item) 
+                })
+                .OrderByDescending(e => e.SumSalary)
+                .Take(10) 
                 .ToList();
 
-            // Removed employees (those who have been terminated within the last 6 months)
-            var removedEmployees = db.NhanViens
-                .Where(nv => nv.TrangThai == false && nv.NgaySinh >= lastSixMonths)
-                .GroupBy(nv => new { nv.NgaySinh.Value.Month, nv.NgaySinh.Value.Year })
-                .Select(group => new { Month = group.Key.Month, Year = group.Key.Year, Count = group.Count() })
+            viewModel.TopEmployees = topEmployees.Select(x => new TopEmployee
+            {
+                NameEmployee = x.NameEmployee,
+                SumSalary = (decimal)x.SumSalary
+            }).ToList();
+        // Employees by department
+        viewModel.DepartmentEmployeeCounts = db.PhongBans
+                .Select(pb => new DepartmentEmployeeCount
+                {
+                    DepartmentName = pb.TenPhongBan,
+                    EmployeeCount = pb.NhanViens.Count(nv => nv.TrangThai)
+                })
                 .ToList();
 
-            // Employee roles (Chức vụ) statistics
-            var employeeRoles = db.NhanViens
-                .GroupBy(nv => nv.ChucVuNhanVien.TenChucVu)
-                .Select(group => new { Role = group.Key, Count = group.Count() })
-                .ToList();
-
-            // Employee distribution by department (for pie chart)
-            var employeesByDepartment = db.NhanViens
-                .GroupBy(nv => nv.PhongBan.TenPhongBan)
-                .Select(group => new { Department = group.Key, Count = group.Count() })
-                .ToList();
-
-            // Contract statistics
-            var contractStats = db.HopDongs
+            // Contract types
+            viewModel.ContractTypeCounts = db.HopDongs
                 .GroupBy(hd => hd.LoaiHopDong)
-                .Select(group => new { ContractType = group.Key, Count = group.Count() })
+                .Select(g => new ContractTypeCount
+                {
+                    ContractType = g.Key,
+                    Count = g.Count()
+                })
+                .Take(10)
                 .ToList();
 
-            ViewBag.NewEmployees = newEmployees;
-            ViewBag.RemovedEmployees = removedEmployees;
-            ViewBag.EmployeeRoles = employeeRoles;
-            ViewBag.EmployeesByDepartment = employeesByDepartment;
-            ViewBag.ContractStats = contractStats;
-            return View();
-        }
+            // Employee roles
+            viewModel.EmployeeRoleCounts = db.ChucVuNhanViens
+                .Select(cv => new EmployeeRoleCount
+                {
+                    RoleName = cv.TenChucVu,
+                    Count = cv.NhanViens.Count(nv => nv.TrangThai)
+                })
+                .ToList();
 
+            // Other dashboard data
+            viewModel.TotalEmployees = db.NhanViens.Count(nv => nv.TrangThai);
+            viewModel.TotalDepartments = db.PhongBans.Count();
+            viewModel.TotalSalaryRecords = db.Luongs.Count();
+            viewModel.TotalSalaryAmount = CalculateTotalSalary();
+            viewModel.TotalRewards = db.KhenThuongs.Count();
+
+            return View(viewModel);
+        }
+        private double CalculateTotalSalary()
+        {
+            return db.Luongs.Sum(l =>
+                (l.LuongToiThieu * (l.HeSoLuong ?? 0)) +
+                (l.LuongToiThieu * (l.PhuCap ?? 0)) -
+                (l.LuongToiThieu * ((l.BHXH ?? 0) + (l.BHYT ?? 0) + (l.BHTN ?? 0)) / 100) -
+                (l.LuongToiThieu * (l.ThueThuNhap ?? 0) / 100)
+            );
+        }
+        public double CalculateTotalSalary(Luong luong)
+        {
+            double totalSalary = 0;
+
+            double luongcb = luong.LuongToiThieu * (luong.HeSoLuong ?? 0);
+
+            double xh = (luong.BHXH ?? 0) * luong.LuongToiThieu / 100;
+            double yt = (luong.BHYT ?? 0) * luong.LuongToiThieu / 100;
+            double tn = (luong.BHTN ?? 0) * luong.LuongToiThieu / 100;
+
+            double phucap = luong.LuongToiThieu * (luong.PhuCap ?? 0);
+            double tienthue = luong.LuongToiThieu * (luong.ThueThuNhap ?? 0) / 100;
+
+            totalSalary = luongcb - (xh + yt + tn) - tienthue + phucap;
+
+            return totalSalary;
+        }
         public ActionResult DangXuat()
         {
             FormsAuthentication.SignOut();

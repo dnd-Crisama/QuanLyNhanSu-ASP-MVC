@@ -216,6 +216,7 @@
     <Compile Include="Models\ChuyenNganh.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dashboard.cs" />
     <Compile Include="Models\HopDong.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>

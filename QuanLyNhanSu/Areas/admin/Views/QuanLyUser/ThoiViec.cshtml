@@ -1,0 +1,86 @@
+﻿@using QuanLyNhanSu.Models
+@model List<ThoiViec>
+
+@{
+    ViewBag.Title = "Nhân viên";
+}
+@{
+    QuanLyNhanSuEntities db = new QuanLyNhanSuEntities();
+    string trangthai;
+}
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Nhân viên
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
+            </li>
+            <li>
+                <i class="fa fa-user"></i> Nhân viên
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div>
+    <div style="padding:10px">
+        <a class="btn btn-primary" href="@Url.Action("ThemUser", "QuanLyUser")">
+            Thêm nhân viên
+        </a>
+
+        <a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
+            Xuất danh sách nhân viên
+        </a>
+        <a class="btn btn-primary" href="@Url.Action("Index", "QuanLyUser", new { showDisable = !(ViewBag.showDisable ?? false) })">
+            Hiện nhân viên đã ngừng hoạt động
+        </a>
+        <a class="btn btn-primary" href="@Url.Action("ThoiViec", "QuanLyUser", new { thoiviec = !(ViewBag.ThoiViec ?? false) })">
+            Nhân viên thôi việc
+        </a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table id="table-taikhoan" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr class="success">
+                <th>
+                    Mã nhân viên cũ
+                </th>
+                <th>
+                    Họ tên
+                </th>
+                <th>
+                    Lý do thôi việc
+                </th>
+                <th>
+                    Ngày thôi việc
+                </th>
+                <th>
+                    Số lượng: @Model.Count
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.MaNhanVien</td>
+                        <td>@item.TenNhanVien</td>
+                        <td>@item.Lydo</td>
+                        <td>@item.NgayThoiViec</td>
+                        <td>
+                            <a class="btn btn-danger" href="@Url.Action("XoaThoiViec", "QuanLyUser", new { id = item.MaNhanVien })">
+                                <i class="fa fa-trash-o"></i> Xóa dữ liệu
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

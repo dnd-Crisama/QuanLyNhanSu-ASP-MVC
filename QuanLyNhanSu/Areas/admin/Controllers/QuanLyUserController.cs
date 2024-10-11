@@ -178,6 +178,21 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
 
         public ActionResult ThemUser()
         {
+            var lastEmployee = db.NhanViens
+    .Where(x => x.MaNhanVien != "Admin") 
+    .OrderByDescending(x => x.MaNhanVien.Length)
+    .ThenByDescending(x => x.MaNhanVien) 
+    .FirstOrDefault();
+            if (lastEmployee != null)
+            {
+                var numericPart = int.Parse(lastEmployee.MaNhanVien);
+                string nextMaNhanVien = (numericPart + 1).ToString();
+                ViewBag.NextMaNhanVien = nextMaNhanVien;
+            }
+            else
+            {
+                ViewBag.NextMaNhanVien = null;
+            }
             var chucvu = db.ChucVuNhanViens.ToList();
             var phongban = db.PhongBans.ToList();
             var hopdong = db.HopDongs.ToList();
@@ -192,6 +207,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         [HttpPost]
         public ActionResult ThemUser(UserValidate nv)
         {
+
             nv.XacNhanMatKhau = nv.MatKhau;
             if (ModelState.IsValid)
             {
@@ -351,6 +367,35 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 db.SaveChanges();
             }
             return Redirect("/admin/QuanLyUser");
+        }
+        public ActionResult ThoiViec(bool? thoiviec = false)
+        {
+            ViewBag.ThoiViec = thoiviec;
+            if(thoiviec == true)
+            {
+                var data = db.ThoiViecs.ToList();
+                return View(data);
+            }
+            else
+            {
+                var data = db.NhanViens
+                .Where(x => x.MaNhanVien != "admin" && x.TrangThai == true)
+                .ToList()
+                .OrderBy(m => {
+                    int id;
+                    return int.TryParse(m.MaNhanVien, out id) ? id : int.MaxValue;
+                })
+                .ToList();
+                return View("Index",data);
+            }   
+           
+        }
+        public ActionResult XoaThoiViec (string id)
+        {
+            var thoiviec = db.ThoiViecs.FirstOrDefault(nv => nv.MaNhanVien == id);
+            db.ThoiViecs.Remove(thoiviec);
+            db.SaveChanges();
+            return RedirectToAction("ThoiViec");
         }
 
     }   //end lass

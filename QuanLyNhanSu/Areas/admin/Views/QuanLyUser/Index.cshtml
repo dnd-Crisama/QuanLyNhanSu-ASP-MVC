@@ -35,8 +35,11 @@
         <a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
             Xuất danh sách nhân viên
         </a>
-        <a class="btn btn-primary " href="@Url.Action("Index", "QuanLyUser", new {showDisable = !ViewBag.showDisable})">
+        <a class="btn btn-primary" href="@Url.Action("Index", "QuanLyUser", new { showDisable = !(ViewBag.showDisable ?? false) })">
             Hiện nhân viên đã ngừng hoạt động
+        </a>
+        <a class="btn btn-primary" href="@Url.Action("ThoiViec", "QuanLyUser", new { thoiviec = !(ViewBag.ThoiViec ?? false) })">
+            Nhân viên thôi việc
         </a>
     </div>
 </div>

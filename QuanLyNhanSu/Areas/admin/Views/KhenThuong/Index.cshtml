@@ -42,6 +42,12 @@
             <th>
                 Tiền thưởng
             </th>
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Action
+            </th>
 
         </tr>
     </thead>
@@ -54,16 +60,28 @@
                 </td>
                 <td>
                     @String.Format("{0:dd/MM/yyyy}", @item.ThangThuong)
-                    
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LyDo)
                 </td>
                 <td>
                     @string.Format("{0:#,#}", @item.TienThuong).Replace(",", ",")
-                    
-                </td>
 
+                </td>
+                <td>
+                    @if (item.TrangThai == true)
+                    {
+                        <span>Đã áp dụng</span>
+                    }
+                    else
+                    {
+                        <span>Chưa áp dụng</span>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-warning" href="@Url.Action("CapNhat", "KhenThuong", new { @id = @item.MaNhanVien })"><i class="fa fa-pencil-square-o x5" aria-hidden="true"></i>Cập nhật</a>
+                </td>
             </tr>
         }
     </tbody>

@@ -1,5 +1,9 @@
 ﻿@{
     ViewBag.Title = "Lương nhân viên";
+    var db = new QuanLyNhanSuEntities();
+    string tienphatne;
+    string tienthuongne;
+
 }
 
 @using QuanLyNhanSu.Models
@@ -37,6 +41,8 @@
                     <th>Phụ cấp CV</th>
                     <th>Tiền bảo hiểm</th>
                     <th>Thuế (%)</th>
+                    <th>Tiền thướng</th>
+                    <th>Tiền phạt</th>
                     <th>Số bảng lương: @Model.Count</th>
 
                 </tr>
@@ -70,6 +76,30 @@
                             </td>
                             <td>
                                 @string.Format("{0:#,#}", @item.ThueThuNhap).Replace(",", ",")
+                            </td>
+                            <td>
+                                @{ var tienthuong = db.KhenThuongs.Where(k => k.MaNhanVien == item.MaNhanVien).FirstOrDefault();
+                                    if (tienthuong != null)
+                                    {
+                                        tienthuongne = string.Format("{0:#,#}", @tienthuong.TienThuong).Replace(",", ",") + " VND";
+                                    }
+                                    else
+                                    {
+                                        tienthuongne = "0 VND";
+                                    }
+                                } @tienthuongne;
+                            </td>
+                            <td>
+                                @{ var tienphat = db.KyLuats.Where(k => k.MaNhanVien == item.MaNhanVien).FirstOrDefault();
+                                    if(tienphat != null)
+                                    {
+                                        tienphatne = string.Format("{0:#,#}", @tienphat.TienKyLuat).Replace(",", ",") + " VND";
+                                    }
+                                    else
+                                        {
+                                        tienphatne = "0 VND";
+                                        }
+                                } @tienphatne
                             </td>
                             <td>
                                 <a class="btn btn-warning" href="@Url.Action("SuaBangLuong", "QuanLyLuong", new { @id = @item.MaNhanVien })"><i class="fa fa-pencil-square-o x5" aria-hidden="true"></i>Sửa</a>

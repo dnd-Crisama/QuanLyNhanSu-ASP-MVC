@@ -74,9 +74,11 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
             foreach (var item in luong)
             {
                 ChiTietLuong ct = new ChiTietLuong();
-                ct.MaChiTietBangLuong = "t" + now.Month.ToString();
+                ct.MaChiTietBangLuong = "T" + now.Month.ToString() +"-"+ now.Year.ToString();
                 ct.MaNhanVien = item.MaNhanVien;
                 var ctl = db.ChiTietLuongs.Where(n => n.MaNhanVien == ct.MaNhanVien).FirstOrDefault();
+                var khenthuong = db.KhenThuongs.Where(m => m.MaNhanVien == ct.MaNhanVien && m.TrangThai != true).FirstOrDefault();
+                var kyluat = db.KyLuats.Where(x => x.MaNhanVien == ct.MaNhanVien && x.TrangThai != true).FirstOrDefault();
                 //ct.MaChiTietBangLuong = t+dem.ToString();
 
                 double tienthue = 0, phucap = 0;
@@ -104,15 +106,23 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 ct.ThueThuNhap = tienthue;
 
                 ct.NgayNhanLuong = DateTime.Now.Date;
-                ct.TienThuong = 0;
-                ct.TienPhat = 0;
-                tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap;
+                ct.TienThuong = khenthuong?.TienThuong ?? 0;
+                ct.TienPhat = kyluat?.TienKyLuat ?? 0;
+                tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap + (double)ct.TienThuong - (double)ct.TienPhat;
                 ct.TongTienLuong = tong.ToString();
                 if (ctl == null)
                 {
                     db.ChiTietLuongs.Add(ct);
                 }
                 ViewBag.ok = "thanh toán thành công";
+                if (khenthuong != null)
+                {
+                    khenthuong.TrangThai = true;
+                }
+                if (kyluat != null)
+                {
+                    kyluat.TrangThai = true;
+                }
                 db.SaveChanges();
             }
             return Redirect("/admin/QuanLyLuong");
@@ -131,6 +141,9 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 ChiTietLuong ct = new ChiTietLuong();
                 DateTime now = DateTime.Now;
                 double tienthue = 0, tong = 0, phucap = 0;
+
+                var khenthuong = db.KhenThuongs.Where(m => m.MaNhanVien == id && m.TrangThai != true).FirstOrDefault();
+                var kyluat = db.KyLuats.Where(x => x.MaNhanVien == id && x.TrangThai != true).FirstOrDefault();
 
                 ct.MaChiTietBangLuong = "t" + now.Month.ToString();
                 ct.MaNhanVien = luongthang.MaNhanVien;
@@ -155,15 +168,24 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 tienthue = (double)luongthang.LuongToiThieu * (double)luongthang.ThueThuNhap / 100;
                 ct.ThueThuNhap = (double)tienthue;
                 ct.NgayNhanLuong = DateTime.Now.Date;
-                ct.TienThuong = 0;
-                ct.TienPhat = 0;
-                tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap;
+                ct.TienThuong = khenthuong?.TienThuong ?? 0;
+                ct.TienPhat = kyluat?.TienKyLuat ?? 0;
+                
+                tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap +(double)ct.TienThuong - (double)ct.TienPhat;
                 ct.TongTienLuong = tong.ToString();
                 if (ctl == null)
                 {
                     ViewBag.ok = "thanh toán thành công";
                     db.ChiTietLuongs.Add(ct);
                 }
+                if (khenthuong != null)
+                {
+                    khenthuong.TrangThai = true;
+                }              
+                if(kyluat != null)
+                {
+                    kyluat.TrangThai = true;
+                }              
                 db.SaveChanges();
 
             }

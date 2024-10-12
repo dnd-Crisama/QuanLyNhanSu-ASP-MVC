@@ -83,6 +83,7 @@
           <Property Name="ThangThuong" Type="datetime" Nullable="false" />
           <Property Name="LyDo" Type="nvarchar(max)" />
           <Property Name="TienThuong" Type="int" />
+          <Property Name="TrangThai" Type="bit" />
         </EntityType>
         <EntityType Name="KyLuats">
           <Key>
@@ -92,6 +93,7 @@
           <Property Name="LyDo" Type="nvarchar(max)" />
           <Property Name="ThangKiLuat" Type="datetime" Nullable="false" />
           <Property Name="TienKyLuat" Type="int" />
+          <Property Name="TrangThai" Type="bit" />
         </EntityType>
         <EntityType Name="LuanChuyenNhanViens">
           <Key>
@@ -194,9 +196,12 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ThoiViecs">
           <Key>
             <PropertyRef Name="MaNhanVien" />
+            
           </Key>
           <Property Name="MaNhanVien" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Lydo" Type="nvarchar(max)" />
@@ -353,8 +358,15 @@
           <EntitySet Name="PhongBans" EntityType="Self.PhongBans" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SlideImages" EntityType="Self.SlideImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ThoiViecs" EntityType="Self.ThoiViecs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrinhDoHocVans" EntityType="Self.TrinhDoHocVans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThoiViecs" EntityType="Self.ThoiViecs" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ThoiViecs].[MaNhanVien] AS [MaNhanVien], 
+    [ThoiViecs].[Lydo] AS [Lydo], 
+    [ThoiViecs].[NgayThoiViec] AS [NgayThoiViec], 
+    [ThoiViecs].[TenNhanVien] AS [TenNhanVien]
+    FROM [dbo].[ThoiViecs] AS [ThoiViecs]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK__LuanChuyen__MaNhanVien" Association="Self.FK__LuanChuyen__MaNhanVien">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="LuanChuyenNhanViens" EntitySet="LuanChuyenNhanViens" />
@@ -600,6 +612,7 @@
           <Property Name="ThangKiLuat" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="TienKyLuat" Type="Int32" />
           <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK_KyLuat_KyLuat" FromRole="KyLuat" ToRole="NhanVien" />
+          <Property Name="TrangThai" Type="Boolean" />
         </EntityType>
         <EntityType Name="KhenThuong">
           <Key>
@@ -610,6 +623,7 @@
           <Property Name="LyDo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TienThuong" Type="Int32" />
           <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__Thuong__MaNhanVien" FromRole="KhenThuong" ToRole="NhanVien" />
+          <Property Name="TrangThai" Type="Boolean" />
         </EntityType>
         <EntityType Name="LuanChuyenNhanVien">
           <Key>
@@ -1018,6 +1032,7 @@
           <EntitySetMapping Name="KyLuats">
             <EntityTypeMapping TypeName="QuanLyNhanSuModel.KyLuat">
               <MappingFragment StoreEntitySet="KyLuats">
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
                 <ScalarProperty Name="TienKyLuat" ColumnName="TienKyLuat" />
                 <ScalarProperty Name="ThangKiLuat" ColumnName="ThangKiLuat" />
                 <ScalarProperty Name="LyDo" ColumnName="LyDo" />
@@ -1028,6 +1043,7 @@
           <EntitySetMapping Name="KhenThuongs">
             <EntityTypeMapping TypeName="QuanLyNhanSuModel.KhenThuong">
               <MappingFragment StoreEntitySet="KhenThuongs">
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
                 <ScalarProperty Name="TienThuong" ColumnName="TienThuong" />
                 <ScalarProperty Name="LyDo" ColumnName="LyDo" />
                 <ScalarProperty Name="ThangThuong" ColumnName="ThangThuong" />

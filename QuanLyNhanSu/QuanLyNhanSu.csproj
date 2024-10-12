@@ -589,6 +589,7 @@
     <Content Include="Areas\admin\Views\HoSoNhanVien\Detail.cshtml" />
     <Content Include="database\10-10.bacpac" />
     <Content Include="Areas\admin\Views\QuanLyUser\ThoiViec.cshtml" />
+    <Content Include="Areas\admin\Views\KhenThuong\CapNhat.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

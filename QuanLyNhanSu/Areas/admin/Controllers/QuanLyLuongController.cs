@@ -1,5 +1,6 @@
 ﻿using QuanLyNhanSu.Models;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -69,83 +70,126 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         public ActionResult ThanhToanLuong()
         {
             var luong = db.Luongs.ToList();
+            List<string> processedEmployees = new List<string>(); // Store names of employees whose salary has already been processed.
 
             DateTime now = DateTime.Now;
+            string currentMonthYear = "T" + now.Month.ToString() + "-" + now.Year.ToString();
+
             foreach (var item in luong)
             {
-                ChiTietLuong ct = new ChiTietLuong();
-                ct.MaChiTietBangLuong = "T" + now.Month.ToString() +"-"+ now.Year.ToString();
-                ct.MaNhanVien = item.MaNhanVien;
-                var ctl = db.ChiTietLuongs.Where(n => n.MaNhanVien == ct.MaNhanVien).FirstOrDefault();
-                var khenthuong = db.KhenThuongs.Where(m => m.MaNhanVien == ct.MaNhanVien && m.TrangThai != true).FirstOrDefault();
-                var kyluat = db.KyLuats.Where(x => x.MaNhanVien == ct.MaNhanVien && x.TrangThai != true).FirstOrDefault();
-                //ct.MaChiTietBangLuong = t+dem.ToString();
+                ChiTietLuong ct = new ChiTietLuong
+                {
+                    MaChiTietBangLuong = currentMonthYear,
+                    MaNhanVien = item.MaNhanVien
+                };
 
-                double tienthue = 0, phucap = 0;
-                double tong = 0;
-                item.HeSoLuong = item.HeSoLuong == null ? 0 : item.HeSoLuong;
+                // Check if a salary detail already exists for the current month.
+                var ctl = db.ChiTietLuongs
+                    .Where(n => n.MaNhanVien == ct.MaNhanVien && n.MaChiTietBangLuong == currentMonthYear)
+                    .FirstOrDefault();
+
+                if (ctl != null)
+                {
+                    // Add the employee's name to the list if their salary for this month is already processed.
+                    string ten = db.NhanViens.FirstOrDefault(m => m.MaNhanVien == item.MaNhanVien)?.HoTen;
+                    if (!string.IsNullOrEmpty(ten))
+                    {
+                        processedEmployees.Add(ten);
+                    }
+                    continue; // Skip processing salary for this employee.
+                }
+
+                // Proceed with salary calculation if not already processed.
+                double tienthue = 0, phucap = 0, tong = 0;
+                item.HeSoLuong = item.HeSoLuong ?? 0;
                 ct.LuongCoBan = item.LuongToiThieu * (double)item.HeSoLuong;
 
-                item.BHXH = item.BHXH == null ? 0 : item.BHXH;
+                item.BHXH = item.BHXH ?? 0;
                 ct.BHXH = item.BHXH * item.LuongToiThieu / 100;
 
-                item.BHYT = item.BHYT == null ? 0 : item.BHYT;
+                item.BHYT = item.BHYT ?? 0;
                 ct.BHYT = item.BHYT * item.LuongToiThieu / 100;
 
-                item.BHTN = item.BHTN == null ? 0 : item.BHTN;
+                item.BHTN = item.BHTN ?? 0;
                 ct.BHTN = item.BHTN * item.LuongToiThieu / 100;
 
-
-                item.PhuCap = item.PhuCap == null ? 0 : item.PhuCap;
+                item.PhuCap = item.PhuCap ?? 0;
                 phucap = item.LuongToiThieu * (double)item.PhuCap;
                 ct.PhuCap = phucap;
 
-
-                item.ThueThuNhap = item.ThueThuNhap == null ? 0 : item.ThueThuNhap;
-                tienthue = item.LuongToiThieu * (int)item.ThueThuNhap / 100;
+                item.ThueThuNhap = item.ThueThuNhap ?? 0;
+                tienthue = item.LuongToiThieu * (double)item.ThueThuNhap / 100;
                 ct.ThueThuNhap = tienthue;
 
-                ct.NgayNhanLuong = DateTime.Now.Date;
-                ct.TienThuong = khenthuong?.TienThuong ?? 0;
-                ct.TienPhat = kyluat?.TienKyLuat ?? 0;
-                tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap + (double)ct.TienThuong - (double)ct.TienPhat;
+                ct.NgayNhanLuong = now.Date;
+                ct.TienThuong = db.KhenThuongs
+                    .Where(m => m.MaNhanVien == ct.MaNhanVien && m.TrangThai != true)
+                    .Select(m => m.TienThuong)
+                    .FirstOrDefault() ?? 0;
+
+                ct.TienPhat = db.KyLuats
+                    .Where(x => x.MaNhanVien == ct.MaNhanVien && x.TrangThai != true)
+                    .Select(x => x.TienKyLuat)
+                    .FirstOrDefault() ?? 0;
+
+                tong = ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap + (double)ct.TienThuong - (double)ct.TienPhat;
                 ct.TongTienLuong = tong.ToString();
-                if (ctl == null)
-                {
-                    db.ChiTietLuongs.Add(ct);
-                }
-                ViewBag.ok = "thanh toán thành công";
+
+                db.ChiTietLuongs.Add(ct);
+                var khenthuong = db.KhenThuongs.FirstOrDefault(m => m.MaNhanVien == ct.MaNhanVien && m.TrangThai != true);
                 if (khenthuong != null)
                 {
-                    khenthuong.TrangThai = true;
+                    khenthuong.TrangThai = true; 
                 }
+
+                var kyluat = db.KyLuats.FirstOrDefault(x => x.MaNhanVien == ct.MaNhanVien && x.TrangThai != true);
                 if (kyluat != null)
                 {
-                    kyluat.TrangThai = true;
+                    kyluat.TrangThai = true; 
                 }
+                TempData["ok"] = "Thanh toán thành công";
                 db.SaveChanges();
             }
+
+            // Store the list of processed employees in ViewBag to display in the view.
+            TempData["ChiTietLuongErrorNOTNULL"] = processedEmployees;
             return Redirect("/admin/QuanLyLuong");
         }
 
 
-        public ActionResult ThanhToanMotNhanVien(String id)
+        public ActionResult ThanhToanMotNhanVien(string id)
         {
-            var nv = db.NhanViens.Where(n => n.MaNhanVien == id).FirstOrDefault();
+            var nv = db.NhanViens.FirstOrDefault(n => n.MaNhanVien == id);
             if (nv != null)
             {
-                //tim xem da co trong chi tiet lương chưa
-                var ctl = db.ChiTietLuongs.Where(n => n.MaNhanVien == id).FirstOrDefault();
-                //tìm bảng lương tương ứng với nhân viên
-                var luongthang = db.Luongs.Where(n => n.MaNhanVien == id).FirstOrDefault();
-                ChiTietLuong ct = new ChiTietLuong();
                 DateTime now = DateTime.Now;
+                string currentMonthYear = "T" + now.Month.ToString() + "-" + now.Year.ToString();
+
+                // Check if salary details already exist for this employee for the current month.
+                var ctl = db.ChiTietLuongs
+                    .Where(n => n.MaNhanVien == id && n.MaChiTietBangLuong == currentMonthYear)
+                    .FirstOrDefault();
+
+                if (ctl != null)
+                {
+                    TempData["SINGLEChiTietLuongErrorNOTNULL"] = "Nhân viên đã được thanh toán lương cho tháng này.";
+                    return Redirect("/admin/QuanLyLuong");
+                }
+
+                // Proceed with salary calculation if not already processed.
+                var luongthang = db.Luongs.FirstOrDefault(n => n.MaNhanVien == id);
+                ChiTietLuong ct = new ChiTietLuong
+                {
+                    MaChiTietBangLuong = currentMonthYear,
+                    MaNhanVien = luongthang.MaNhanVien,
+                    NgayNhanLuong = now.Date
+                };
                 double tienthue = 0, tong = 0, phucap = 0;
 
                 var khenthuong = db.KhenThuongs.Where(m => m.MaNhanVien == id && m.TrangThai != true).FirstOrDefault();
                 var kyluat = db.KyLuats.Where(x => x.MaNhanVien == id && x.TrangThai != true).FirstOrDefault();
 
-                ct.MaChiTietBangLuong = "t" + now.Month.ToString();
+                ct.MaChiTietBangLuong = "T" + now.Month.ToString() + "-" + now.Year.ToString();
                 ct.MaNhanVien = luongthang.MaNhanVien;
 
                 ct.LuongCoBan = luongthang.LuongToiThieu * (double)luongthang.HeSoLuong;
@@ -175,7 +219,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 ct.TongTienLuong = tong.ToString();
                 if (ctl == null)
                 {
-                    ViewBag.ok = "thanh toán thành công";
+                    TempData["ok"] = "Thanh toán thành công";
                     db.ChiTietLuongs.Add(ct);
                 }
                 if (khenthuong != null)

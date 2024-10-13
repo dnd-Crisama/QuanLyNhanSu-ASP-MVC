@@ -1,12 +1,12 @@
 ﻿@using QuanLyNhanSu.Models
-@model List<ThoiViec>
+@model IEnumerable<QuanLyNhanSu.Models.ThoiViec>
 
 @{
     ViewBag.Title = "Nhân viên";
 }
 @{
     QuanLyNhanSuEntities db = new QuanLyNhanSuEntities();
-    string trangthai;
+
 }
 
 <div class="">
@@ -60,7 +60,7 @@
                     Ngày thôi việc
                 </th>
                 <th>
-                    Số lượng: @Model.Count
+                    Số lượng: @Model.Count()
                 </th>
             </tr>
         </thead>
@@ -74,7 +74,7 @@
                         <td>@item.Lydo</td>
                         <td>@item.NgayThoiViec</td>
                         <td>
-                            <a class="btn btn-danger" href="@Url.Action("XoaThoiViec", "QuanLyUser", new { id = item.MaNhanVien })">
+                            <a class="btn btn-danger" href="@Url.Action("XoaThoiViec", "QuanLyUser", new { id = item.MaNhanVien, name=item.TenNhanVien})">
                                 <i class="fa fa-trash-o"></i> Xóa dữ liệu
                             </a>
                         </td>

@@ -169,17 +169,15 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         public ActionResult XoaPhongBan(String id)
         {
             var pb = db.PhongBans.Where(n => n.MaPhongBan == id).FirstOrDefault();
-
-            // những nhân viên phòngban
+/*
             var nv = db.NhanViens.Where(n => n.MaPhongBan == id).ToList();
 
-            //danh sách hợp đồng
-            var hd = db.HopDongs.ToList();
+            var hd = db.HopDongs.Where(m=>m.MaNhanVien == nv.)
 
             /*
              * mã phòng ban
              * mã hợp đồng = mã nhân viên
-             */
+             
 
             foreach (var item in hd)
             {
@@ -195,6 +193,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 db.HopDongs.Remove(item);
                 db.SaveChanges();
             }
+*/
             if (pb != null)
             {
                 db.PhongBans.Remove(pb);

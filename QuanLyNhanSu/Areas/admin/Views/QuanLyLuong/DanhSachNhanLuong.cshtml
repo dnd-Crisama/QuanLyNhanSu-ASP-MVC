@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<QuanLyNhanSu.Models.ChiTietLuong>
 @{
     ViewBag.Title = "Danh sách nhận lương";
+    var db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
 }
 
 
@@ -45,10 +46,13 @@
     <table id="table-taikhoan" class="table table-striped table-hover table-bordered ">
         <thead>
             <tr class="success">
+                <th> Mã chi tiết lương</th>
                 <th>
                     Mã nhân viên
                 </th>
-
+                <th>
+                    Tên nhân viên
+                </th>
                 <th>
                     Lương cơ bản
                 </th>
@@ -81,9 +85,15 @@
             {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.MaChiTietBangLuong)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.MaNhanVien)
                 </td>
+                <td>
+                    @db.NhanViens.SingleOrDefault(m=>m.MaNhanVien == item.MaNhanVien).HoTen
 
+                </td>
                 <td>
                     @string.Format("{0:#,#}", @item.LuongCoBan).Replace(",", ",")
 

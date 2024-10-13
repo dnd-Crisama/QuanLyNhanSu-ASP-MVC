@@ -1,0 +1,67 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.KyLuat>
+
+@{
+    ViewBag.Title = "Danh sách kỷ luật";
+    var db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
+}
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Kỷ luật nhân viên
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
+            </li>
+            <li>
+                <i class="fa fa-warning"></i> Kỷ luật
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div style="margin:10px">
+    <a class="btn btn-primary" href="@Url.Action("Create", "KyLuat")">Thêm Kỷ Luật</a>
+</div>
+
+<table id="table-taikhoan" class="table table-responsive table-bordered table-striped">
+    <thead>
+        <tr class="success">
+            <th>Mã nhân viên</th>
+            <th>Tên nhân viên</th>
+            <th>Tháng kỷ luật</th>
+            <th>Lý do</th>
+            <th>Tiền kỷ luật</th>
+            <th>Trạng thái</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.NhanVien.MaNhanVien)</td>
+                <td>@db.NhanViens.SingleOrDefault(m=>m.MaNhanVien == item.MaNhanVien).HoTen</td>
+                <td>@String.Format("{0:dd/MM/yyyy}", @item.ThangKiLuat)</td>
+                <td>@Html.DisplayFor(modelItem => item.LyDo)</td>
+                <td>@string.Format("{0:#,#}", @item.TienKyLuat).Replace(",", ",")</td>
+                <td>
+                    @if (item.TrangThai == true)
+                    {
+                        <i class="fa fa-check-square-o"></i><span> Đã áp dụng</span>
+                    }
+                    else
+                    {
+                        <i class="fa fa-remove"></i><span> Chưa áp dụng</span>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-warning" href="@Url.Action("CapNhat", "KyLuat", new { @id = @item.MaNhanVien })">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Cập nhật
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

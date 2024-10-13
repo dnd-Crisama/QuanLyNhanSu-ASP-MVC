@@ -1,0 +1,48 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.ChuyenNganh>
+
+@{
+    ViewBag.Title = "Danh sách chuyên ngành";
+}
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Chuyên ngành nhân viên
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
+            </li>
+            <li>
+                <i class="fa fa-money"></i> Chuyên ngành
+            </li>
+        </ol>
+    </div>
+</div>
+<div>
+
+    <a class="btn btn-primary" href="@Url.Action("Create", "QuanLyChuyenNganh")">Thêm Chuyên Ngành</a>
+</div>
+<hr />
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Mã chuyên ngành</th>
+            <th>Tên chuyên ngành</th>
+            <th>Số lượng: @Model.Count()</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaChuyenNganh</td>
+                <td>@item.TenChuyenNganh</td>
+                <td>
+                    <a class="btn btn-warning" href="@Url.Action("Edit", "QuanLyChuyenNganh", new { id = item.MaChuyenNganh })">Cập nhật</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", "QuanLyChuyenNganh", new { id = item.MaChuyenNganh })">Xóa</a>
+                    <a class="btn btn-info" href="@Url.Action("FindEmployees", "QuanLyChuyenNganh", new { id = item.MaChuyenNganh })">Xem Nhân Viên</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

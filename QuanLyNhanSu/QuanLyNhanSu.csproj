@@ -188,9 +188,13 @@
     <Compile Include="Areas\admin\Controllers\AdminController.cs" />
     <Compile Include="Areas\admin\Controllers\AuthorController.cs" />
     <Compile Include="Areas\admin\Controllers\CaiDatController.cs" />
+    <Compile Include="Areas\admin\Controllers\QuanLyHocVanController.cs" />
     <Compile Include="Areas\admin\Controllers\HopDongController.cs" />
     <Compile Include="Areas\admin\Controllers\HoSoNhanVienController.cs" />
     <Compile Include="Areas\admin\Controllers\KhenThuongController.cs" />
+    <Compile Include="Areas\admin\Controllers\KyLuatController.cs" />
+    <Compile Include="Areas\admin\Controllers\QuanLyChucVuController.cs" />
+    <Compile Include="Areas\admin\Controllers\QuanLyChuyenNganhController.cs" />
     <Compile Include="Areas\admin\Controllers\QuanLyLuongController.cs" />
     <Compile Include="Areas\admin\Controllers\QuanLyPhongBanController.cs" />
     <Compile Include="Areas\admin\Controllers\QuanLyUserController.cs" />
@@ -590,6 +594,26 @@
     <Content Include="database\10-10.bacpac" />
     <Content Include="Areas\admin\Views\QuanLyUser\ThoiViec.cshtml" />
     <Content Include="Areas\admin\Views\KhenThuong\CapNhat.cshtml" />
+    <Content Include="Areas\admin\Views\KyLuat\Index.cshtml" />
+    <Content Include="Areas\admin\Views\KyLuat\Create.cshtml" />
+    <Content Include="Areas\admin\Views\KyLuat\CapNhat.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChucVu\Index.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChucVu\Create.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChucVu\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChucVu\Delete.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyHocVan\Index.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyHocVan\Create.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyHocVan\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyHocVan\Delete.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyHocVan\getByTrinhDo.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChuyenNganh\Index.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChuyenNganh\Create.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChuyenNganh\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChuyenNganh\Delete.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChuyenNganh\FindEmployees.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChuyenNganh\EditChuyenNganhNV.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChucVu\getByChucVu.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChucVu\EditChucVuNV.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -622,11 +646,15 @@
     <Content Include="Views\login\UpDateUser.cshtml" />
     <Content Include="Views\NhanVien\Index.cshtml" />
     <Content Include="Views\Shared\_FooterPartial.cshtml" />
+    <Content Include="Views\login\ForgotPassword.cshtml" />
+    <Content Include="Views\login\VerifyCode.cshtml" />
+    <Content Include="Views\login\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\admin\Models\" />
     <Folder Include="Areas\admin\Views\Author\" />
+    <Folder Include="Areas\admin\Views\HocVan\" />
     <Folder Include="Views\Authen\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.NhanVien>
+
+@{
+    ViewBag.Title = "Danh sách nhân viên theo trình độ học vấn";
+    var db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
+}
+
+<h2>Nhân viên theo chức vụ</h2>
+
+<div>
+    <a class="btn btn-primary" href="@Url.Action("XuatExcel", "QuanLyHocVan")">Thêm Trình Độ</a>
+</div>
+<hr />
+<table class="table table-bordered">
+    <thead>
+        <tr class="success">
+            <th>Mã nhân viên</th>
+            <th>Mã chức vụ</th>
+            <th>Tên nhân viên</th>
+            <th>Tên chức vú</th>
+            <th>Tên phòng ban</th>
+            <th>Chuyên ngành</th>
+            <th>Só lượng: @Model.Count()</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaNhanVien</td>
+                <td>@item.MaChucVuNV</td>
+                <td>@item.HoTen</td>
+                <td>@db.ChucVuNhanViens.SingleOrDefault(m => m.MaChucVuNV == item.MaChucVuNV).TenChucVu </td>
+                <td>@db.PhongBans.SingleOrDefault(m => m.MaPhongBan == item.MaPhongBan).TenPhongBan</td>
+                <td>@db.ChuyenNganhs.SingleOrDefault(m => m.MaChuyenNganh == item.MaChuyenNganh).TenChuyenNganh</td>
+                <td>
+                    <a class="btn btn-warning" href="@Url.Action("EditChucVuNV", "QuanLyChucVu", new { id = item.MaNhanVien })">Cập nhật chức vụ</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-danger" href="/admin/QuanLyHocVan">Back</a>

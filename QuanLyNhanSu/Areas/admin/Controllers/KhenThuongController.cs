@@ -58,20 +58,30 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         public ActionResult CapNhat(string id)
         {
             var khenThuong = db.KhenThuongs.Find(id);
+            var nhanVien = db.NhanViens.FirstOrDefault(nv => nv.MaNhanVien == khenThuong.MaNhanVien);
+            ViewBag.HoTenNhanVien = nhanVien != null ? nhanVien.HoTen : "Không xác định";
 
             return View(khenThuong);
         }
+        [HttpPost]
         public ActionResult CapNhat(KhenThuong kt)
         {
+            var existingKhenThuong = db.KhenThuongs.Find(kt.MaNhanVien);
 
-            KhenThuong ad = new KhenThuong();
-            ad.MaNhanVien = kt.MaNhanVien;
-            ad.ThangThuong = kt.ThangThuong;
-            ad.TienThuong = kt.TienThuong;
-            ad.LyDo = kt.LyDo;
-            ad.TrangThai = false;
+            if (existingKhenThuong != null)
+            {
+                existingKhenThuong.ThangThuong = kt.ThangThuong;
+                existingKhenThuong.TienThuong = kt.TienThuong;
+                existingKhenThuong.LyDo = kt.LyDo;
+                existingKhenThuong.TrangThai = kt.TrangThai;
 
-            db.SaveChanges();
+                db.SaveChanges();
+            }
+            else
+            {
+                return HttpNotFound("Record not found");
+            }
+
             return Redirect("/admin/KhenThuong");
         }
     }

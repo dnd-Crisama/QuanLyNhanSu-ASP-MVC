@@ -64,6 +64,23 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 })
                 .ToList();
 
+            // nhan vien theo chuyen nganh
+            viewModel.SpecializationEmployeeCounts = db.NhanViens
+                .GroupBy(nv => nv.ChuyenNganh.TenChuyenNganh)
+                .Select(g => new SpecializationEmployeeCount
+                {
+                    SpecializationName = g.Key,
+                    EmployeeCount = g.Count()
+                })
+                .ToList();
+            // nhan vien theo trinh do hoc van
+            viewModel.EducationalQualificationCounts = db.TrinhDoHocVans
+        .Select(td => new EducationalQualificationCount
+        {
+            QualificationName = td.TenTrinhDo, // Ensure this matches your model's property
+            Count = td.NhanViens.Count(nv => nv.TrangThai)
+        })
+        .ToList();
             // Other dashboard data
             viewModel.TotalEmployees = db.NhanViens.Count(nv => nv.TrangThai);
             viewModel.TotalDepartments = db.PhongBans.Count();

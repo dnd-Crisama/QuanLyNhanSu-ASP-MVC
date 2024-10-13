@@ -7,10 +7,24 @@
 
 }
 
-<h2>Quản lý Hợp Đồng</h2>
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Quản lý hợp đồng
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
+            </li>
+            <li>
+                <i class="fa fa-money"></i> Hợp đồng
+            </li>
+        </ol>
+    </div>
+</div>
 
-<a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
-    Xuất danh sách nhân viên
+<a class="btn btn-primary " href="@Url.Action("XuatFileExel", "HopDong")">
+    Xuất danh sách hợp đồng
 </a>
 <hr />
 @if (Model == null)
@@ -21,41 +35,41 @@
 }
 else
 {
-         
-<div class="table-responsive">
-    <table id="table-taikhoan" class="table table-bordered table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Mã Hợp Đồng</th>
-                <th>Loại Hợp Đồng</th>
-                <th>Ngày Bắt Đầu</th>
-                <th>Ngày Kết Thúc</th>
-                <th>Ghi Chú</th>
-                <th>Mã Nhân Viên</th>
-                <th>Tên Nhân Viên</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.MaHopDong</td>
-                    <td>@item.LoaiHopDong</td>
-                    <td>@item.NgayBatDau</td>
-                    <td>@item.NgayKetThuc</td>
-                    <td>@item.GhiChu</td>
-                    <td>@item.MaHopDong</td>
-                    <td>@db.NhanViens.Where(h => h.MaNhanVien != "admin").SingleOrDefault(n => n.MaHopDong == item.MaHopDong).HoTen</td>
 
-                    <td>
-                        @Html.ActionLink("Sửa", "Edit", new { id = item.MaHopDong }, new { @class = "btn btn-primary" }) |
-                        @Html.ActionLink("Gia Hạn", "Extend", new { id = item.MaHopDong }, new { @class = "btn btn-warning" }) |
-                        @Html.ActionLink("Hủy hợp đồng", "Delete", new { id = item.MaHopDong }, new { @class = "btn btn-danger" })
-                    </td>
+    <div class="table-responsive">
+        <table id="table-taikhoan" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr class="success">
+                    <th>Mã Hợp Đồng</th>
+                    <th>Loại Hợp Đồng</th>
+                    <th>Ngày Bắt Đầu</th>
+                    <th>Ngày Kết Thúc</th>
+                    <th>Ghi Chú</th>
+                    <th>Mã Nhân Viên</th>
+                    <th>Tên Nhân Viên</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
- </div>
-    }
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.MaHopDong</td>
+                        <td>@item.LoaiHopDong</td>
+                        <td>@item.NgayBatDau</td>
+                        <td>@item.NgayKetThuc</td>
+                        <td>@item.GhiChu</td>
+                        <td>@item.MaHopDong</td>
+                        <td>@db.NhanViens.Where(h => h.MaNhanVien != "admin").SingleOrDefault(n => n.MaHopDong == item.MaHopDong).HoTen</td>
+
+                        <td>
+                            @Html.ActionLink("Sửa", "Edit", new { id = item.MaHopDong }, new { @class = "btn btn-primary" }) |
+                            @Html.ActionLink("Gia Hạn", "Extend", new { id = item.MaHopDong }, new { @class = "btn btn-warning" }) |
+                            @Html.ActionLink("Hủy hợp đồng", "Delete", new { id = item.MaHopDong }, new { @class = "btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

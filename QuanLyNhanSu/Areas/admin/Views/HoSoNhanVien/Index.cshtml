@@ -12,14 +12,14 @@
 <div class="">
     <div class="">
         <h1 class="page-header">
-            Nhân viên
+            Hồ sơ nhân viên
         </h1>
         <ol class="breadcrumb">
             <li>
                 <i class="fa fa-dashboard"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
             </li>
             <li>
-                <i class="fa fa-user"></i> Nhân viên
+                <i class="fa fa-user"></i> Hồ sơ Nhân viên
             </li>
         </ol>
     </div>
@@ -61,7 +61,7 @@
                     Giới tính
                 </th>
                 <th>
-                    Ngày bắt đầu
+                    Chuyên ngành
                 </th>
                 <th>
                     Số lượng: @Model.Count
@@ -113,16 +113,7 @@
                         <td>@item.ChucVuNhanVien.TenChucVu</td>
                         <td>@gioitinh</td>
                         <td>
-
-                            @String.Format("{0:dd/MM/yyyy}", @item.HopDong.NgayBatDau)
-                            @{
-                                DateTime ngaydau = Convert.ToDateTime(@item.HopDong.NgayBatDau);
-                                DateTime ngaysau = DateTime.Now.Date;
-                                TimeSpan Times = ngaysau - ngaydau;
-
-                                int sonam = (int)Times.Days / 365;
-                            }
-
+                            @db.ChuyenNganhs.SingleOrDefault(m=>m.MaChuyenNganh == item.MaChuyenNganh).TenChuyenNganh
                         </td>
                         <td>
                             <a class="btn btn-primary" href="@Url.Action("Detail", "HoSoNhanVien", new { id = item.MaNhanVien })">

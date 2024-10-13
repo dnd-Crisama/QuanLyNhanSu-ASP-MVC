@@ -1,0 +1,25 @@
+﻿@model QuanLyNhanSu.Models.ChuyenNganh
+
+@{
+    ViewBag.Title = "Thêm Chuyên Ngành";
+}
+
+<h2>Thêm Chuyên Ngành</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.Label("Mã chuyên ngành")
+        @Html.TextBoxFor(model => model.MaChuyenNganh, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.MaChuyenNganh)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Tên chuyên ngành")
+        @Html.TextBoxFor(model => model.TenChuyenNganh, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.TenChuyenNganh)
+    </div>
+
+    <input type="submit" value="Xác nhận" class="btn btn-primary" />
+}

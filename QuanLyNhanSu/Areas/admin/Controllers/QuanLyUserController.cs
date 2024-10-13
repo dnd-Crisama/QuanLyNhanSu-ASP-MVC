@@ -61,18 +61,18 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 new SqlParameter("@NgayThoiViec", DateTime.Now),
                 new SqlParameter("@Lydo", lydo));
 
-            db.SaveChanges();
-
+           /*
             foreach (var item in ctLuong)
             {
                 db.ChiTietLuongs.Remove(item);
             }
 
             db.Luongs.Remove(luong);
-            
             db.NhanViens.Remove(a);
+            */
             db.HopDongs.Remove(hd);
-            
+
+         
             db.SaveChanges();
             return Redirect("~/admin/QuanLyUser");
         }
@@ -373,7 +373,9 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
             ViewBag.ThoiViec = thoiviec;
             if(thoiviec == true)
             {
-                var data = db.ThoiViecs.ToList();
+                string sql = "SELECT * FROM THOIVIECs"; 
+                var data = db.Database.SqlQuery<ThoiViec>(sql).ToList();
+
                 return View(data);
             }
             else
@@ -390,11 +392,10 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
             }   
            
         }
-        public ActionResult XoaThoiViec (string id)
+        public ActionResult XoaThoiViec (string id ,string name)
         {
-            var thoiviec = db.ThoiViecs.FirstOrDefault(nv => nv.MaNhanVien == id);
-            db.ThoiViecs.Remove(thoiviec);
-            db.SaveChanges();
+            string sql = "DELETE FROM THOIVIECs WHERE MaNhanVien = @p0 AND TenNhanVien = @p1";
+            db.Database.ExecuteSqlCommand(sql, id, name);
             return RedirectToAction("ThoiViec");
         }
 

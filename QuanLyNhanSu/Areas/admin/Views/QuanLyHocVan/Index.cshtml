@@ -1,0 +1,54 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.TrinhDoHocVan>
+
+@{
+    ViewBag.Title = "Danh sách trình độ học vấn";
+}
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Trình độ học vấn
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
+            </li>
+            <li>
+                <i class="fa fa-money"></i> Học vấn
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-primary" href="@Url.Action("Create", "QuanLyHocVan")">Thêm Trình Độ</a>
+</div>
+<hr />
+<div class="table-responsive">
+    <table id="table-taikhoan" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr class="success">
+                <th>Mã Trình Độ</th>
+                <th>Tên Trình Độ</th>
+                <th>Hệ Số Bậc</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaTrinhDoHocVan</td>
+                    <td>@item.TenTrinhDo</td>
+                    <td>@item.HeSoBac</td>
+                    <td>
+                        <a class="btn btn-success" href="@Url.Action("getByTrinhDo", "QuanLyHocVan", new { id = item.MaTrinhDoHocVan })">Danh sách nhân viên theo trình độ</a>
+                        <a class="btn btn-warning" href="@Url.Action("Edit", "QuanLyHocVan", new { id = item.MaTrinhDoHocVan })">Cập nhật</a>
+                        <a class="btn btn-danger" href="@Url.Action("Delete", "QuanLyHocVan", new { id = item.MaTrinhDoHocVan })">Xóa</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

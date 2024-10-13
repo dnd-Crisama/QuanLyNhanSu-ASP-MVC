@@ -12,6 +12,9 @@ namespace QuanLyNhanSu.Models
         public List<ContractTypeCount> ContractTypeCounts { get; set; }
         public List<EmployeeRoleCount> EmployeeRoleCounts { get; set; }
         public List<TopEmployee> TopEmployees { get; set; }
+        public List<SpecializationEmployeeCount> SpecializationEmployeeCounts { get; set; }
+        public List<EducationalQualificationCount> EducationalQualificationCounts { get; set; }
+
         public int TotalEmployees { get; set; }
         public int TotalDepartments { get; set; }
         public int TotalSalaryRecords { get; set; }
@@ -45,6 +48,16 @@ namespace QuanLyNhanSu.Models
     public class EmployeeRoleCount
     {
         public string RoleName { get; set; }
+        public int Count { get; set; }
+    }
+    public class SpecializationEmployeeCount
+    {
+        public string SpecializationName { get; set; }
+        public int EmployeeCount { get; set; }
+    }
+    public class EducationalQualificationCount
+    {
+        public string QualificationName { get; set; }
         public int Count { get; set; }
     }
 }

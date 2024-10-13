@@ -1,0 +1,30 @@
+﻿@model QuanLyNhanSu.Models.TrinhDoHocVan
+
+@{
+    ViewBag.Title = "Xóa Trình Độ Học Vấn";
+}
+
+<h2>Xóa Trình Độ Học Vấn</h2>
+
+<h3>Bạn có chắc chắn muốn xóa trình độ này?</h3>
+<div>
+    <h4>Trình Độ: @Model.TenTrinhDo</h4>
+    <div>
+        <dl class="dl-horizontal">
+            <dt>Mã Trình Độ</dt>
+            <dd>@Model.MaTrinhDoHocVan</dd>
+            <dt>Tên trình độ</dt>
+            <dd>@Model.TenTrinhDo</dd>
+            <dt>Hệ Số Bậc</dt>
+            <dd>@Model.HeSoBac</dd>
+        </dl>
+    </div>
+
+    @using (Html.BeginForm("DeleteConfirmed","QuanLyHocVan"))
+    {
+        @Html.AntiForgeryToken()
+        <input type="text" value="@Model.MaTrinhDoHocVan" name="id" hidden />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> 
+@Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-default" })
+    }
+    </div>

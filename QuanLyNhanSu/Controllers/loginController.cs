@@ -2,6 +2,9 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net.Mail;
+using System.Net.Mime;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -160,5 +163,126 @@ namespace QuanLyNhanSu.Controllers
         {
             return PartialView("_FooterPartial");
         }
+        [HttpGet]
+        public ActionResult ForgotPassword(string id)
+        {
+            var us = db.NhanViens.FirstOrDefault(m => m.MaNhanVien == id);
+            if (us == null)
+            {
+                ViewBag.Error = "Mã nhân viên không tồn tại.";
+            }
+            return View(us);
+        }
+
+        [HttpPost]
+        public ActionResult ForgotPassword(string maNhanVien, string email)
+        {
+            var user = db.NhanViens.FirstOrDefault(x => x.Email == email && x.MaNhanVien == maNhanVien);
+            if (user != null)
+            {
+                // Generate a random verification code
+                string verificationCode = Guid.NewGuid().ToString().Substring(0, 6);
+                Session["VerificationCode"] = verificationCode;
+                Session["ResetUserId"] = user.MaNhanVien;
+
+                // Send the code to user's email
+                // Assuming a method SendEmail exists that sends an email.
+                SendVerificationCode(user.Email, verificationCode);
+
+                ViewBag.Message = "Mã xác nhận đã được gửi tới email của bạn.";
+                return RedirectToAction("VerifyCode");
+            }
+            else
+            {
+                ViewBag.Error = "Email hoặc mã nhân viên không chính xác.";
+            }
+            return View(db.NhanViens.FirstOrDefault(m=>m.MaNhanVien == maNhanVien));
+        }
+
+        [HttpGet]
+        public ActionResult VerifyCode()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult VerifyCode(string code)
+        {
+            string sessionCode = Session["VerificationCode"] as string;
+            if (sessionCode == code)
+            {
+                return RedirectToAction("ResetPassword");
+            }
+
+            ViewBag.Error = "Mã xác nhận không chính xác.";
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(string newPassword, string confirmPassword)
+        {
+            if (newPassword == confirmPassword)
+            {
+                string userId = Session["ResetUserId"] as string;
+                var user = db.NhanViens.FirstOrDefault(x => x.MaNhanVien == userId);
+                if (user != null)
+                {
+                    user.MatKhau = newPassword;
+                    db.SaveChanges();
+
+                    Session["VerificationCode"] = null;
+                    Session["ResetUserId"] = null;
+
+                    ViewBag.Message = "Mật khẩu của bạn đã được đặt lại thành công.";
+                    return RedirectToAction("Login");
+                }
+            }
+
+            ViewBag.Error = "Mật khẩu không khớp.";
+            return View();
+        }
+
+        // Helper method to send email (you need to implement it)
+        public void SendVerificationCode(string toEmail, string verificationCode)
+        {
+            try
+            {
+                var fromAddress = new MailAddress("tapphongloanvu@gmail.com", "Quản lý nhân sự");
+                var toAddress = new MailAddress(toEmail);
+                const string fromPassword = "qtxt rkar buwx llid";
+                string subject = "Password Reset Verification Code";
+                string body = $"Your verification code is: {verificationCode}";
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle exception
+                Console.WriteLine("Error sending email: " + ex.Message);
+            }
+        }
     }
+    
 }

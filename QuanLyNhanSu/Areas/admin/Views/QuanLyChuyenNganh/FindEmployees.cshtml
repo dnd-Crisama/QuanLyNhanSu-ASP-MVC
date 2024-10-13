@@ -1,0 +1,43 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.NhanVien>
+@{
+    ViewBag.Title = "FindEmployees";
+    var db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
+}
+
+<h2>Danh sách nhân viên theo chuyên ngành: @ViewBag.tencn </h2>
+
+<div>
+    <h1 class="page-header">Chuyên ngành nhân viên</h1>
+    <a class="btn btn-primary" href="@Url.Action("XuatExcel", "QuanLyChuyenNganh")">Thêm Chuyên Ngành</a>
+</div>
+<hr />
+<table id="table-taikhoan" class="table table-bordered table-striped">
+    <thead>
+        <tr class="success">
+            <th>Mã nhân viên</th>
+            <th>Mã chuyên ngành</th>
+            <th>Tên nhân viên</th>
+            <th>Tên chuyên ngành</th>
+            <th>Chức vụ</th>
+            <th>Trình độ học vấn</th>
+            <th>Số lượng: @Model.Count()</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaNhanVien</td>
+                <td>@item.MaChuyenNganh</td>
+                <td>@item.HoTen </td>
+                <td>@db.ChuyenNganhs.SingleOrDefault(m => m.MaChuyenNganh == item.MaChuyenNganh).TenChuyenNganh </td>
+                <td>@db.ChucVuNhanViens.SingleOrDefault(m => m.MaChucVuNV == item.MaChucVuNV).TenChucVu </td>
+                <td>@db.TrinhDoHocVans.SingleOrDefault(m => m.MaTrinhDoHocVan == item.MaTrinhDoHocVan).TenTrinhDo </td>
+                <td>
+                    <a class="btn btn-warning" href="@Url.Action("EditChuyenNganhNV", "QuanLyChuyenNganh", new { id = item.MaNhanVien })">Cập nhật</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-danger" href="/admin/QuanLyChuyenNganh">Back</a>

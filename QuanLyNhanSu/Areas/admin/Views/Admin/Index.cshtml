@@ -187,6 +187,12 @@
             </div>
         </div>
         <div class="row chart-row">
+            <div class="col-lg-6 chart-container-3rd">
+                <h3 class="breadcrumb">Nhân sự theo Chuyên Ngành</h3>
+                <canvas id="specializationEmployeeChart"></canvas>
+            </div>
+        </div>
+        <div class="row chart-row">
             <div class="col-lg-6 chart-container">
                 <h3 class="breadcrumb">Thống kê Loại Hợp Đồng</h3>
                 <canvas id="contractTypeChart"></canvas>
@@ -196,9 +202,14 @@
                 <canvas id="employeeRoleChart"></canvas>
             </div>
         </div>
+        <div class="row chart-row">
+            <div class="col-lg-6 chart-container-3rd">
+                <h3 class="breadcrumb">Thống kê Trình Độ Học Vấn</h3>
+                <canvas id="educationalQualificationChart"></canvas>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
     </div>
-    <!-- /.container-fluid -->
-</div>
 <!-- /#page-wrapper -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -308,6 +319,52 @@
             }
         }
     });
+    // Specialization Employee Chart
+    var specializationCtx = document.getElementById('specializationEmployeeChart').getContext('2d');
+    new Chart(specializationCtx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Encode(Model.SpecializationEmployeeCounts.Select(sec => sec.SpecializationName))),
+            datasets: [{
+                label: 'Số lượng nhân viên',
+                data: @Html.Raw(Json.Encode(Model.SpecializationEmployeeCounts.Select(sec => sec.EmployeeCount))),
+                backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                borderColor: 'rgb(153, 102, 255)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    // Educational Qualification Chart
+var educationalQualificationCtx = document.getElementById('educationalQualificationChart').getContext('2d');
+new Chart(educationalQualificationCtx, {
+    type: 'bar',
+    data: {
+        labels: @Html.Raw(Json.Encode(Model.EducationalQualificationCounts.Select(eq => eq.QualificationName))),
+        datasets: [{
+            label: 'Số lượng nhân viên',
+            data: @Html.Raw(Json.Encode(Model.EducationalQualificationCounts.Select(eq => eq.Count))),
+            backgroundColor: 'rgba(153, 102, 255, 0.6)',
+            borderColor: 'rgb(153, 102, 255)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
 </script>
 
 <style>
@@ -323,6 +380,18 @@
         background-color: #f9f9f9; /* Optional: add background color */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
     }
+    .chart-container-3rd {
+        position: relative;
+        margin: auto;
+        height: 600px;
+        width: 1000px; /* Make it full width */
+        max-width: 1600px; /* Set a max-width for better layout */
+        padding: 50px; /* Add padding around the chart */
+        border: 1px solid #ccc; /* Optional: add a border for separation */
+        border-radius: 10px; /* Optional: round corners */
+        background-color: #f9f9f9; /* Optional: add background color */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+    }
 
     .row {
         margin-bottom: 30px;
@@ -332,6 +401,7 @@
         display: flex; /* Use flexbox for row layout */
         justify-content: space-around; /* Space out the charts */
         flex-wrap: wrap; /* Allow wrapping for smaller screens */
+        margin-bottom:30px;
     }
 
     h3 {
@@ -357,4 +427,10 @@
         .panel-footer:hover {
             background-color: #e0e0e0;
         }
+        @@media (max-width: 768px) {
+    .chart-container {
+        flex: 0 0 100%; /* Stack the charts on small screens */
+        margin-bottom: 20px; /* Add space between stacked items */
+    }
+}
 </style>

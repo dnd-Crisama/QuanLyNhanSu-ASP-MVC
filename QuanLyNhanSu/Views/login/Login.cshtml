@@ -18,12 +18,15 @@
         <div class="login">
             <div class="form">
                 <h1>Welcome</h1>
-                <input type="text" placeholder="Tài khoản" name="MaNhanVien" autofocus required>
+                <input type="text" placeholder="Tài khoản" id="maNhanVien" name="MaNhanVien" autofocus required>
                 <input type="password" placeholder="Mật khẩu" name="MatKhau">
-                <input type="submit" value="Sign In" class="submit">
+                <a id="forgotPasswordLink" href="#" name="id">Quên mật khẩu?</a>
+                <div class="text-danger" style="padding:0px ; margin:0px"> @ViewBag.err</div>
+                <input type="submit" value="Sign In" class="submit" style="margin-top:10px;">
             </div>
+
         </div>
-        <span class="text-danger"> @ViewBag.err</span>
+
     </form>
     <div class="lines">
         <div class="line"></div>
@@ -50,3 +53,15 @@
 @section FooterPartial{
     @Html.Action("FooterPartial")
 }
+<script>
+    // Get the input and the link
+    const maNhanVienInput = document.getElementById('maNhanVien');
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+
+    // Add an event listener to update the link's href when the input changes
+    maNhanVienInput.addEventListener('input', function() {
+        const maNhanVien = maNhanVienInput.value;
+        // Update the href dynamically based on the input value
+        forgotPasswordLink.href = '@Url.Action("ForgotPassword", "login")' + '?id=' + encodeURIComponent(maNhanVien);
+    });
+</script>

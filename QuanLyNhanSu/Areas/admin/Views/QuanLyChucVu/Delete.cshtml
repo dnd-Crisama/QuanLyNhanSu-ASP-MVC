@@ -1,0 +1,45 @@
+﻿@model QuanLyNhanSu.Models.ChucVuNhanVien
+
+@{
+    ViewBag.Title = "Xóa Chức Vụ";
+}
+
+<h2>Xóa Chức Vụ</h2>
+
+<h3>Bạn có chắc chắn muốn xóa chức vụ này?</h3>
+
+<div>
+    <h4>Chức vụ nhân viên</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MaChucVuNV)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaChucVuNV)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TenChucVu)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TenChucVu)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HSPC)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HSPC)
+        </dd>
+    </dl>
+</div>
+
+@using (Html.BeginForm("DeleteConfirmed","QuanLyChucVu"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.MaChucVuNV)
+    <div>
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        <input type="text" value="@Model.MaChucVuNV" hidden name="id"/>
+        @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-default" })
+    </div>
+}

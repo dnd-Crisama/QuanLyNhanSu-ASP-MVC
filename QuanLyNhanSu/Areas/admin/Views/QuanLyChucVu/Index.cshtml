@@ -1,0 +1,58 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.ChucVuNhanVien>
+
+@{
+    ViewBag.Title = "Danh sách chức vụ";
+    var db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
+}
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Chức vụ nhân viên
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
+            </li>
+            <li>
+                <i class="fa fa-user"></i> Chức vụ
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div style="margin:10px">
+    <a class="btn btn-primary" href="@Url.Action("Create", "QuanLyChucVu")">Thêm Chức Vụ</a>
+</div>
+<hr />
+<table id="table-taikhoan" class="table table-responsive table-bordered table-striped">
+    <thead>
+        <tr class="success">
+            <th>Mã chức vụ</th>
+            <th>Tên chức vụ</th>
+            <th>Hệ số PC</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.MaChucVuNV)</td>
+                <td>@Html.DisplayFor(modelItem => item.TenChucVu)</td>
+                <td>@Html.DisplayFor(modelItem => item.HSPC) </td>
+                <td>
+                    <a class="btn btn-warning" href="@Url.Action("getByChucVu", "QuanLyChucVu", new { @id = @item.MaChucVuNV })">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Nhân viên theo chức vụ
+                    </a>
+                    <a class="btn btn-warning" href="@Url.Action("Edit", "QuanLyChucVu", new { @id = @item.MaChucVuNV })">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Cập nhật
+                    </a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", "QuanLyChucVu", new { @id = @item.MaChucVuNV })">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>Xóa
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

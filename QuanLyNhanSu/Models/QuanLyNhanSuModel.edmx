@@ -200,8 +200,8 @@
 warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ThoiViecs">
           <Key>
-            <PropertyRef Name="MaNhanVien" />
             
+            <PropertyRef Name="MaNhanVien" />
           </Key>
           <Property Name="MaNhanVien" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Lydo" Type="nvarchar(max)" />

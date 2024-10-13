@@ -1,0 +1,86 @@
+﻿@model QuanLyNhanSu.Models.KyLuat
+
+@using QuanLyNhanSu.Models
+@{
+    ViewBag.Title = "Thêm Kỷ Luật";
+    var nhanvien = new QuanLyNhanSuEntities().NhanViens.Where(n => n.MaNhanVien != "admin").ToList();
+}
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Thêm Kỷ Luật
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-dashboard"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
+            </li>
+            <li>
+                <i class="fa fa-warning"></i> Kỷ luật
+            </li>
+        </ol>
+    </div>
+</div>
+
+@if (ViewBag.ErrorKyLuatTrungMaNhanVien != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorKyLuatTrungMaNhanVien
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-offset-2 col-md-8">
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+            <div class="form-group">
+                <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+                    <label>Nhân viên</label>
+                </div>
+                <div class="col-md-4 col-sm-8">
+                    <input list="nhanVien" name="MaNhanVien" class="form-control" />
+                    <datalist id="nhanVien">
+                        @foreach (var item in nhanvien)
+                        {
+                            <option value="@item.MaNhanVien.ToString()">@item.MaNhanVien - @item.HoTen</option>
+                        }
+                    </datalist>
+                    @Html.ValidationMessageFor(model => model.MaNhanVien)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-offset-1 col-md-4 col-sm-4">Tháng kỷ luật</label>
+                <div class="col-md-4 col-sm-8">
+                    <input type="date" name="ThangKiLuat" required class="form-control" />
+                    @Html.ValidationMessageFor(model => model.ThangKiLuat)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-offset-1 col-md-4 col-sm-4">Tiền kỷ luật(nếu có)</label>
+                <div class="col-md-4 col-sm-8">
+                    <input name="TienKyLuat" class="form-control" title="Tiền kỷ luật" />
+                    @Html.ValidationMessageFor(model => model.TienKyLuat)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-offset-1 col-md-4 col-sm-4">Lý do</label>
+                <div class="col-md-4 col-sm-8">
+                    @Html.TextAreaFor(model => model.LyDo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LyDo)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-md-offset-5 col-sm-8">
+                    <input type="submit" value="Xác nhận" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+}

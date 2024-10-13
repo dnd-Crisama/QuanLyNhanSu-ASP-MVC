@@ -37,24 +37,18 @@
                     <label>Nhân viên</label>
                 </div>
                 <div class="col-md-4 col-sm-8">
-                    @*@Html.DropDownList("@ViewBag.nhanvien", "ma nhan vien")*@
+                    <!-- Display combined MaNhanVien and HoTen as read-only text -->
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.MaNhanVien - @ViewBag.HoTenNhanVien"
+                           readonly />
 
-                    <input list="browsers" name="MaNhanvien" class="form-control">
-                    <datalist id="browsers" readonly>
-                        @Model.MaNhanVien - @db.NhanViens.SingleOrDefault(m => m.MaNhanVien == @Model.MaNhanVien).HoTen.ToString();
+                    <!-- Hidden input to store and submit the MaNhanVien value -->
+                    <input type="hidden" name="MaNhanVien" value="@Model.MaNhanVien" />
 
-                    </datalist>
-
-                    @*<select name="MaNhanvien" class="form-control">
-                            @foreach (var item in nhanvien)
-                            {
-                                <option value="@item.MaNhanVien.ToString()">@item.MaNhanVien - @item.HoTen</option>
-                            }
-                        </select>*@
                     @Html.ValidationMessageFor(model => model.MaNhanVien)
                 </div>
             </div>
-            S
             <div class="form-group">
                 <label class="control-label col-md-offset-1 col-md-4 col-sm-4">Tháng thưởng</label>
                 <div class="col-md-4 col-sm-8">
@@ -68,7 +62,7 @@
                 <label class="control-label col-md-offset-1 col-md-4 col-sm-4">Tiền thưởng(nếu có)</label>
 
                 <div class="col-md-4 col-sm-8">
-                    <input name="TienThuong" class="form-control" title="Tiền thưởng" />
+                    <input name="TienThuong" class="form-control" title="Tiền thưởng" value="@Model.TienThuong" />
                     @Html.ValidationMessageFor(model => model.TienThuong)
                 </div>
             </div>
@@ -79,6 +73,16 @@
                 <div class="col-md-4 col-sm-8">
                     @Html.TextAreaFor(model => model.LyDo, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.LyDo)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-offset-1 col-md-4 col-sm-4">Trạng thái</label>
+                <div class="col-md-4 col-sm-8">
+                    <select name="TrangThai" class="form-control">
+                        <option value="false" @(Model.TrangThai == false ? "selected" : "")>Chưa áp dụng</option>
+                        <option value="true" @(Model.TrangThai == true ? "selected" : "")>Đã áp dụng</option>
+                    </select>
                 </div>
             </div>
 

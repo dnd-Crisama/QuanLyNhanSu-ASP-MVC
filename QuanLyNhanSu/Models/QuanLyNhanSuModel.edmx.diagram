@@ -38,6 +38,15 @@
         <AssociationConnector Association="QuanLyNhanSuModel.FK_NhanVien_TrinhDoHocVan" />
         <EntityTypeShape EntityType="QuanLyNhanSuModel.SlideImage" Width="1.5" PointX="10.375" PointY="0.75" />
         <AssociationConnector Association="QuanLyNhanSuModel.FK_HopDongs_NhanViens" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.Conversation" Width="1.5" PointX="5.25" PointY="26.625" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.Message" Width="1.5" PointX="7.5" PointY="18.75" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.Notification" Width="1.5" PointX="3.25" PointY="0.5" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Conversat__Parti__07C12930" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Conversat__Parti__08B54D69" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Messages__Conver__0E6E26BF" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Messages__Receiv__0D7A0286" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Messages__Sender__0C85DE4D" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Notificat__Sende__1332DBDC" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

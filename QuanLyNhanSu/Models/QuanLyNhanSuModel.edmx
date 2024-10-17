@@ -64,6 +64,17 @@
           <Property Name="MaChuyenNganh" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="TenChuyenNganh" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Conversations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Participant1Id" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Participant2Id" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="StartedAt" Type="datetime" />
+          <Property Name="IsGlobal" Type="bit" />
+          <Property Name="Hidden" Type="bit" />
+        </EntityType>
         <EntityType Name="HopDongs">
           <Key>
             <PropertyRef Name="MaHopDong" />
@@ -141,6 +152,18 @@
           <Property Name="PhuCap" Type="float" />
           <Property Name="ThueThuNhap" Type="float" />
         </EntityType>
+        <EntityType Name="Messages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SenderId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ReceiverId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="255" />
+          <Property Name="SentAt" Type="datetime" />
+          <Property Name="ConversationId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="NhanViens">
           <Key>
             <PropertyRef Name="MaNhanVien" />
@@ -164,6 +187,17 @@
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="Bio" Type="nvarchar(max)" />
           <Property Name="Facebookk" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Notifications">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SenderId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="SentAt" Type="datetime" />
+          <Property Name="IsGlobal" Type="bit" />
+          <Property Name="isSeen" Type="bit" />
         </EntityType>
         <EntityType Name="PhongBans">
           <Key>
@@ -197,11 +231,11 @@
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ThoiViecs">
           <Key>
-            
             <PropertyRef Name="MaNhanVien" />
+            
           </Key>
           <Property Name="MaNhanVien" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Lydo" Type="nvarchar(max)" />
@@ -216,6 +250,30 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
           <Property Name="TenTrinhDo" Type="nvarchar(max)" Nullable="false" />
           <Property Name="HeSoBac" Type="float" />
         </EntityType>
+        <Association Name="FK__Conversat__Parti__07C12930">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="1" />
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Conversations">
+              <PropertyRef Name="Participant1Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conversat__Parti__08B54D69">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="1" />
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Conversations">
+              <PropertyRef Name="Participant2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__LuanChuyen__MaNhanVien">
           <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -230,6 +288,42 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Messages__Conver__0E6E26BF">
+          <End Role="Conversations" Type="Self.Conversations" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Messages__Receiv__0D7A0286">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="ReceiverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Messages__Sender__0C85DE4D">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="1" />
+          <End Role="Messages" Type="Self.Messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Messages">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__NhanVien__MaHopDong">
           <End Role="HopDongs" Type="Self.HopDongs" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -241,6 +335,18 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
             </Principal>
             <Dependent Role="NhanViens">
               <PropertyRef Name="MaHopDong" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Notificat__Sende__1332DBDC">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="1" />
+          <End Role="Notifications" Type="Self.Notifications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Notifications">
+              <PropertyRef Name="SenderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -346,6 +452,7 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
           <EntitySet Name="ChiTietLuongs" EntityType="Self.ChiTietLuongs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChucVuNhanViens" EntityType="Self.ChucVuNhanViens" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChuyenNganhs" EntityType="Self.ChuyenNganhs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Conversations" EntityType="Self.Conversations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HopDongs" EntityType="Self.HopDongs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KhenThuongs" EntityType="Self.KhenThuongs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KyLuats" EntityType="Self.KyLuats" Schema="dbo" store:Type="Tables" />
@@ -354,7 +461,9 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
           <EntitySet Name="LuongA21PGS" EntityType="Self.LuongA21PGS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LuongA31GS" EntityType="Self.LuongA31GS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Luongs" EntityType="Self.Luongs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Messages" EntityType="Self.Messages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NhanViens" EntityType="Self.NhanViens" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notifications" EntityType="Self.Notifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhongBans" EntityType="Self.PhongBans" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SlideImages" EntityType="Self.SlideImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -367,13 +476,37 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
     [ThoiViecs].[TenNhanVien] AS [TenNhanVien]
     FROM [dbo].[ThoiViecs] AS [ThoiViecs]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__Conversat__Parti__07C12930" Association="Self.FK__Conversat__Parti__07C12930">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conversat__Parti__08B54D69" Association="Self.FK__Conversat__Parti__08B54D69">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
           <AssociationSet Name="FK__LuanChuyen__MaNhanVien" Association="Self.FK__LuanChuyen__MaNhanVien">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="LuanChuyenNhanViens" EntitySet="LuanChuyenNhanViens" />
           </AssociationSet>
+          <AssociationSet Name="FK__Messages__Conver__0E6E26BF" Association="Self.FK__Messages__Conver__0E6E26BF">
+            <End Role="Conversations" EntitySet="Conversations" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Messages__Receiv__0D7A0286" Association="Self.FK__Messages__Receiv__0D7A0286">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Messages__Sender__0C85DE4D" Association="Self.FK__Messages__Sender__0C85DE4D">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Messages" EntitySet="Messages" />
+          </AssociationSet>
           <AssociationSet Name="FK__NhanVien__MaHopDong" Association="Self.FK__NhanVien__MaHopDong">
             <End Role="HopDongs" EntitySet="HopDongs" />
             <End Role="NhanViens" EntitySet="NhanViens" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Notificat__Sende__1332DBDC" Association="Self.FK__Notificat__Sende__1332DBDC">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Notifications" EntitySet="Notifications" />
           </AssociationSet>
           <AssociationSet Name="FK__Thuong__MaNhanVien" Association="Self.FK__Thuong__MaNhanVien">
             <End Role="NhanViens" EntitySet="NhanViens" />
@@ -513,6 +646,33 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
           <AssociationSet Name="FK_HopDongs_NhanViens" Association="QuanLyNhanSuModel.FK_HopDongs_NhanViens">
             <End Role="NhanVien" EntitySet="NhanViens" />
             <End Role="HopDong" EntitySet="HopDongs" />
+          </AssociationSet>
+          <EntitySet Name="Conversations" EntityType="QuanLyNhanSuModel.Conversation" />
+          <EntitySet Name="Messages" EntityType="QuanLyNhanSuModel.Message" />
+          <EntitySet Name="Notifications" EntityType="QuanLyNhanSuModel.Notification" />
+          <AssociationSet Name="FK__Conversat__Parti__07C12930" Association="QuanLyNhanSuModel.FK__Conversat__Parti__07C12930">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Conversation" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conversat__Parti__08B54D69" Association="QuanLyNhanSuModel.FK__Conversat__Parti__08B54D69">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Conversation" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Messages__Conver__0E6E26BF" Association="QuanLyNhanSuModel.FK__Messages__Conver__0E6E26BF">
+            <End Role="Conversation" EntitySet="Conversations" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Messages__Receiv__0D7A0286" Association="QuanLyNhanSuModel.FK__Messages__Receiv__0D7A0286">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Messages__Sender__0C85DE4D" Association="QuanLyNhanSuModel.FK__Messages__Sender__0C85DE4D">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Notificat__Sende__1332DBDC" Association="QuanLyNhanSuModel.FK__Notificat__Sende__1332DBDC">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
@@ -710,6 +870,11 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Bio" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Facebookk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Conversations" Relationship="QuanLyNhanSuModel.FK__Conversat__Parti__07C12930" FromRole="NhanVien" ToRole="Conversation" />
+          <NavigationProperty Name="Conversations1" Relationship="QuanLyNhanSuModel.FK__Conversat__Parti__08B54D69" FromRole="NhanVien" ToRole="Conversation" />
+          <NavigationProperty Name="Messages" Relationship="QuanLyNhanSuModel.FK__Messages__Receiv__0D7A0286" FromRole="NhanVien" ToRole="Message" />
+          <NavigationProperty Name="Messages1" Relationship="QuanLyNhanSuModel.FK__Messages__Sender__0C85DE4D" FromRole="NhanVien" ToRole="Message" />
+          <NavigationProperty Name="Notifications" Relationship="QuanLyNhanSuModel.FK__Notificat__Sende__1332DBDC" FromRole="NhanVien" ToRole="Notification" />
         </EntityType>
         <EntityType Name="PhongBan">
           <Key>
@@ -948,6 +1113,119 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Participant1Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Participant2Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="StartedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__Conversat__Parti__07C12930" FromRole="Conversation" ToRole="NhanVien" />
+          <NavigationProperty Name="NhanVien1" Relationship="QuanLyNhanSuModel.FK__Conversat__Parti__08B54D69" FromRole="Conversation" ToRole="NhanVien" />
+          <NavigationProperty Name="Messages" Relationship="QuanLyNhanSuModel.FK__Messages__Conver__0E6E26BF" FromRole="Conversation" ToRole="Message" />
+          <Property Name="IsGlobal" Type="Boolean" />
+          <Property Name="Hidden" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SenderId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ReceiverId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SentAt" Type="DateTime" Precision="3" />
+          <Property Name="ConversationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Conversation" Relationship="QuanLyNhanSuModel.FK__Messages__Conver__0E6E26BF" FromRole="Message" ToRole="Conversation" />
+          <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__Messages__Receiv__0D7A0286" FromRole="Message" ToRole="NhanVien" />
+          <NavigationProperty Name="NhanVien1" Relationship="QuanLyNhanSuModel.FK__Messages__Sender__0C85DE4D" FromRole="Message" ToRole="NhanVien" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SenderId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SentAt" Type="DateTime" Precision="3" />
+          <Property Name="IsGlobal" Type="Boolean" />
+          <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__Notificat__Sende__1332DBDC" FromRole="Notification" ToRole="NhanVien" />
+          <Property Name="isSeen" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK__Conversat__Parti__07C12930">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="1" />
+          <End Type="QuanLyNhanSuModel.Conversation" Role="Conversation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Conversation">
+              <PropertyRef Name="Participant1Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conversat__Parti__08B54D69">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="1" />
+          <End Type="QuanLyNhanSuModel.Conversation" Role="Conversation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Conversation">
+              <PropertyRef Name="Participant2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Messages__Conver__0E6E26BF">
+          <End Type="QuanLyNhanSuModel.Conversation" Role="Conversation" Multiplicity="1" />
+          <End Type="QuanLyNhanSuModel.Message" Role="Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Messages__Receiv__0D7A0286">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="1" />
+          <End Type="QuanLyNhanSuModel.Message" Role="Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="ReceiverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Messages__Sender__0C85DE4D">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="1" />
+          <End Type="QuanLyNhanSuModel.Message" Role="Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Notificat__Sende__1332DBDC">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="1" />
+          <End Type="QuanLyNhanSuModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1176,6 +1454,43 @@ warning 6002: The table/view 'QuanLyNhanSu.dbo.ThoiViecs' does not have a primar
                 <ScalarProperty Name="alt" ColumnName="alt" />
                 <ScalarProperty Name="src" ColumnName="src" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Conversations">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.Conversation">
+              <MappingFragment StoreEntitySet="Conversations">
+                <ScalarProperty Name="Hidden" ColumnName="Hidden" />
+                <ScalarProperty Name="IsGlobal" ColumnName="IsGlobal" />
+                <ScalarProperty Name="StartedAt" ColumnName="StartedAt" />
+                <ScalarProperty Name="Participant2Id" ColumnName="Participant2Id" />
+                <ScalarProperty Name="Participant1Id" ColumnName="Participant1Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Messages">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.Message">
+              <MappingFragment StoreEntitySet="Messages">
+                <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
+                <ScalarProperty Name="SentAt" ColumnName="SentAt" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="ReceiverId" ColumnName="ReceiverId" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.Notification">
+              <MappingFragment StoreEntitySet="Notifications">
+                <ScalarProperty Name="isSeen" ColumnName="isSeen" />
+                <ScalarProperty Name="IsGlobal" ColumnName="IsGlobal" />
+                <ScalarProperty Name="SentAt" ColumnName="SentAt" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

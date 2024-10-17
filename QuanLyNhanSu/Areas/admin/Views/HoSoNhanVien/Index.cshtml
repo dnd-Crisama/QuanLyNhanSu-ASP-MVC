@@ -116,7 +116,7 @@
                             @db.ChuyenNganhs.SingleOrDefault(m=>m.MaChuyenNganh == item.MaChuyenNganh).TenChuyenNganh
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="@Url.Action("Detail", "HoSoNhanVien", new { id = item.MaNhanVien })">
+                            <a class="btn btn-primary" href="@Url.Action("Detail", "HoSoNhanVien", new { id = item.MaNhanVien})">
                                 <i class="fa fa-address-book"></i> Chi tiết hồ sơ
                             </a>
                             <a class="btn btn-danger" href="@Url.Action("Delete", "HopDong", new { id = item.MaHopDong })">

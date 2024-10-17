@@ -1,0 +1,438 @@
+﻿body {
+    margin: 0;
+}
+
+.body, .body > html {
+    background-color: black;
+    width: 100%;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    overflow: auto;
+}
+.chat-container {
+    display: flex;
+    position:center;
+    height: 93.5vh;
+    width:100%;
+    background: #2c2f33;
+    color: #ddd;
+    font-family: Arial, sans-serif;
+    padding:0;
+    overflow:hidden;
+
+}
+hr {
+    display:none;
+    padding:0;
+
+    margin:0;
+}
+.body{
+
+    padding-top: 60px;
+    padding-bottom: 0px;
+
+}
+.body-content {
+    max-width: 100%;
+    max-height: 100%;
+    padding: 0;
+    margin: 0;
+}
+.sidebar {
+    background: #23272a;
+    width: 250px;
+    min-width: 250px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+h3 {
+    color: #ddd;
+    margin-bottom: 10px;
+}
+.conversation-item {
+    position: relative; /* Make it relative to position the button inside */
+    padding: 3px; /* Optional: Add some padding */
+}
+
+.conversation-content {
+    display: flex; /* Flex container for layout */
+    justify-content: space-between; /* Space out content */
+    align-items: center; /* Center items vertically */
+}
+
+.close-button {
+    position: absolute; /* Position it absolutely */
+    top: 5px; /* Distance from the top */
+    right: 5px; /* Distance from the right */
+    background-color: grey; /* Red background */
+    color: white; /* White text */
+    border: none; /* Remove default border */
+    border-radius: 50%; /* Make it round */
+    width: 15px; /* Width of the button */
+    height: 15px; /* Height of the button */
+    cursor: pointer; /* Change cursor on hover */
+    font-size: 6px; /* Font size */
+    text-align:center;
+
+}
+
+    .close-button:hover {
+        background-color: darkred; /* Darker red on hover */
+    }
+
+.conversation-list, .user-list {
+    list-style:none;
+    padding: 0;
+}
+
+.conversation-item, .user-item {
+    margin: 10px 0;
+}
+
+    .conversation-item a, .user-item span {
+        color: #ddd;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        background: #2c2f33;
+        transition: background 0.3s;
+    }
+
+        .conversation-item a:hover, .user-item span:hover {
+            background: #7289da;
+        }
+
+    .conversation-item.active a {
+        background: #7289da;
+    }
+
+.chat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: #36393f;
+    overflow: hidden
+}
+
+h2 {
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 30px;
+}
+
+.message-list {
+    list-style: none;
+    padding: 0;
+    overflow-y: auto
+}
+
+.message-item {
+    display:flex;
+    align-items:flex-start;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #444;
+    overflow-y:auto
+}
+
+    .message-item.sent {
+        background: #444;
+        text-align: left;
+    }
+
+.message-info {
+    display: flex;
+    justify-content: flex-start;
+    color: #bbb;
+}
+
+.message-content {
+    margin-top: 5px;
+}
+.message-Content {
+    display:flex;
+}
+.message-image {
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.message-input {
+    display:flex;
+    gap: 10px;
+    width:100%;
+    overflow-x:auto;
+}
+.message-form{
+    display:flex;
+    width:100%;
+}
+.input-text {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background: #444;
+    color: #ddd;
+}
+
+.input-file {
+    background: #2c2f33;
+    color: #ddd;
+}
+
+.send-button {
+    padding: 10px 15px;
+    background: #7289da;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+    .send-button:hover {
+        background: #5a6ea8;
+    }
+.message-input-container {
+    display: flex;
+    width: 150%;
+    max-width: 2000px;
+    align-items: center;
+    padding: 10px;
+    background-color: #2c2f33; /* Light background */
+    border: 1px solid #ced4da; /* Light border */
+    border-radius: 72px 110px 111px 65px;
+    -webkit-border-radius: 72px 110px 111px 65px;
+    -moz-border-radius: 72px 110px 111px 65px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow: hidden;
+}
+
+
+textarea {
+    resize: none; /* Allow vertical resizing */
+    height: auto; /* Set height to auto for dynamic sizing */
+    min-height: 50px; /* Minimum height */
+    max-height: 200px; /* Maximum height */
+    height:55px;
+    width: 156vh;
+    max-width:2000px;
+    margin-right: 10px;
+    padding: 10px; /* Padding for better text input */
+    border: 1px solid #ccc; /* Border styling */
+    border-radius: 15px; /* Rounded corners */
+    font-size: 14px; /* Font size */
+    line-height: 1.5; /* Line height */
+    color: aliceblue;
+    background: rgb(73,79,80);
+    background: linear-gradient(90deg, rgba(73,79,80,1) 0%, rgba(45,46,46,1) 35%, rgba(22,21,40,1) 100%);
+}
+
+.attachment-container {
+    display: flex;
+    align-items: center;
+}
+
+.file-upload {
+    display: none; /* Hide the file input */
+}
+
+.file-upload-label {
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px; /* Space between label and button */
+}
+/*
+.send-button {
+    background-color: #28a745; 
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+
+    .send-button:hover {
+        background-color: #218838; 
+    }
+
+    .send-button:disabled {
+        background-color: #ccc;
+    }
+    */
+.image-preview {
+    position: relative; /* Allows positioning of the remove button */
+}
+
+.remove-image-button {
+    position: absolute; /* Positioning for the remove button */
+    top: 1px; /* Position from the top */
+    left: 75px; /* Position from the right */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 50%; /* Circular button */
+    width: 25px; /* Button size */
+    height: 25px; /* Button size */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size for the X icon */
+}
+
+    .remove-image-button:hover {
+        background-color: rgba(255, 0, 0, 0.8); /* Change background on hover */
+    }
+.user-avatar {
+    width: 40px; /* Adjust size as needed */
+    height: 40px; /* Adjust size as needed */
+    border-radius: 50%; /* Make the image circular */
+    margin-right: 10px; /* Space between the avatar and text */
+    object-fit: cover; /* Crop the image to fit the circle */
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    padding-top:120px;
+
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 700px; /* Max width */
+}
+
+#caption {
+    margin: auto;
+    display: block;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #1a1a1a;
+    border-radius: 10px;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #b30000;
+    }
+.btn-upload {
+    color: var(--btn-upload-color);
+    fill: var(--btn-upload-color);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: bold;
+    background-color: var(--btn-upload-background-color);
+    width: var(--btn-upload-width);
+    height: var(--btn-upload-height);
+    padding: 0;
+    
+    border: 0;
+    margin-right: 6px;
+    outline: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 50px;
+    box-shadow: 0 0.7em 1.2em rgba(25, 25, 25, 0.5);
+}
+
+    .btn-upload:not(.btn-upload-uploading) {
+        transition: box-shadow var(--btn-upload-transition-time) ease-out, transform var(--btn-upload-transition-time) ease-out;
+    }
+
+        .btn-upload:not(.btn-upload-uploading):hover {
+            box-shadow: 0 0.7em 1.2em rgba(25, 25, 25, 0.8);
+        }
+
+        .btn-upload:not(.btn-upload-uploading):active {
+            box-shadow: 0 0 0 rgba(25, 25, 25, 0.8);
+            transform: translateY(0.2em);
+        }
+
+    .btn-upload > svg {
+        fill: inherit;
+    }
+
+    .btn-upload > span {
+        color: inherit;
+        margin-left: 0.3em;
+    }
+.send-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4071cb; /* Change to a suitable color */
+    border: none; /* Remove default border */
+    border-radius: 50%; /* Make it circular */
+    width: 45px; /* Adjust the size */
+    height: 45px; /* Adjust the size */
+    cursor: pointer; /* Change cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    outline: none; /* Remove outline */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+}
+
+    .send-button svg {
+        stroke: white; /* Icon color */
+        width: 16px; /* Icon size */
+        height: 16px; /* Icon size */
+    }
+
+    .send-button:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+        transform: scale(1.05); /* Slightly enlarge on hover */
+    }
+
+    .send-button:active {
+        transform: scale(0.95); /* Shrink slightly when clicked */
+    }

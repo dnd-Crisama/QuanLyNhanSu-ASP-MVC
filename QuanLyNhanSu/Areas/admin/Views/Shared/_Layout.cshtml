@@ -51,7 +51,10 @@
                                 <a href="#"><i class="fa fa-exchange"></i>  Đổi mật khẩu</a>
                             </li>*@
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Tin nhắn</a>
+                            <a href="@Url.Action("Index", "Message",new {area =""})"><i class="fa fa-fw fa-envelope"></i> Tin nhắn</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Notification", new {area =""})"><i class="fa fa-fw fa-bell"></i> Thông báo</a>
                         </li>
                         <li>
                             <a href="@Url.Action("Index","CaiDat", new { area = "admin" })"><i class="fa fa-fw fa-gear"></i> Cài đặt</a>
@@ -101,16 +104,16 @@
                     </li>
 
                     @*<li>
-            <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-user"></i> MaNhanVien <i class="fa fa-fw fa-caret-down"></i></a>
-            <ul id="demo" class="collapse">
-                <li>
-                    <a href="#">Change MatKhau</a>
-                </li>
-                <li>
-                    <a href="#">Log Out</a>
-                </li>
-            </ul>
-        </li>*@
+                            <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-user"></i> MaNhanVien <i class="fa fa-fw fa-caret-down"></i></a>
+                            <ul id="demo" class="collapse">
+                                <li>
+                                    <a href="#">Change MatKhau</a>
+                                </li>
+                                <li>
+                                    <a href="#">Log Out</a>
+                                </li>
+                            </ul>
+                        </li>*@
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -136,25 +139,26 @@
     </div>
 
 
-    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery1")
     @Scripts.Render("~/bundles/datatable")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-<script>
-    //  $('#top').hide(500);
-    $(window).on('scroll', function () {
-        var scrollTop = $(window).scrollTop();
-        if (scrollTop > 0) {
-            $('#top').show(500);
-            //$('#top').fadeIn(500);
-        } else {
-            //$('#top').fadeOut(500);
-            $('#top').hide(500);
-        }
-    });
-    $('#top').on('click', function (e) {
-        $('html,body').animate({ scrollTop: 0 }, "slow");
-    });
-</script>
+ 
+    <script>
+        //  $('#top').hide(500);
+        $(window).on('scroll', function () {
+            var scrollTop = $(window).scrollTop();
+            if (scrollTop > 0) {
+                $('#top').show(500);
+                //$('#top').fadeIn(500);
+            } else {
+                //$('#top').fadeOut(500);
+                $('#top').hide(500);
+            }
+        });
+        $('#top').on('click', function (e) {
+            $('html,body').animate({ scrollTop: 0 }, "slow");
+        });
+    </script>
 </body>
 </html>

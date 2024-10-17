@@ -47,6 +47,8 @@ namespace QuanLyNhanSu.Controllers
                 Session["TenNV"] = userFromDb.HoTen;
                 Session["HinhAnh"] = userFromDb.HinhAnh;
 
+                
+
                 FormsAuthentication.SetAuthCookie(user.MaNhanVien, false);
                 if (checkadmin)
                 {

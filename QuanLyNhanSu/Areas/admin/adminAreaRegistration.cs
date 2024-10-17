@@ -126,7 +126,15 @@ namespace QuanLyNhanSu.Areas.admin
            name: "admin_chucvu",
            url: "admin/QuanLyChucVu/{action}/{id}",
            defaults: new { controller = "QuanLyChucVu", action = "Index", id = UrlParameter.Optional }
-        );
+        );/*
+            //========================ThongBao=================================
+            context.MapRoute(
+            name: "admin_thongbao",
+            url: "Notification/{action}/{id}",
+            defaults: new { controller = "Notification", action = "Index", id = UrlParameter.Optional }
+         );*/
+            //========================TinNhan=================================
+
             //==========================default===================================
             context.MapRoute(
                 "admin_default",

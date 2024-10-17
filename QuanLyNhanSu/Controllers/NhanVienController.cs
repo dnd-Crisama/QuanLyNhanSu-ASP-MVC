@@ -1,5 +1,6 @@
 ﻿using QuanLyNhanSu.Models;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 
 namespace QuanLyNhanSu.Controllers
@@ -18,6 +19,21 @@ namespace QuanLyNhanSu.Controllers
         public ActionResult FooterPartial()
         {
             return PartialView("_FooterPartial");
+        }
+        public ActionResult Detail(string  id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            NhanVien nhanVien = db.NhanViens.Find(id);
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+
+            return View(nhanVien);
         }
     }
 }

@@ -1,0 +1,30 @@
+﻿@using QuanLyNhanSu.Models
+@{
+    ViewBag.Title = "ListConversation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<Conversation>
+@{
+    ViewBag.Title = "Conversations";
+    var userId = (string)Session["MaNhanVien"];
+}
+<link rel="stylesheet" href="~/Content/chat.css" />
+
+<h2>Conversations</h2>
+<div>
+    <ul>
+        @foreach (var conversation in Model)
+        {
+            var otherParticipant = (conversation.Participant1Id == userId) ? conversation.Participant2Id : conversation.Participant1Id;
+            <li>
+                <a href="@Url.Action("Index", "Message", new { conversationId = conversation.Id })">
+                    Chat with @otherParticipant
+                </a>
+                <span>Started at: @conversation.StartedAt)</span>   
+            </li>
+        }
+    </ul>
+</div>
+
+<script src="~/Scripts/chat.js"></script>

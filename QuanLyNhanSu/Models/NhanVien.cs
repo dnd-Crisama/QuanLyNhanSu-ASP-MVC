@@ -27,6 +27,16 @@ public partial class NhanVien
 
         this.HopDongs = new HashSet<HopDong>();
 
+        this.Conversations = new HashSet<Conversation>();
+
+        this.Conversations1 = new HashSet<Conversation>();
+
+        this.Messages = new HashSet<Message>();
+
+        this.Messages1 = new HashSet<Message>();
+
+        this.Notifications = new HashSet<Notification>();
+
     }
 
 
@@ -93,6 +103,16 @@ public partial class NhanVien
     public virtual TrinhDoHocVan TrinhDoHocVan { get; set; }
 
     public virtual ICollection<HopDong> HopDongs { get; set; }
+
+    public virtual ICollection<Conversation> Conversations { get; set; }
+
+    public virtual ICollection<Conversation> Conversations1 { get; set; }
+
+    public virtual ICollection<Message> Messages { get; set; }
+
+    public virtual ICollection<Message> Messages1 { get; set; }
+
+    public virtual ICollection<Notification> Notifications { get; set; }
 
 }
 

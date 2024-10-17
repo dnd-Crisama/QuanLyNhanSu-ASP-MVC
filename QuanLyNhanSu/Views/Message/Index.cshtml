@@ -1,0 +1,218 @@
+﻿@using QuanLyNhanSu.Models
+@{
+    ViewBag.Title = "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var db = new QuanLyNhanSuEntities();
+    var userId = (string)Session["MaNhanVien"];
+
+
+    // Pre-fetch employee names
+    var employeeNames = db.NhanViens.ToDictionary(m => m.MaNhanVien, m => m.HoTen);
+    var employeeId = db.NhanViens.ToDictionary(m => m.MaNhanVien, m => m.MaNhanVien);
+}
+<link rel="stylesheet" href="~/Content/css/chat.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+@functions {
+    string FormatDate(DateTime date)
+    {
+        var now = DateTime.Now;
+        var timePart = date.ToString("h:mm tt");
+
+        if (date.Date == now.Date)
+        {
+            return "Today at " + timePart;
+        }
+        else if (date.Date == now.Date.AddDays(-1))
+        {
+            return "Yesterday at " + timePart;
+        }
+        else
+        {
+            return date.ToString("dd/MM/yyyy h:mm tt");
+        }
+    }
+    string GetNameColor(string senderId, string gender)
+    {
+        if(senderId == "admin")
+        {
+            return "#8c32db";
+        }
+        if (senderId == (string)Session["MaNhanVien"])
+        {
+            return "#db6d3d"; // Self messages
+        }
+        return gender == "0" ? "pink" : gender == "1" ? "#5a75ed" : "#74de62";
+    }
+}
+
+<div class="chat-container">
+    <div class="sidebar">
+        <h3>Conversations</h3> 
+        <ul class="conversation-list">
+            <li class="conversation-item @(ViewBag.ConversationId == null ? "active" : "")">
+                <a href="@Url.Action("Index","Message")">Global Chat</a>
+            </li>
+            @foreach (var conv in ViewBag.Conversations)
+            {
+                string otherUserId = conv.Participant1Id == userId ? conv.Participant2Id : conv.Participant1Id;
+                string otherUserName;
+                employeeNames.TryGetValue(otherUserId, out otherUserName);
+                
+
+                var otherUserAvatar = db.NhanViens.FirstOrDefault(nv => nv.MaNhanVien == otherUserId).HinhAnh;
+                if (!string.IsNullOrEmpty(otherUserAvatar))
+                {
+                    otherUserAvatar = "~/Content/images/" + otherUserAvatar;
+                }
+                else
+                {
+                    otherUserAvatar = "~/Content/images/default-avatar.png";
+                }
+
+                <li class="conversation-item @(ViewBag.ConversationId == conv.Id ? "active" : "")" data-id="@conv.Id">
+                    <div class="conversation-content">
+                        <a href="@Url.Action("Index", "Message", new { conversationId = conv.Id })">
+                            <div style="display: flex; align-items: center;">
+                                <img src="@Url.Content(otherUserAvatar)" alt="@otherUserName's Avatar" class="user-avatar" />
+                                Conversation with @(otherUserName ?? "Admin")
+                            </div>
+                        </a>
+                        <button class="close-button" onclick="hideConversation('@conv.Id')"><i class="fa fa-remove"></i></button> <!-- Add onclick event -->
+                    </div>
+                </li>
+
+            }
+        </ul>
+
+
+        <h3>Users</h3>
+        <ul class="user-list">
+            @foreach (var user in ViewBag.Users)
+            {
+                string userName;
+                string otherUserId;
+
+                employeeNames.TryGetValue(user.MaNhanVien, out userName);
+                employeeId.TryGetValue(user.MaNhanVien, out otherUserId);
+
+                var userAvatar = db.NhanViens.FirstOrDefault(nv => nv.MaNhanVien == otherUserId).HinhAnh;
+                if (!string.IsNullOrEmpty(userAvatar))
+                {
+                    userAvatar = "~/Content/images/" + userAvatar;
+                }
+                else
+                {
+                    userAvatar = "~/Content/images/default-avatar.png";
+                }
+                <li class="user-item">
+                    <a href="@Url.Action("StartConversation","Message", new {participantId = user.MaNhanVien})">
+                        <div style="display: flex; align-items: center;">
+                            <img src="@Url.Content(userAvatar)" alt="@userName's Avatar" class="user-avatar" />
+                            <span>@(userName ?? "Admin")</span>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="chat-content">
+        <h2>@(ViewBag.ConversationId == null || ViewBag.ConversationId == 2 ? "Global Chat" : "Private Chat with "+ ViewBag.otherUserNamePrivately) </h2>
+        <div class="messages">
+            <ul class="message-list" id="message-List">
+                @foreach (var message in Model)
+                {
+                    string senderName;
+                    string senderId;
+                    int? senderGender;
+
+                    employeeNames.TryGetValue(message.SenderId, out senderName);
+                    employeeId.TryGetValue(message.SenderId, out senderId);
+                    var employeeGender = db.NhanViens.ToDictionary(m => m.MaNhanVien, m => m.GioiTinh);
+                    employeeGender.TryGetValue(message.SenderId, out senderGender);
+
+                    string senderAvatar = db.NhanViens.FirstOrDefault(nv => nv.MaNhanVien == senderId).HinhAnh;
+
+                    if (!string.IsNullOrEmpty(senderAvatar))
+                    {
+                        senderAvatar = "~/Content/images/" + senderAvatar;
+                    }
+                    else
+                    {
+                        senderAvatar = "~/Content/images/default-avatar.png";
+                    }
+
+                    <li class="message-item @(message.SenderId == userId ? "sent" : "received")">
+                        <img src="@Url.Content(senderAvatar)" alt="@senderName's Avatar" class="user-avatar" />
+                        <div style="display: flex; align-items: center;">
+
+                            <div style="flex: 1;">
+                                <div class="message-info">
+
+                                    <a href="@Url.Action("Detail", "NhanVien", new { id = senderId})"target="_blank" style="color:@GetNameColor(senderId, senderGender.ToString())"><strong>@(message.SenderId == userId ? senderName : senderName ?? "Admin")</strong></a>
+                                    &nbsp&nbsp
+                                    <span class="message-time" style="font-size:12px; padding-left:10px; color:#aaa">@FormatDate(message.SentAt)</span>
+                                </div>
+                                <div class="message-content">
+                                    <span class="message-Content">@message.Content</span>
+                                    @if (!string.IsNullOrEmpty(message.ImagePath))
+                                    {
+                                        <img src="@Url.Content(message.ImagePath)" class="message-image" alt="Message Image" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+
+        </div>
+        <div class="message-input">
+            @using (Html.BeginForm("SendMessage", "Message", FormMethod.Post, new { enctype = "multipart/form-data", @class = "message-form", conversationId = ViewBag.ConversationId }))
+            {
+                <div class="message-input-container">
+                    <label for="imageUpload" class="btn-upload" id="btn_upload">
+                        <svg viewBox="0 0 640 512" width="32">
+                            <path d="M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zM393.4 288H328v112c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V288h-65.4c-14.3 0-21.4-17.2-11.3-27.3l105.4-105.4c6.2-6.2 16.4-6.2 22.6 0l105.4 105.4c10.1 10.1 2.9 27.3-11.3 27.3z"></path>
+                        </svg>
+                        <span></span>
+
+                    </label>
+                    <textarea id="messageContent" name="content" placeholder="Type your message..." autofocus></textarea>
+                    <input type="text" hidden name="conversationId" value="@ViewBag.ConversationId" />
+                    <div class="attachment-container">
+                        <input type="file" name="image" id="imageUpload" class="file-upload" style="display:none" />
+                        @*<label for="imageUpload" class="file-upload-label">
+                        <i class="fas fa-paperclip"></i> Attach File
+                    </label>*@
+
+                    </div>
+                    <button type="submit" class="send-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polyline points="22 2 15 22 11 13 2 9 22 2"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            }
+            <button type="button" id="removeFileButton" class="remove-file-button" style="display: none;"><strong>X</strong></button> <!-- Remove button -->
+
+        </div>
+
+    </div>
+</div>
+<div id="imageModal" class="modal" style="display: none;">
+    <span class="close" id="closeModal">&times;</span>
+    <img class="modal-content" id="modalImage" alt="Zoomed Image">
+    <div id="caption"></div>
+</div>
+@section scripts {
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script src="~/Scripts/chat.js"></script>
+    <script>
+        var myUserId = '@userId';
+        var conversationId = @ViewBag.ConversationId;
+    </script>
+}

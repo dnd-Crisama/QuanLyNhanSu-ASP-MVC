@@ -34,6 +34,11 @@ namespace QuanLyNhanSu
                           defaults: new { controller = "login", action = "Login", id = UrlParameter.Optional }
                       );
                         */
+            routes.MapRoute(
+                 name: "Tin nhắn",
+                 url: "Message/{action}/{id}",
+                 defaults: new { controller = "Message", action = "Index", id = UrlParameter.Optional }
+             );
 
             routes.MapRoute(
                 name: "Default",

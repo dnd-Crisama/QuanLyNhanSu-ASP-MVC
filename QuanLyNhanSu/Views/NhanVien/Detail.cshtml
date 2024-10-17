@@ -1,0 +1,284 @@
+﻿@model QuanLyNhanSu.Models.NhanVien
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var email = (Model.HoTen.ToLower().Replace(" ", "") + "-" + Model.MaNhanVien + "-" + Model.MaChuyenNganh + "@gmail.com").Trim();
+
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+<link href="~/Content/css/HosoDetail.css" rel="stylesheet" />
+<div class="profile-header">
+    <div class="profile-info">
+        <img alt="Profile Picture" src="~/Content/images/@Model.HinhAnh" />
+        <h1>
+            @Model.HoTen
+        </h1>
+        <p>
+            @Model.ChucVuNhanVien.TenChucVu
+        </p>
+        <p>
+            @Model.Bio
+        </p>
+        <div class="social-icons">
+            <a href="@Model.Facebookk" target="_blank">
+                <i class="fab fa-facebook-f">
+                </i>
+            </a>
+            <a href="#" target="_blank">
+                <i class="fab fa-twitter">
+                </i>
+            </a>
+            <a href="#" target="_blank">
+                <i class="fab fa-linkedin-in">
+                </i>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="profile-nav">
+    <a class="active" href="#">
+        Thông tin
+    </a>
+    <a href="#">
+        Tài liệu
+    </a>
+    <a href="#">
+        Lương
+    </a>
+</div>
+<div class="profile-content">
+    <div class="profile-section">
+        <h2>
+            Thông tin cơ bản
+        </h2>
+        <div class="info-row">
+            <div>
+                <span>
+                    Họ và tên
+                </span>
+                <p>
+                    @Model.HoTen
+                </p>
+            </div>
+            <div>
+                <span>
+                    Sô CMND
+                </span>
+                <p>
+                    @Model.CMND
+                </p>
+            </div>
+        </div>
+        <div class="info-row">
+            <div>
+                <span>
+                    Quê quán
+                </span>
+                <p>
+                    @Model.QueQuan
+                </p>
+            </div>
+            <div>
+                <span>
+                    Số điện thoại
+                </span>
+                <p>
+                    @Model.sdt_NhanVien
+
+                </p>
+            </div>
+        </div>
+        <div class="info-row">
+            <div>
+                <span>
+                    Email
+                </span>
+                <p>
+                    @Model.Email
+                </p>
+            </div>
+            <div>
+                <span>
+                    Ngày sinh
+                </span>
+                <p>
+                    @String.Format("{0:dd/MM/yyyy}", Model.NgaySinh)
+                </p>
+            </div>
+        </div>
+        <div class="info-row">
+            <div>
+                <span>
+                    Giới tính
+                </span>
+                <p>
+                    @{ string gioitinh;
+                        switch (Model.GioiTinh)
+                        {
+                            case 0:
+                                gioitinh = "Nữ";
+                                break;
+                            case 1:
+                                gioitinh = "Nam";
+                                break;
+                            default:
+                                gioitinh = "Khác";
+                                break;
+                        }
+                    }
+                    @gioitinh
+                </p>
+            </div>
+            <div>
+                <span>
+                    Dân tộc
+                </span>
+                <p>
+                    @Model.DanToc
+                </p>
+            </div>
+        </div>
+        <div class="more-options">
+            <i class="fas fa-ellipsis-v">
+            </i>
+        </div>
+    </div>
+    <div class="profile-section">
+        <h2>
+            Thông tin nhân viên
+        </h2>
+        <div class="info-row">
+            <div>
+                <span>
+                    Mã nhân viên (WORK ID)
+                </span>
+                <p>
+                    @Model.MaChuyenNganh-@Model.MaNhanVien
+                </p>
+            </div>
+            <div>
+                <span>
+                    Ngày băt đầu làm việc
+                </span>
+                <p>
+                    @Model.HopDong.NgayBatDau
+                </p>
+            </div>
+        </div>
+        <div class="info-row">
+            <div>
+                <span>
+                    Email công ty
+                </span>
+                <p>
+                    @email
+                </p>
+            </div>
+            <div>
+                <span>
+                    Chuyên ngành
+                </span>
+                <p>
+                    @Model.ChuyenNganh.TenChuyenNganh
+                </p>
+            </div>
+        </div>
+        <div class="info-row">
+            <div>
+                <span>
+                    Vị trí
+                </span>
+                <p>
+                    @Model.ChucVuNhanVien.TenChucVu
+                </p>
+            </div>
+            <div>
+                <span>
+                    Phòng ban
+                </span>
+                <p>
+                    @Model.PhongBan.TenPhongBan
+                </p>
+            </div>
+        </div>
+        <div class="info-row">
+            <div>
+                <span>
+                    Trình độ học vấn
+                </span>
+                <p>
+                    @Model.TrinhDoHocVan.TenTrinhDo
+                </p>
+            </div>
+        </div>
+        <div class="more-options">
+            <i class="fas fa-ellipsis-v">
+            </i>
+        </div>
+    </div>
+    <div class="profile-section">
+        <h2>
+            Hợp đồng
+        </h2>
+        <div class="info-row">
+            <div>
+                <span>
+                    Mã hợp đồng
+                </span>
+                <p>
+                    @Model.HopDong.MaHopDong
+                </p>
+            </div>
+            <div>
+                <span>
+                    Loại hợp đồng
+                </span>
+                <p>
+                    @Model.HopDong.LoaiHopDong
+                </p>
+            </div>
+        </div>
+        <div class="info-row">
+            <div>
+                <span>
+                    Ngày bắt đầu
+                </span>
+                <p>
+                    @Model.HopDong.NgayBatDau
+                </p>
+            </div>
+            <div>
+                <span>
+                    Ngày kết thúc
+                </span>
+                <p>
+                    @Model.HopDong.NgayKetThuc
+                </p>
+            </div>
+        </div>
+        <div class="info-row">
+            <div>
+                <span>
+                    Zip Code
+                </span>
+                <p>
+                    720000
+                </p>
+            </div>
+            <div>
+                <span>
+                    Quốc tịch
+                </span>
+                <p>
+                    Việt Nam
+                </p>
+            </div>
+        </div>
+        <div class="more-options">
+            <i class="fas fa-ellipsis-v">
+            </i>
+        </div>
+    </div>
+</div>

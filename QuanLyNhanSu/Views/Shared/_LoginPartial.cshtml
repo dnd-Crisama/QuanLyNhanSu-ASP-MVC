@@ -4,15 +4,16 @@
         @{
             String hoten = Session["TenNV"] as String;
             String avatarUrl;
+            
+            
 
-
-            if (Session["MaNhanVien"].ToString() == "admin") 
+            if (Session["MaNhanVien"].ToString() == "admin")
             {
-                avatarUrl = "~/Content/images/admin.jpg"; 
+                avatarUrl = "admin.jpg";
             }
             else
             {
-                avatarUrl = Session["HinhAnh"] as String ?? "~/Content/images/icon.jpg"; 
+                avatarUrl = Session["HinhAnh"] as String ?? "~/Content/images/icon.jpg";
             }
 
             String avatar = Url.Content(avatarUrl);
@@ -28,6 +29,8 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="menu-sanpham">
 
                 <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("UpdateUser", "login")">Cập nhật thông tin</a></li>
+                <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Message")">Tin nhắn</a></li>
+                <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Notification")">Thông báo</a></li>
                 <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("index", "NhanVien")">Lịch sử nhận lương</a></li>
 
                 <li role="presentation" class="divider"></li>

@@ -10,6 +10,7 @@ namespace QuanLyNhanSu.Controllers
         public ActionResult Index()
         {
             var list = db.SlideImages.ToList();
+            
             return View(list);
         }
 

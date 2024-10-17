@@ -79,6 +79,14 @@ public partial class QuanLyNhanSuEntities : DbContext
 
     public virtual DbSet<Notification> Notifications { get; set; }
 
+    public virtual DbSet<Comment> Comments { get; set; }
+
+    public virtual DbSet<Like> Likes { get; set; }
+
+    public virtual DbSet<Photo> Photos { get; set; }
+
+    public virtual DbSet<Post> Posts { get; set; }
+
 
     public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
     {

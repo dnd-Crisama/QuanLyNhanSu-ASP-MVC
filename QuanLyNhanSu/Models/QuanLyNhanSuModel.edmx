@@ -64,6 +64,16 @@
           <Property Name="MaChuyenNganh" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="TenChuyenNganh" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostID" Type="int" />
+          <Property Name="UserID" Type="varchar" MaxLength="30" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="CommentDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Conversations">
           <Key>
             <PropertyRef Name="Id" />
@@ -105,6 +115,15 @@
           <Property Name="ThangKiLuat" Type="datetime" Nullable="false" />
           <Property Name="TienKyLuat" Type="int" />
           <Property Name="TrangThai" Type="bit" />
+        </EntityType>
+        <EntityType Name="Likes">
+          <Key>
+            <PropertyRef Name="LikeID" />
+          </Key>
+          <Property Name="LikeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostID" Type="int" />
+          <Property Name="UserID" Type="varchar" MaxLength="30" />
+          <Property Name="LikeDate" Type="datetime" />
         </EntityType>
         <EntityType Name="LuanChuyenNhanViens">
           <Key>
@@ -187,6 +206,7 @@
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="Bio" Type="nvarchar(max)" />
           <Property Name="Facebookk" Type="nvarchar(max)" />
+          <Property Name="CoverImage" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Notifications">
           <Key>
@@ -207,6 +227,26 @@
           <Property Name="TenPhongBan" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DiaChi" Type="nvarchar" MaxLength="50" />
           <Property Name="sdt_PhongBan" Type="varchar" MaxLength="11" />
+        </EntityType>
+        <EntityType Name="Photos">
+          <Key>
+            <PropertyRef Name="PhotoID" />
+          </Key>
+          <Property Name="PhotoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="30" />
+          <Property Name="ImageURL" Type="nvarchar(max)" />
+          <Property Name="UploadDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Posts">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="30" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="ImageURL" Type="nvarchar(max)" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="LikesCount" Type="int" />
         </EntityType>
         <EntityType Name="SlideImages">
           <Key>
@@ -250,6 +290,30 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <Property Name="TenTrinhDo" Type="nvarchar(max)" Nullable="false" />
           <Property Name="HeSoBac" Type="float" />
         </EntityType>
+        <Association Name="FK__Comments__PostID__2DE6D218">
+          <End Role="Posts" Type="Self.Posts" Multiplicity="0..1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Posts">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Comments__UserID__2EDAF651">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Conversat__Parti__07C12930">
           <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="1" />
           <End Role="Conversations" Type="Self.Conversations" Multiplicity="*" />
@@ -271,6 +335,30 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             </Principal>
             <Dependent Role="Conversations">
               <PropertyRef Name="Participant2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Likes__PostID__32AB8735">
+          <End Role="Posts" Type="Self.Posts" Multiplicity="0..1" />
+          <End Role="Likes" Type="Self.Likes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Posts">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="Likes">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Likes__UserID__339FAB6E">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1" />
+          <End Role="Likes" Type="Self.Likes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Likes">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -347,6 +435,30 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             </Principal>
             <Dependent Role="Notifications">
               <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Photos__UserID__37703C52">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1" />
+          <End Role="Photos" Type="Self.Photos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Photos">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Posts__UserID__29221CFB">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1" />
+          <End Role="Posts" Type="Self.Posts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Posts">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -452,10 +564,12 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <EntitySet Name="ChiTietLuongs" EntityType="Self.ChiTietLuongs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChucVuNhanViens" EntityType="Self.ChucVuNhanViens" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChuyenNganhs" EntityType="Self.ChuyenNganhs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Conversations" EntityType="Self.Conversations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HopDongs" EntityType="Self.HopDongs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KhenThuongs" EntityType="Self.KhenThuongs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KyLuats" EntityType="Self.KyLuats" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Likes" EntityType="Self.Likes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LuanChuyenNhanViens" EntityType="Self.LuanChuyenNhanViens" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LuongA1GV" EntityType="Self.LuongA1GV" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LuongA21PGS" EntityType="Self.LuongA21PGS" Schema="dbo" store:Type="Tables" />
@@ -465,6 +579,8 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <EntitySet Name="NhanViens" EntityType="Self.NhanViens" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notifications" EntityType="Self.Notifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhongBans" EntityType="Self.PhongBans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Photos" EntityType="Self.Photos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Posts" EntityType="Self.Posts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SlideImages" EntityType="Self.SlideImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrinhDoHocVans" EntityType="Self.TrinhDoHocVans" Schema="dbo" store:Type="Tables" />
@@ -476,6 +592,14 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
     [ThoiViecs].[TenNhanVien] AS [TenNhanVien]
     FROM [dbo].[ThoiViecs] AS [ThoiViecs]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__Comments__PostID__2DE6D218" Association="Self.FK__Comments__PostID__2DE6D218">
+            <End Role="Posts" EntitySet="Posts" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Comments__UserID__2EDAF651" Association="Self.FK__Comments__UserID__2EDAF651">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
           <AssociationSet Name="FK__Conversat__Parti__07C12930" Association="Self.FK__Conversat__Parti__07C12930">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="Conversations" EntitySet="Conversations" />
@@ -483,6 +607,14 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <AssociationSet Name="FK__Conversat__Parti__08B54D69" Association="Self.FK__Conversat__Parti__08B54D69">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="Conversations" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Likes__PostID__32AB8735" Association="Self.FK__Likes__PostID__32AB8735">
+            <End Role="Posts" EntitySet="Posts" />
+            <End Role="Likes" EntitySet="Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Likes__UserID__339FAB6E" Association="Self.FK__Likes__UserID__339FAB6E">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Likes" EntitySet="Likes" />
           </AssociationSet>
           <AssociationSet Name="FK__LuanChuyen__MaNhanVien" Association="Self.FK__LuanChuyen__MaNhanVien">
             <End Role="NhanViens" EntitySet="NhanViens" />
@@ -507,6 +639,14 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <AssociationSet Name="FK__Notificat__Sende__1332DBDC" Association="Self.FK__Notificat__Sende__1332DBDC">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="Notifications" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Photos__UserID__37703C52" Association="Self.FK__Photos__UserID__37703C52">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Photos" EntitySet="Photos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Posts__UserID__29221CFB" Association="Self.FK__Posts__UserID__29221CFB">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="Posts" EntitySet="Posts" />
           </AssociationSet>
           <AssociationSet Name="FK__Thuong__MaNhanVien" Association="Self.FK__Thuong__MaNhanVien">
             <End Role="NhanViens" EntitySet="NhanViens" />
@@ -673,6 +813,34 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <AssociationSet Name="FK__Notificat__Sende__1332DBDC" Association="QuanLyNhanSuModel.FK__Notificat__Sende__1332DBDC">
             <End Role="NhanVien" EntitySet="NhanViens" />
             <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <EntitySet Name="Comments" EntityType="QuanLyNhanSuModel.Comment" />
+          <EntitySet Name="Likes" EntityType="QuanLyNhanSuModel.Like" />
+          <EntitySet Name="Photos" EntityType="QuanLyNhanSuModel.Photo" />
+          <EntitySet Name="Posts" EntityType="QuanLyNhanSuModel.Post" />
+          <AssociationSet Name="FK__Comments__PostID__2DE6D218" Association="QuanLyNhanSuModel.FK__Comments__PostID__2DE6D218">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Comments__UserID__2EDAF651" Association="QuanLyNhanSuModel.FK__Comments__UserID__2EDAF651">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Likes__PostID__32AB8735" Association="QuanLyNhanSuModel.FK__Likes__PostID__32AB8735">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Like" EntitySet="Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Likes__UserID__339FAB6E" Association="QuanLyNhanSuModel.FK__Likes__UserID__339FAB6E">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Like" EntitySet="Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Photos__UserID__37703C52" Association="QuanLyNhanSuModel.FK__Photos__UserID__37703C52">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Photo" EntitySet="Photos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Posts__UserID__29221CFB" Association="QuanLyNhanSuModel.FK__Posts__UserID__29221CFB">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
@@ -875,6 +1043,11 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <NavigationProperty Name="Messages" Relationship="QuanLyNhanSuModel.FK__Messages__Receiv__0D7A0286" FromRole="NhanVien" ToRole="Message" />
           <NavigationProperty Name="Messages1" Relationship="QuanLyNhanSuModel.FK__Messages__Sender__0C85DE4D" FromRole="NhanVien" ToRole="Message" />
           <NavigationProperty Name="Notifications" Relationship="QuanLyNhanSuModel.FK__Notificat__Sende__1332DBDC" FromRole="NhanVien" ToRole="Notification" />
+          <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Comments" Relationship="QuanLyNhanSuModel.FK__Comments__UserID__2EDAF651" FromRole="NhanVien" ToRole="Comment" />
+          <NavigationProperty Name="Likes" Relationship="QuanLyNhanSuModel.FK__Likes__UserID__339FAB6E" FromRole="NhanVien" ToRole="Like" />
+          <NavigationProperty Name="Photos" Relationship="QuanLyNhanSuModel.FK__Photos__UserID__37703C52" FromRole="NhanVien" ToRole="Photo" />
+          <NavigationProperty Name="Posts" Relationship="QuanLyNhanSuModel.FK__Posts__UserID__29221CFB" FromRole="NhanVien" ToRole="Post" />
         </EntityType>
         <EntityType Name="PhongBan">
           <Key>
@@ -1226,6 +1399,125 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostID" Type="Int32" />
+          <Property Name="UserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CommentDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Post" Relationship="QuanLyNhanSuModel.FK__Comments__PostID__2DE6D218" FromRole="Comment" ToRole="Post" />
+          <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__Comments__UserID__2EDAF651" FromRole="Comment" ToRole="NhanVien" />
+        </EntityType>
+        <EntityType Name="Like">
+          <Key>
+            <PropertyRef Name="LikeID" />
+          </Key>
+          <Property Name="LikeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostID" Type="Int32" />
+          <Property Name="UserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LikeDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Post" Relationship="QuanLyNhanSuModel.FK__Likes__PostID__32AB8735" FromRole="Like" ToRole="Post" />
+          <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__Likes__UserID__339FAB6E" FromRole="Like" ToRole="NhanVien" />
+        </EntityType>
+        <EntityType Name="Photo">
+          <Key>
+            <PropertyRef Name="PhotoID" />
+          </Key>
+          <Property Name="PhotoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ImageURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UploadDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__Photos__UserID__37703C52" FromRole="Photo" ToRole="NhanVien" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="LikesCount" Type="Int32" />
+          <NavigationProperty Name="Comments" Relationship="QuanLyNhanSuModel.FK__Comments__PostID__2DE6D218" FromRole="Post" ToRole="Comment" />
+          <NavigationProperty Name="Likes" Relationship="QuanLyNhanSuModel.FK__Likes__PostID__32AB8735" FromRole="Post" ToRole="Like" />
+          <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__Posts__UserID__29221CFB" FromRole="Post" ToRole="NhanVien" />
+        </EntityType>
+        <Association Name="FK__Comments__PostID__2DE6D218">
+          <End Type="QuanLyNhanSuModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="QuanLyNhanSuModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Comments__UserID__2EDAF651">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="0..1" />
+          <End Type="QuanLyNhanSuModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Likes__PostID__32AB8735">
+          <End Type="QuanLyNhanSuModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="QuanLyNhanSuModel.Like" Role="Like" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="Like">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Likes__UserID__339FAB6E">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="0..1" />
+          <End Type="QuanLyNhanSuModel.Like" Role="Like" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Like">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Photos__UserID__37703C52">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="0..1" />
+          <End Type="QuanLyNhanSuModel.Photo" Role="Photo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Photo">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Posts__UserID__29221CFB">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="0..1" />
+          <End Type="QuanLyNhanSuModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1382,6 +1674,7 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <EntitySetMapping Name="NhanViens">
             <EntityTypeMapping TypeName="QuanLyNhanSuModel.NhanVien">
               <MappingFragment StoreEntitySet="NhanViens">
+                <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
                 <ScalarProperty Name="Facebookk" ColumnName="Facebookk" />
                 <ScalarProperty Name="Bio" ColumnName="Bio" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1491,6 +1784,49 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="SenderId" ColumnName="SenderId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.Comment">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Likes">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.Like">
+              <MappingFragment StoreEntitySet="Likes">
+                <ScalarProperty Name="LikeDate" ColumnName="LikeDate" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="LikeID" ColumnName="LikeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Photos">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.Photo">
+              <MappingFragment StoreEntitySet="Photos">
+                <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PhotoID" ColumnName="PhotoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.Post">
+              <MappingFragment StoreEntitySet="Posts">
+                <ScalarProperty Name="LikesCount" ColumnName="LikesCount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

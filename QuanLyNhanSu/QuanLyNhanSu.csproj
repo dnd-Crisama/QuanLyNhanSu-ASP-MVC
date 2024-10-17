@@ -215,6 +215,7 @@
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -234,6 +235,9 @@
     <Compile Include="Models\ChuyenNganh.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Comment.cs">
+      <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Conversation.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
@@ -246,6 +250,9 @@
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KyLuat.cs">
+      <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Like.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LuanChuyenNhanVien.cs">
@@ -276,6 +283,13 @@
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PhongBanValidation.cs" />
+    <Compile Include="Models\Photo.cs">
+      <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Post.cs">
+      <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\QuanLyNhanSuModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -684,6 +698,7 @@
     <Content Include="Views\Message\ListConversation.cshtml" />
     <Content Include="Views\Message\ListUsers.cshtml" />
     <Content Include="Views\NhanVien\Detail.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -691,6 +706,7 @@
     <Folder Include="Areas\admin\Views\Author\" />
     <Folder Include="Areas\admin\Views\HocVan\" />
     <Folder Include="Content\images\messages\" />
+    <Folder Include="Content\images\profile\" />
     <Folder Include="Views\Authen\" />
   </ItemGroup>
   <ItemGroup>

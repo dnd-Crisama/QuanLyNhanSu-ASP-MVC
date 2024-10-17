@@ -47,6 +47,16 @@
         <AssociationConnector Association="QuanLyNhanSuModel.FK__Messages__Receiv__0D7A0286" />
         <AssociationConnector Association="QuanLyNhanSuModel.FK__Messages__Sender__0C85DE4D" />
         <AssociationConnector Association="QuanLyNhanSuModel.FK__Notificat__Sende__1332DBDC" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.Comment" Width="1.5" PointX="7.5" PointY="22.5" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.Like" Width="1.5" PointX="10.5" PointY="22.625" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.Photo" Width="1.5" PointX="5.25" PointY="30.375" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.Post" Width="1.5" PointX="5.25" PointY="33.125" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Comments__PostID__2DE6D218" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Comments__UserID__2EDAF651" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Likes__PostID__32AB8735" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Likes__UserID__339FAB6E" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Photos__UserID__37703C52" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__Posts__UserID__29221CFB" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

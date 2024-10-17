@@ -37,6 +37,14 @@ public partial class NhanVien
 
         this.Notifications = new HashSet<Notification>();
 
+        this.Comments = new HashSet<Comment>();
+
+        this.Likes = new HashSet<Like>();
+
+        this.Photos = new HashSet<Photo>();
+
+        this.Posts = new HashSet<Post>();
+
     }
 
 
@@ -78,6 +86,8 @@ public partial class NhanVien
 
     public string Facebookk { get; set; }
 
+    public string CoverImage { get; set; }
+
 
 
     public virtual ICollection<CapNhatTrinhDoHocVan> CapNhatTrinhDoHocVans { get; set; }
@@ -113,6 +123,14 @@ public partial class NhanVien
     public virtual ICollection<Message> Messages1 { get; set; }
 
     public virtual ICollection<Notification> Notifications { get; set; }
+
+    public virtual ICollection<Comment> Comments { get; set; }
+
+    public virtual ICollection<Like> Likes { get; set; }
+
+    public virtual ICollection<Photo> Photos { get; set; }
+
+    public virtual ICollection<Post> Posts { get; set; }
 
 }
 

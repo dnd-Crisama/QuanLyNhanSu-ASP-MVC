@@ -150,7 +150,7 @@
                             <div style="flex: 1;">
                                 <div class="message-info">
 
-                                    <a href="@Url.Action("Index", "Profile", new { maNhanVien = senderId})"target="_blank" style="color:@GetNameColor(senderId, senderGender.ToString())"><strong>@(message.SenderId == userId ? senderName : senderName ?? "Admin")</strong></a>
+                                    <a href="@Url.Action("Index", "Profile", new { maNhanVien = senderId})" style="color:@GetNameColor(senderId, senderGender.ToString())"><strong>@(message.SenderId == userId ? senderName : senderName ?? "Admin")</strong></a>
                                     &nbsp&nbsp
                                     <span class="message-time" style="font-size:12px; padding-left:10px; color:#aaa">@FormatDate(message.SentAt)</span>
                                 </div>

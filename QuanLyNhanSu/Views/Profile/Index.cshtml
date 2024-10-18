@@ -604,8 +604,6 @@
 </style>
 
 <script>
-    // Add these variables at the top to store current user info
-    // Add these variables at the top to store current user info
     try {
         let currentUserName = '@db.NhanViens.SingleOrDefault(m=>m.MaNhanVien == UserNow).HoTen';
         let currentUserProfileImage = '@Url.Content("/Content/images/" + db.NhanViens.SingleOrDefault(m=>m.MaNhanVien == UserNow).HinhAnh)';
@@ -681,7 +679,8 @@
                             `;
 
                                 // Insert the new comment at the top
-                                commentsSection.find('.comment:first').before(commentHtml);
+                                $(commentHtml).insertBefore(commentsSection.find('.add-comment'));
+                                /*commentsSection.find('.comment:first').before(commentHtml);*/
 
                                 // Clear input
                                 input.val('');
@@ -760,7 +759,13 @@
                         `;
 
                             // Add new post at the top of the posts list
-                            $('.main-content .card:first').before(postHtml);
+                            /*$('.main-content .card:first').before(postHtml);*/
+
+                            if ($('.main-content .card').length > 0) {
+                                $('.main-content .card:first').before(postHtml);
+                            } else {
+                                $('.main-content').append(postHtml);
+                            }
 
                             // Clear form
                             form.find('textarea[name="Content"]').val('');

@@ -27,7 +27,8 @@
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="menu-sanpham">
-                <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Profile", new { maNhanVien = Session["MaNhanVien"] })"target="_blank">Trang cá nhân</a></li>
+                <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Newsfeed")">Newsfeed</a></li>
+                <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Profile", new { maNhanVien = Session["MaNhanVien"] })">Trang cá nhân</a></li>
                 <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("UpdateUser", "login")">Cập nhật thông tin</a></li>
                 <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Message")">Tin nhắn</a></li>
                 <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Notification")">Thông báo</a></li>

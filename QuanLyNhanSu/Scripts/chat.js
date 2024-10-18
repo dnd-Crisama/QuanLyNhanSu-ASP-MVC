@@ -245,7 +245,7 @@ $(function () {
             <div style="display: flex; align-items: center;">
                 <div style="flex: 1;">
                     <div class="message-info">
-                        <a href="#" style="color:${color}"><strong>${userId === myUserId ? senderName : senderName || "Admin"}</strong></a>
+                        <a href="/Profile?maNhanVien=${userId})" style="color:${color}"><strong>${userId === myUserId ? senderName : senderName || "Admin"}</strong></a>
                         &nbsp;&nbsp;
                         <span class="message-time" style="font-size:12px; padding-left:10px; color:#aaa">${formatDate(new Date(sentAt))}</span>
                     </div>

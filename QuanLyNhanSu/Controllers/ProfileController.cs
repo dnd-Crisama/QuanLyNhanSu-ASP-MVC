@@ -16,18 +16,7 @@ namespace QuanLyNhanSu.Controllers
 
         // GET: UserProfile
         public ActionResult Index(string maNhanVien)
-        {/*
-            var user = db.NhanViens.FirstOrDefault(nv => nv.MaNhanVien == maNhanVien);
-            var posts = db.Posts.Where(p => p.UserID == maNhanVien).OrderByDescending(p => p.PostDate).ToList();
-            var photos = db.Photos.Where(p => p.UserID == maNhanVien).OrderByDescending(p => p.UploadDate).Take(6).ToList();
-
-            var viewModel = new ProfileViewModel
-            {
-                User = user,
-                Posts = posts,
-                Photos = photos
-            };*/
-
+        {
             var user = db.NhanViens
                 .Include("Posts.Comments")
                 .Include("Posts.Likes")

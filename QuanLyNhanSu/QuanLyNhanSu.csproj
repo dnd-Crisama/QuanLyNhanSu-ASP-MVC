@@ -213,6 +213,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\loginController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\NewsfeedController.cs" />
     <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -699,6 +700,7 @@
     <Content Include="Views\Message\ListUsers.cshtml" />
     <Content Include="Views\NhanVien\Detail.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Newsfeed\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

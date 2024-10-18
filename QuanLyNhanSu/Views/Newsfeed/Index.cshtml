@@ -1,0 +1,548 @@
+﻿@model List<QuanLyNhanSu.Models.Post>
+@{
+    ViewBag.Title = "Newsfeed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUserId = ViewBag.CurrentUserId;
+    var db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
+    var employeeNames = (Dictionary<string, string>)ViewBag.EmployeeNames;
+    var employeeId = (Dictionary<string, string>)ViewBag.EmployeeId;
+    bool isLoggedIn;
+    if (currentUserId == null)
+    {
+        isLoggedIn = false;
+    }
+    else
+    {
+        isLoggedIn = true;
+    }
+
+
+}
+
+<div class="container-fluid" style="margin-top:10px;">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Left sidebar -->
+            <div class="card bg-dark border-secondary mb-3" style="padding:10px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align:center">Shortcuts</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-dark text-light" onclick="showEvents()" style="cursor: pointer;">
+                            <i class="fa fa-calendar"></i> Notification
+                        </li>
+                        <li class="list-group-item bg-dark text-light"><i class="fa fa-user"></i> Friends</li>
+                        <li class="list-group-item bg-dark text-light"><i class="fa fa-users"></i> Groups</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Events List (Initially Hidden) -->
+            <div id="eventsList" class="card bg-dark border-secondary mb-3" style="padding:10px; display: none;">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align:center">Notifications</h5>
+                    <ul class="list-group list-group-flush">
+                        <!-- Example static event data, replace with dynamic data -->
+                        @foreach (var item in db.Notifications.OrderByDescending(m=>m.SentAt).ToList()){
+                        <li class="list-group-item bg-dark text-light">@item.SentAt: @item.Content</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!-- Main content - Posts -->
+            @if (isLoggedIn)
+            {
+                <div class="post-card">
+                    <textarea id="postContent" class="post-input" rows="3" placeholder="What's on your mind?" style="background-color:#5d5e5f;color:aliceblue"></textarea>
+                    <input type="file" id="postImage" accept="image/*" style="display: none;" />
+                    <img id="imagePreview" class="post-image-preview" style="display: none;" />
+                    <div class="mt-2">
+                        <button id="addImageBtn" class="btn btn-secondary" style="margin-top:10px">
+                            <i class="fa fa-image"></i> &nbsp;&nbsp; Add Image
+                        </button>
+                        <button id="postButton" class="btn btn-primary post-button">Post</button>
+                    </div>
+                </div>
+            }
+        <div id="postsContainer">
+            @foreach (var post in Model)
+            {
+                <div class="card bg-dark border-secondary mb-3" style="padding: 20px; border-radius: 25px 25px 25px 25px; -webkit-border-radius: 25px 25px 25px 25px; -moz-border-radius: 25px 25px 25px 25px; margin-bottom:20px;">
+                    <div class="card-body">
+                        <div class="post">
+                            <div class="post-header">
+                                <img src="/Content/images/@post.NhanVien.HinhAnh" class="post-avatar" />
+                                <div>
+                                    <a href="@Url.Action("Index","Profile", new {maNhanVien = post.UserID})"style="color:#E4E6EB"><h6 class="mb-0" style="margin-bottom:5px; font-size:14px;"><strong>@post.NhanVien.HoTen</strong></h6></a>
+                                    <small>@post.PostDate.ToString()</small>
+                                </div>
+                            </div>
+                            <div class="post-content mt-3">
+                                <p style="margin-bottom:10px;">@post.Content</p>
+                                @if (!string.IsNullOrEmpty(post.ImageURL))
+                                {
+                                    <img src="@post.ImageURL" class="img-fluid post-image" style="margin-bottom:20px;" />
+                                }
+                            </div>
+                            <div class="post-actions mt-3">
+                                <button class="btn btn-link text-light like-button" style="color: @(post.Likes.Any(l => l.UserID == currentUserId) ? "#2D88FF" : "#E4E6EB")" data-post-id="@post.PostID">
+                                    <i class="fa fa-thumbs-up"></i> Like (@post.Likes.Count)
+                                </button>
+                                <button class="btn btn-link text-light comment-toggle" style="color: #E4E6EB">
+                                    <i class="fa fa-comment"></i> Comment (@post.Comments.Count)
+                                </button>
+                            </div>
+                            <div class="comments-section mt-3" style="display: none;">
+                                @foreach (var comment in post.Comments.OrderBy(c => c.CommentDate))
+                                {
+                                    <div class="comment" style="padding:5px 8px;margin-top:0px;">
+                                        <img src="/Content/images/@comment.NhanVien.HinhAnh" class="comment-avatar" />
+                                        <div class="comment-content">
+                                            <a href="@Url.Action("Index","Profile", new {maNhanVien = db.NhanViens.FirstOrDefault(m=>m.MaNhanVien == comment.UserID).MaNhanVien})" style="color:#E4E6EB"><h6 class="mb-0"><strong>@comment.NhanVien.HoTen</strong></h6></a>
+                                            <p>@comment.Content</p>
+                                            <small>@comment.CommentDate.ToString()</small>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="add-comment mt-2" style="margin-top:20px">
+                                    <input type="text" class="form-control bg-dark text-light comment-input"
+                                           placeholder="Write a comment..." data-post-id="@post.PostID" style="max-width:150vh;width:100%; height:60px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        </div>
+        <div class="col-md-3" style="position:fixed; margin-left:890px; width:fit-content; padding:0 10px; min-width:fit-content; width:300px">
+            <!-- Right sidebar -->
+
+            <div class="card bg-dark border-secondary mb-3" style="border-radius: 17px 17px 47px 47px; -webkit-border-radius: 17px 17px 47px 47px; -moz-border-radius: 17px 17px 47px 47px;">
+                <div class="card-body" style="padding: 15px;">
+                    <h3 style="margin-top:5px; text-align:center">Users</h3>
+                    <input type="text" id="searchUser" onkeyup="searchUserByName()" placeholder="Search for users..." class="form-control mb-3" style="margin-bottom:15px;"/>
+
+                    <ul class="user-list" id="userList">
+                        @foreach (var user in ViewBag.Users)
+                        {
+                            string userName;
+                            string otherUserId;
+
+                            employeeNames.TryGetValue(user.MaNhanVien, out userName);
+                            employeeId.TryGetValue(user.MaNhanVien, out otherUserId);
+
+                            var userAvatar = db.NhanViens.FirstOrDefault(nv => nv.MaNhanVien == otherUserId).HinhAnh;
+                            if (!string.IsNullOrEmpty(userAvatar))
+                            {
+                                userAvatar = "~/Content/images/" + userAvatar;
+                            }
+                            else
+                            {
+                                userAvatar = "~/Content/images/icon.jpg";
+                            }
+                            <li class="user-item">
+                                <a href="@Url.Action("Index","Profile", new {maNhanVien = user.MaNhanVien})">
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="@Url.Content(userAvatar)" alt="@userName's Avatar" class="user-avatar" />
+                                        <span class="user-name">@(userName ?? "Admin")</span>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    body {
+        background-color: #18191A;
+        color: #E4E6EB;
+    }
+
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+
+    .post-card {
+        background-color: #3A3B3C;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    .post-input {
+        width: 100%;
+        max-width: 200vh;
+        border-radius: 20px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        resize: none;
+    }
+    .post-section {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .post-input {
+        width: 100%;
+        border-radius: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        resize: none;
+    }
+
+    .post-button {
+        float: right;
+        margin-top: 50px;
+        border-radius: 20px;
+    }
+
+    .post-image-preview {
+        max-width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .post {
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+
+    .comment-input {
+        border-radius: 20px;
+        padding: 10px 15px;
+    }
+
+    .card {
+        background-color: #242526;
+        border-color: #3A3B3C;
+    }
+
+    .form-control {
+        background-color: #3A3B3C;
+        border-color: #3A3B3C;
+        color: #E4E6EB;
+    }
+
+    .btn-primary {
+        background-color: #2D88FF;
+        border-color: #2D88FF;
+    }
+
+    .post-avatar, .comment-avatar, .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+
+    .post-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .post-content {
+        margin-top: 15px;
+    }
+
+    .post-image {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    .post-input {
+        width: 100%;
+        border-radius: 20px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        resize: none;
+    }
+
+    .post-button {
+        float: right;
+        margin-top: 10px;
+        border-radius: 20px;
+    }
+
+    .post-image-preview {
+        max-width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .post-actions {
+        display: flex;
+        justify-content: space-around;
+        border-top: 1px solid #3A3B3C;
+        border-bottom: 1px solid #3A3B3C;
+        padding: 10px 0;
+    }
+
+    .comment {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .comment-content {
+        background-color: #3A3B3C;
+        border-radius: 18px;
+        padding: 8px 12px;
+        flex-grow: 1;
+    }
+
+    .comment-input {
+        border-radius: 20px;
+    }
+
+    .list-group-item {
+        background-color: #242526;
+        border-color: #3A3B3C;
+        color: #E4E6EB;
+    }
+
+        .list-group-item:hover {
+            background-color: #3A3B3C;
+        }
+
+    .user-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .user-item {
+        margin-bottom: 10px;
+    }
+
+        .user-item a {
+            color: #E4E6EB;
+            text-decoration: none;
+        }
+
+            .user-item a:hover {
+                text-decoration: underline;
+            }
+    .like-button {
+        color: #E4E6EB;
+    }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+<script>
+        $(document).ready(function () {
+            // Post status functionality
+            $('#postButton').click(function () {
+                var content = $('#postContent').val();
+                var imageFile = $('#postImage')[0].files[0];
+
+                if (content.trim() !== '' || imageFile) {
+                    var formData = new FormData();
+                    formData.append('content', content);
+                    if (imageFile) {
+                        formData.append('image', imageFile);
+                    }
+
+                    $.ajax({
+                        url: '@Url.Action("PostStatus", "Newsfeed")',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success) {
+                                var newPost = `
+                <div class="card bg-dark border-secondary mb-3" data-post-id="${response.postId}">
+                    <div class="card-body">
+                        <div class="post">
+                            <div class="post-header d-flex align-items-center">
+                                <img src="/Content/images/${response.userAvatar}" class="post-avatar rounded-circle me-2" style="width: 50px; height: 50px;">
+                                <div>
+                                    <a href="/Profile?maNhanVien=${response.userId}" style="color:#E4E6EB"><h6 class="mb-0" style="font-size:15px;"><strong>${response.userName}</strong></h6></a>
+                                    <small class="text-muted">Just now</small>
+                                </div>
+                            </div>
+                            <div class="post-content mt-3">
+                                <p>${escapeHtml(response.content)}</p>
+                                ${response.imageUrl ? `<img src="${response.imageUrl}" class="img-fluid post-image" alt="Post image" />` : ''}
+                            </div>
+                            <div class="post-actions mt-3">
+                                <button class="btn btn-link text-light like-button" data-post-id="${response.postId}" style="color: #fff;">
+                                    <i class="fas fa-thumbs-up"></i> Like (0)
+                                </button>
+                                <button class="btn btn-link text-light comment-toggle">
+                                    <i class="fas fa-comment"></i> Comment (0)
+                                </button>
+                            </div>
+                            <div class="comments-section mt-3" style="display: none;">
+                                <div class="add-comment mt-2">
+                                    <input type="text" class="form-control bg-dark text-light comment-input"
+                                           placeholder="Write a comment..." data-post-id="${response.postId}"
+                                           style="max-width:1000px; width:85vh; margin-top:20px; height:45px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+                                $('#postsContainer').prepend(newPost);
+                                $('#postContent').val('');
+                                $('#postImage').val('');
+                                $('#imagePreview').hide();
+                            } else if (response.redirectUrl) {
+                                window.location.href = response.redirectUrl;
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Image preview
+            $('#addImageBtn').click(function() {
+                $('#postImage').click();
+            });
+
+            $('#postImage').change(function() {
+                var file = this.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#imagePreview').attr('src', e.target.result).show();
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Like functionality
+            $(document).on('click', '.like-button', function () {
+                var postId = $(this).data('post-id');
+                var button = $(this);
+
+                $.ajax({
+                    url: '@Url.Action("ToggleLike", "Newsfeed")',
+                    type: 'POST',
+                    data: { postId: postId },
+                    success: function (response) {
+                        if (response.success) {
+                            if (!response.isLiked) {
+                                button.css('color', '#2D88FF');
+                            } else {
+                                button.css('color', '#E4E6EB');
+                            }
+                            button.html('<i class="fa fa-thumbs-up"></i> Like (' + response.likeCount + ')');
+                        } else if (response.redirectUrl) {
+                            window.location.href = response.redirectUrl;
+                        }
+                    }
+                });
+            });
+
+            // Comment functionality
+            $(document).on('keypress', '.comment-input', function (e) {
+                if (e.which == 13) {  // Enter key
+                    var postId = $(this).data('post-id');
+                    var content = $(this).val();
+                    var input = $(this);
+
+                    $.ajax({
+                        url: '@Url.Action("AddComment", "Newsfeed")',
+                        type: 'POST',
+                        data: { postId: postId, content: content },
+                        success: function (response) {
+                            if (response.success) {
+                                var newComment = `
+                        <div class="comment" style="padding:5px 8px;margin-top:0px;">
+                            <img src="/Content/images/${response.userAvatar}" class="comment-avatar" />
+                            <div class="comment-content">
+                                <h6 class="mb-0"><strong>${response.userName}</strong></h6>
+                                <p>${escapeHtml(content)}</p>
+                                <small>Just now</small>
+                            </div>
+                        </div>
+                    `;
+                                input.closest('.add-comment').before(newComment);
+                                input.val('');
+
+                                // Update comment count
+                                var commentButton = input.closest('.post-card').find('.comment-toggle');
+                                var currentCount = parseInt(commentButton.text().match(/\d+/)[0]);
+                                commentButton.html('<i class="fa fa-comment"></i> Comment (' + (currentCount + 1) + ')');
+                            } else if (response.redirectUrl) {
+                                window.location.href = response.redirectUrl;
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Toggle comments visibility
+            $(document).on('click', '.comment-toggle', function () {
+                @if (isLoggedIn)
+                {
+                    <text>
+                    $(this).closest('.post').find('.comments-section').toggle();
+
+                    </text>
+                }
+                else
+                {
+                    <text>
+                    window.location.href = '@Url.Action("Login", "login")';
+                    </text>
+                }
+            });
+            function escapeHtml(text) {
+                return text.replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+        });
+    function searchUserByName() {
+        // Get the search input and convert it to lowercase for case-insensitive search
+        var input = document.getElementById('searchUser').value.toLowerCase();
+        var userList = document.getElementById('userList');
+        var userItems = userList.getElementsByClassName('user-item');
+
+        // Loop through all user items and hide those that don't match the search query
+        for (var i = 0; i < userItems.length; i++) {
+            var userName = userItems[i].getElementsByClassName('user-name')[0];
+            if (userName) {
+                var textValue = userName.textContent || userName.innerText;
+                if (textValue.toLowerCase().indexOf(input) > -1) {
+                    userItems[i].style.display = "";
+                } else {
+                    userItems[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function showEvents() {
+        var eventsList = document.getElementById('eventsList');
+        // Toggle the display property to show or hide the events list
+        if (eventsList.style.display === 'none' || eventsList.style.display === '') {
+            eventsList.style.display = 'block';
+        } else {
+            eventsList.style.display = 'none';
+        }
+    }
+</script>

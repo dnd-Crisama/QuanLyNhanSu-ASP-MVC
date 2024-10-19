@@ -121,6 +121,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         public ActionResult DeleteConfirmed(string id)
         {
             HopDong hopDong = db.HopDongs.Find(id);
+            
             db.HopDongs.Remove(hopDong);
             db.SaveChanges();
             return RedirectToAction("Index");

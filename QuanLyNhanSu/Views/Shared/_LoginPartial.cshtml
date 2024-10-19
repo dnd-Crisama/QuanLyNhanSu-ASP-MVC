@@ -27,6 +27,10 @@
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="menu-sanpham">
+                @if ((string)Session["MaNhanVien"] == "admin")
+                {
+                <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("index", "admin" , new {area = "admin"})">Trang quản trị</a></li>
+                }
                 <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Newsfeed")">Newsfeed</a></li>
                 <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("Index", "Profile", new { maNhanVien = Session["MaNhanVien"] })">Trang cá nhân</a></li>
                 <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("UpdateUser", "login")">Cập nhật thông tin</a></li>

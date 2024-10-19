@@ -302,8 +302,10 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Comments__UserID__2EDAF651">
-          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1" />
+        <Association Name="FK__Comments__UserID__40058253">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NhanViens">
@@ -350,8 +352,10 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Likes__UserID__339FAB6E">
-          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1" />
+        <Association Name="FK__Likes__UserID__3B40CD36">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Likes" Type="Self.Likes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NhanViens">
@@ -438,8 +442,10 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Photos__UserID__37703C52">
-          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1" />
+        <Association Name="FK__Photos__UserID__40F9A68C">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Photos" Type="Self.Photos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NhanViens">
@@ -450,8 +456,10 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Posts__UserID__29221CFB">
-          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1" />
+        <Association Name="FK__Posts__UserID__3A4CA8FD">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Posts" Type="Self.Posts" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NhanViens">
@@ -596,7 +604,7 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             <End Role="Posts" EntitySet="Posts" />
             <End Role="Comments" EntitySet="Comments" />
           </AssociationSet>
-          <AssociationSet Name="FK__Comments__UserID__2EDAF651" Association="Self.FK__Comments__UserID__2EDAF651">
+          <AssociationSet Name="FK__Comments__UserID__40058253" Association="Self.FK__Comments__UserID__40058253">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="Comments" EntitySet="Comments" />
           </AssociationSet>
@@ -612,7 +620,7 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             <End Role="Posts" EntitySet="Posts" />
             <End Role="Likes" EntitySet="Likes" />
           </AssociationSet>
-          <AssociationSet Name="FK__Likes__UserID__339FAB6E" Association="Self.FK__Likes__UserID__339FAB6E">
+          <AssociationSet Name="FK__Likes__UserID__3B40CD36" Association="Self.FK__Likes__UserID__3B40CD36">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="Likes" EntitySet="Likes" />
           </AssociationSet>
@@ -640,11 +648,11 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="Notifications" EntitySet="Notifications" />
           </AssociationSet>
-          <AssociationSet Name="FK__Photos__UserID__37703C52" Association="Self.FK__Photos__UserID__37703C52">
+          <AssociationSet Name="FK__Photos__UserID__40F9A68C" Association="Self.FK__Photos__UserID__40F9A68C">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="Photos" EntitySet="Photos" />
           </AssociationSet>
-          <AssociationSet Name="FK__Posts__UserID__29221CFB" Association="Self.FK__Posts__UserID__29221CFB">
+          <AssociationSet Name="FK__Posts__UserID__3A4CA8FD" Association="Self.FK__Posts__UserID__3A4CA8FD">
             <End Role="NhanViens" EntitySet="NhanViens" />
             <End Role="Posts" EntitySet="Posts" />
           </AssociationSet>

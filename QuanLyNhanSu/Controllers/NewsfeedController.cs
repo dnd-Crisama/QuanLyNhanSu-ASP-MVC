@@ -24,6 +24,24 @@ namespace QuanLyNhanSu.Controllers
             var employeeNames = users.ToDictionary(u => u.MaNhanVien, u => u.HoTen);
             var employeeId = users.ToDictionary(u => u.MaNhanVien, u => u.MaNhanVien);
 
+            // SORT USER BY MESSAGE
+            var usersWithMessageCount = db.NhanViens
+                .Where(u => u.MaNhanVien != currentUserId) // Exclude the current user
+                .Select(u => new
+                {
+                 User = u,
+                MessageCount = db.Messages.Count(m =>
+                    (m.SenderId == currentUserId && m.ReceiverId == u.MaNhanVien) ||
+                    (m.SenderId == u.MaNhanVien && m.ReceiverId == currentUserId)
+                )
+                })
+                .OrderByDescending(x => x.MessageCount) // Sort by message count
+                .ToList();
+
+
+            // Pass the sorted users and data to the view
+            ViewBag.UsersMess = usersWithMessageCount.Select(x => x.User).ToList();
+
             ViewBag.CurrentUserId = currentUserId;
             ViewBag.Users = users;
             ViewBag.EmployeeNames = employeeNames;

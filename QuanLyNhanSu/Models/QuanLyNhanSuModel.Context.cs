@@ -87,6 +87,10 @@ public partial class QuanLyNhanSuEntities : DbContext
 
     public virtual DbSet<Post> Posts { get; set; }
 
+    public virtual DbSet<BangChamCong> BangChamCongs { get; set; }
+
+    public virtual DbSet<MaChamCong> MaChamCongs { get; set; }
+
 
     public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
     {

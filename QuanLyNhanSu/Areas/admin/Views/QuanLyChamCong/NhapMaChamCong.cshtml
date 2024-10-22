@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Nhập mã chấm công";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Nhập mã chấm công</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div style="color:red;">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div style="color:green;">@TempData["Success"]</div>
+}
+
+<form method="post" action="/admin/ChamCong/XacNhanChamCong">
+    <div>
+        <label for="maChamCong">Mã chấm công</label>
+        <input type="text" id="maChamCong" name="maChamCong" required />
+    </div>
+    <div>
+        <button type="submit">Xác nhận chấm công</button>
+    </div>
+</form>
+

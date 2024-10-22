@@ -199,6 +199,7 @@
     <Compile Include="Areas\admin\Controllers\AdminController.cs" />
     <Compile Include="Areas\admin\Controllers\AuthorController.cs" />
     <Compile Include="Areas\admin\Controllers\CaiDatController.cs" />
+    <Compile Include="Areas\admin\Controllers\QuanLyChamCongController.cs" />
     <Compile Include="Areas\admin\Controllers\QuanLyHocVanController.cs" />
     <Compile Include="Areas\admin\Controllers\HopDongController.cs" />
     <Compile Include="Areas\admin\Controllers\HoSoNhanVienController.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="Areas\admin\Controllers\QuanLyPhongBanController.cs" />
     <Compile Include="Areas\admin\Controllers\QuanLyUserController.cs" />
     <Compile Include="Controllers\AuthenController.cs" />
+    <Compile Include="Controllers\ChamCongController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\loginController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
@@ -221,6 +223,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\Chat.cs" />
+    <Compile Include="Models\BangChamCong.cs">
+      <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CapNhatLuong.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
@@ -269,6 +274,9 @@
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LuongA31GS.cs">
+      <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MaChamCong.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Message.cs">
@@ -653,6 +661,8 @@
     <Content Include="Areas\admin\Views\QuanLyChucVu\getByChucVu.cshtml" />
     <Content Include="Areas\admin\Views\QuanLyChucVu\EditChucVuNV.cshtml" />
     <Content Include="database\QuanLyNhanSu_v1.1.bacpac" />
+    <Content Include="Areas\admin\Views\QuanLyChamCong\NhapMaChamCong.cshtml" />
+    <Content Include="Areas\admin\Views\QuanLyChamCong\QuanLyChamCong.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chat.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -701,6 +711,7 @@
     <Content Include="Views\NhanVien\Detail.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Newsfeed\Index.cshtml" />
+    <Content Include="Views\ChamCong\NhapMaChamCong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

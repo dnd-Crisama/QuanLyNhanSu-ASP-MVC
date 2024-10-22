@@ -57,6 +57,9 @@
         <AssociationConnector Association="QuanLyNhanSuModel.FK__Likes__UserID__339FAB6E" />
         <AssociationConnector Association="QuanLyNhanSuModel.FK__Photos__UserID__37703C52" />
         <AssociationConnector Association="QuanLyNhanSuModel.FK__Posts__UserID__29221CFB" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.BangChamCong" Width="1.5" PointX="5.25" PointY="37.125" />
+        <EntityTypeShape EntityType="QuanLyNhanSuModel.MaChamCong" Width="1.5" PointX="10.375" PointY="4.75" />
+        <AssociationConnector Association="QuanLyNhanSuModel.FK__BangChamC__GhiCh__4F47C5E3" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

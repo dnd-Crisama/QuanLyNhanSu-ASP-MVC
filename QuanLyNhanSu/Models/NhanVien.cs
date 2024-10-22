@@ -45,6 +45,8 @@ public partial class NhanVien
 
         this.Posts = new HashSet<Post>();
 
+        this.BangChamCongs = new HashSet<BangChamCong>();
+
     }
 
 
@@ -131,6 +133,8 @@ public partial class NhanVien
     public virtual ICollection<Photo> Photos { get; set; }
 
     public virtual ICollection<Post> Posts { get; set; }
+
+    public virtual ICollection<BangChamCong> BangChamCongs { get; set; }
 
 }
 

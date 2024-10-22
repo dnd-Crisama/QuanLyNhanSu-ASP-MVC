@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="QuanLyNhanSuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BangChamCong">
+          <Key>
+            <PropertyRef Name="MaChamCong" />
+          </Key>
+          <Property Name="MaChamCong" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaNhanVien" Type="varchar" MaxLength="30" />
+          <Property Name="NgayChamCong" Type="datetime" />
+          <Property Name="GhiChu" Type="nvarchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="CapNhatLuongs">
           <Key>
             <PropertyRef Name="id" />
@@ -171,6 +180,13 @@
           <Property Name="PhuCap" Type="float" />
           <Property Name="ThueThuNhap" Type="float" />
         </EntityType>
+        <EntityType Name="MaChamCong">
+          <Key>
+            <PropertyRef Name="MaChamCong" />
+          </Key>
+          <Property Name="MaChamCong" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NgayTao" Type="date" />
+        </EntityType>
         <EntityType Name="Messages">
           <Key>
             <PropertyRef Name="Id" />
@@ -290,6 +306,20 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <Property Name="TenTrinhDo" Type="nvarchar(max)" Nullable="false" />
           <Property Name="HeSoBac" Type="float" />
         </EntityType>
+        <Association Name="FK__BangChamC__GhiCh__4F47C5E3">
+          <End Role="NhanViens" Type="Self.NhanViens" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BangChamCong" Type="Self.BangChamCong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanViens">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="BangChamCong">
+              <PropertyRef Name="MaNhanVien" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Comments__PostID__2DE6D218">
           <End Role="Posts" Type="Self.Posts" Multiplicity="0..1" />
           <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
@@ -567,6 +597,7 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="QuanLyNhanSuModelStoreContainer">
+          <EntitySet Name="BangChamCong" EntityType="Self.BangChamCong" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CapNhatLuongs" EntityType="Self.CapNhatLuongs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CapNhatTrinhDoHocVans" EntityType="Self.CapNhatTrinhDoHocVans" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietLuongs" EntityType="Self.ChiTietLuongs" Schema="dbo" store:Type="Tables" />
@@ -583,6 +614,7 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <EntitySet Name="LuongA21PGS" EntityType="Self.LuongA21PGS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LuongA31GS" EntityType="Self.LuongA31GS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Luongs" EntityType="Self.Luongs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MaChamCong" EntityType="Self.MaChamCong" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Messages" EntityType="Self.Messages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NhanViens" EntityType="Self.NhanViens" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notifications" EntityType="Self.Notifications" Schema="dbo" store:Type="Tables" />
@@ -600,6 +632,10 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
     [ThoiViecs].[TenNhanVien] AS [TenNhanVien]
     FROM [dbo].[ThoiViecs] AS [ThoiViecs]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__BangChamC__GhiCh__4F47C5E3" Association="Self.FK__BangChamC__GhiCh__4F47C5E3">
+            <End Role="NhanViens" EntitySet="NhanViens" />
+            <End Role="BangChamCong" EntitySet="BangChamCong" />
+          </AssociationSet>
           <AssociationSet Name="FK__Comments__PostID__2DE6D218" Association="Self.FK__Comments__PostID__2DE6D218">
             <End Role="Posts" EntitySet="Posts" />
             <End Role="Comments" EntitySet="Comments" />
@@ -850,6 +886,12 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             <End Role="NhanVien" EntitySet="NhanViens" />
             <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
+          <EntitySet Name="BangChamCongs" EntityType="QuanLyNhanSuModel.BangChamCong" />
+          <EntitySet Name="MaChamCongs" EntityType="QuanLyNhanSuModel.MaChamCong" />
+          <AssociationSet Name="FK__BangChamC__GhiCh__4F47C5E3" Association="QuanLyNhanSuModel.FK__BangChamC__GhiCh__4F47C5E3">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="BangChamCong" EntitySet="BangChamCongs" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1056,6 +1098,7 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
           <NavigationProperty Name="Likes" Relationship="QuanLyNhanSuModel.FK__Likes__UserID__339FAB6E" FromRole="NhanVien" ToRole="Like" />
           <NavigationProperty Name="Photos" Relationship="QuanLyNhanSuModel.FK__Photos__UserID__37703C52" FromRole="NhanVien" ToRole="Photo" />
           <NavigationProperty Name="Posts" Relationship="QuanLyNhanSuModel.FK__Posts__UserID__29221CFB" FromRole="NhanVien" ToRole="Post" />
+          <NavigationProperty Name="BangChamCongs" Relationship="QuanLyNhanSuModel.FK__BangChamC__GhiCh__4F47C5E3" FromRole="NhanVien" ToRole="BangChamCong" />
         </EntityType>
         <EntityType Name="PhongBan">
           <Key>
@@ -1526,6 +1569,37 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="BangChamCong">
+          <Key>
+            <PropertyRef Name="MaChamCong" />
+          </Key>
+          <Property Name="MaChamCong" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaNhanVien" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="NgayChamCong" Type="DateTime" Precision="3" />
+          <Property Name="GhiChu" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="NhanVien" Relationship="QuanLyNhanSuModel.FK__BangChamC__GhiCh__4F47C5E3" FromRole="BangChamCong" ToRole="NhanVien" />
+        </EntityType>
+        <EntityType Name="MaChamCong">
+          <Key>
+            <PropertyRef Name="MaChamCong1" />
+          </Key>
+          <Property Name="MaChamCong1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NgayTao" Type="DateTime" Precision="0" />
+        </EntityType>
+        <Association Name="FK__BangChamC__GhiCh__4F47C5E3">
+          <End Type="QuanLyNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuanLyNhanSuModel.BangChamCong" Role="BangChamCong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="BangChamCong">
+              <PropertyRef Name="MaNhanVien" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1835,6 +1909,24 @@ warning 6002: The table/view 'QuanLyNhanSu_v1.1.dbo.ThoiViecs' does not have a p
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="PostID" ColumnName="PostID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BangChamCongs">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.BangChamCong">
+              <MappingFragment StoreEntitySet="BangChamCong">
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="NgayChamCong" ColumnName="NgayChamCong" />
+                <ScalarProperty Name="MaNhanVien" ColumnName="MaNhanVien" />
+                <ScalarProperty Name="MaChamCong" ColumnName="MaChamCong" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MaChamCongs">
+            <EntityTypeMapping TypeName="QuanLyNhanSuModel.MaChamCong">
+              <MappingFragment StoreEntitySet="MaChamCong">
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="MaChamCong1" ColumnName="MaChamCong" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

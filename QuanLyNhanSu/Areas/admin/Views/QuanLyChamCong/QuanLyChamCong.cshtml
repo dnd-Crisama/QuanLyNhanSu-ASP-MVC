@@ -1,0 +1,63 @@
+﻿@model IEnumerable<QuanLyNhanSu.Models.BangChamCong>
+@{
+    ViewBag.Title = "Quản lý chấm công";
+    var db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
+    var datenow = DateTime.Now.Date;
+}
+
+
+<h2>Quản lý chấm công</h2>
+<div style="margin:10px">
+    <button onclick="window.location.href='/admin/QuanLyChamCong/TaoMaChamCong'">Tạo code chấm công</button>
+</div>
+<table border="1" style="margin:10px">
+    <thead>
+        <tr>
+            <th>Code chấm công hom nay</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+             <td style="color:forestgreen">@db.MaChamCongs.Where(m=>m.NgayTao == datenow).SingleOrDefault().MaChamCong1</td>
+        </tr>
+    </tbody>
+</table>
+<form method="get" action="/admin/QuanLyChamCong/QuanLyChamCong" style="margin:10px">
+    <div>
+        <label for="maNhanVien">Mã nhân viên:</label>
+        <input type="text" id="maNhanVien" name="maNhanVien" value="@Request.QueryString["maNhanVien"]" />
+    </div>
+    <div>
+        <label for="thang">Tháng:</label>
+        <input type="number" id="thang" name="thang" value="@Request.QueryString["thang"]" />
+    </div>
+    <div>
+        <label for="nam">Năm:</label>
+        <input type="number" id="nam" name="nam" value="@Request.QueryString["nam"]" />
+    </div>
+    <div style="margin:10px">
+        <button type="submit">Lọc</button>
+    </div>
+</form>
+
+<table border="1" id="table-taikhoan" class="table table-responsive table-bordered table-striped" style="margin:10px">
+    <thead>
+        <tr class="success">
+            <th>Mã nhân viên</th>
+            <th>Tên nhân viên</th>
+            <th>Ngày chấm công</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaNhanVien</td>
+                <td>@db.NhanViens.SingleOrDefault(m=>m.MaNhanVien == item.MaNhanVien).HoTen</td>
+                <td>@item.NgayChamCong</td>
+                <td>@item.GhiChu</td>
+            </tr>
+        }
+    </tbody>
+</table>

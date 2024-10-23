@@ -139,7 +139,7 @@
                                             <div class="comment-content">
                                                 <a href="@Url.Action("Index","Profile", new {maNhanVien = db.NhanViens.FirstOrDefault(m=>m.MaNhanVien == comment.UserID).MaNhanVien})" style="color:#E4E6EB"><h6 class="mb-0"><strong>@comment.NhanVien.HoTen</strong></h6></a>
                                                 <p>@comment.Content</p>
-                                                <small>formatTimeAgo@comment.CommentDate.ToString())</small>
+                                                <small>@FormatDate(comment.CommentDate.Value)</small>
                                             </div>
                                         </div>
                                     }

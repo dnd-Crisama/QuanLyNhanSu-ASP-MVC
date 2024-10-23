@@ -5,10 +5,6 @@
     var manhanvien = (string)Session["MaNhanVien"];
 }
 
-
-<h2>Nhập mã chấm công</h2>
-
-
 @if (TempData["Error"] != null)
 {
     <div style="color:red;">@TempData["Error"]</div>
@@ -18,13 +14,21 @@
     <div style="color:green;">@TempData["Success"]</div>
 }
 
-<form method="post" action="/ChamCong/XacNhanChamCong">
-    <div>
-        <label for="maChamCong">Mã chấm công</label>
-        <input type="text" id="maChamCong" name="maChamCong" required />
+<div style="display:flex;flex-direction:column ;justify-content:center; align-items: center; min-height:60vh; ">
+    <div style="border-radius: 10px; background: rgb(2,0,36); background: rgb(144,142,189); background: linear-gradient(90deg, rgba(144,142,189,1) 0%, rgba(141,189,199,1) 100%); padding: 15px; " class="text-center">
+        <h2>Nhập mã chấm công</h2>
+        <form method="post" action="/ChamCong/XacNhanChamCong">
+            <div style="font-size: 20px;">
+                <div>
+                    <label for="maChamCong">Mã chấm công</label>
+                    <input type="text" id="maChamCong" name="maChamCong" required />
+                </div>
+                <div class="text-center" style="margin-top:5px;">
+                    <button type="submit" class="btn btn-success">Xác nhận chấm công</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <div>
-        <button type="submit">Xác nhận chấm công</button>
-    </div>
-</form>
+</div>
+
 

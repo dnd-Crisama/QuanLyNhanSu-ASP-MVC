@@ -62,6 +62,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         // View hiển thị bảng chấm công cho admin, có tìm kiếm theo tháng, năm, mã nhân viên
         public ActionResult QuanLyChamCong(string maNhanVien = "", int thang = 0, int nam = 0)
         {
+            ViewBag.CodeChamCong = TaoMaChamCong();
             var chamCongList = db.BangChamCongs.AsQueryable();
 
             if (!string.IsNullOrEmpty(maNhanVien))
@@ -83,13 +84,13 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         }
 
         // Hàm để random mã chấm công cho mỗi ngày (có thể được gọi tự động hàng ngày)
-        public ActionResult TaoMaChamCong()
+        public string TaoMaChamCong()
         {
-            var codehientai = db.MaChamCongs.Where(m => m.NgayTao < DateTime.Now.Date);
+            var now = DateTime.Now.Day;
+            MaChamCong codehientai = db.MaChamCongs.Where(m => m.NgayTao.Value.Day == now).SingleOrDefault();
             if (codehientai != null) 
             {
-                ViewBag.CodeChamCong = codehientai;
-                return RedirectToAction("QuanLyChamCong");
+                return codehientai.MaChamCong1;
             }
             // Tạo mã chấm công random
             string maChamCong = Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
@@ -100,18 +101,17 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 MaChamCong1 = maChamCong,
                 NgayTao = DateTime.Now.Date
             };
-            ViewBag.CodeChamCong = maChamCong;
             db.MaChamCongs.Add(newMaChamCong);
             db.SaveChanges();
 
             // Xóa mã chấm công của ngày hôm trước
-            var maChamCongCu = db.MaChamCongs.Where(m => m.NgayTao < DateTime.Now.Date);
+            var maChamCongCu = db.MaChamCongs.Where(m => m.NgayTao.Value.Day < now);
             if (maChamCongCu != null)
             {
                 db.MaChamCongs.RemoveRange(maChamCongCu);
                 db.SaveChanges();
             }
-            return RedirectToAction("QuanLyChamCong");
+            return newMaChamCong.MaChamCong1;
         }
     }
 }

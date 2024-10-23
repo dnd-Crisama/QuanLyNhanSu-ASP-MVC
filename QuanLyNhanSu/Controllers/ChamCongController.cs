@@ -26,9 +26,9 @@ namespace QuanLyNhanSu.Controllers
         [HttpPost]
         public ActionResult XacNhanChamCong(string maChamCong)
         {
-            var datenow = DateTime.Now.Date;
+            var datenow = DateTime.Now;
             // Lấy mã chấm công từ DB
-            var maChamCongDB = db.MaChamCongs.FirstOrDefault(m => m.MaChamCong1 == maChamCong && m.NgayTao == datenow);
+            var maChamCongDB = db.MaChamCongs.FirstOrDefault(m => m.MaChamCong1 == maChamCong && m.NgayTao.Value.Day == datenow.Day && m.NgayTao.Value.Month == datenow.Month && m.NgayTao.Value.Year == datenow.Year);
 
             if (maChamCongDB != null)
             {
@@ -36,7 +36,7 @@ namespace QuanLyNhanSu.Controllers
                 string maNhanVien = (string)Session["MaNhanVien"];
 
                 // Kiểm tra xem đã chấm công hôm nay chưa
-                var daChamCong = db.BangChamCongs.FirstOrDefault(c => c.MaNhanVien == maNhanVien && c.NgayChamCong == datenow);
+                var daChamCong = db.BangChamCongs.FirstOrDefault(c => c.MaNhanVien == maNhanVien && c.NgayChamCong.Value.Day == datenow.Day && c.NgayChamCong.Value.Month == datenow.Month && c.NgayChamCong.Value.Year == datenow.Year);
                 if (daChamCong == null)
                 {
                     // Thêm bản ghi chấm công mới

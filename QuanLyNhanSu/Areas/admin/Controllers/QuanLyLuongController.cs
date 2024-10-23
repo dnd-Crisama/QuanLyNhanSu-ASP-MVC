@@ -132,10 +132,12 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                     .Select(x => x.TienKyLuat)
                     .FirstOrDefault() ?? 0;
 
-                var ngaycong = (db.BangChamCongs.Where(x => x.MaNhanVien == ctl.MaNhanVien).Count()) * 0.1;
+                var ngaycong = (db.BangChamCongs.Where(x => x.MaNhanVien == ctl.MaNhanVien && x.NgayChamCong.Value.Month == now.Month && x.NgayChamCong.Value.Year == now.Year).Count()) ;
 
-                tong = ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap + (double)ct.TienThuong - (double)ct.TienPhat;
-                ct.TongTienLuong = (tong*ngaycong).ToString();
+                var luongChamCong = ct.LuongCoBan / 25 * ngaycong;
+
+                tong = luongChamCong - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap + (double)ct.TienThuong - (double)ct.TienPhat;
+                ct.TongTienLuong = tong.ToString();
 
                 db.ChiTietLuongs.Add(ct);
                 var khenthuong = db.KhenThuongs.FirstOrDefault(m => m.MaNhanVien == ct.MaNhanVien && m.TrangThai != true);
@@ -191,7 +193,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 var khenthuong = db.KhenThuongs.Where(m => m.MaNhanVien == id && m.TrangThai != true).FirstOrDefault();
                 var kyluat = db.KyLuats.Where(x => x.MaNhanVien == id && x.TrangThai != true).FirstOrDefault();
 
-                var ngaycong = (db.BangChamCongs.Where(x => x.MaNhanVien == id).Count()) * 0.1;
+                var ngaycong = (db.BangChamCongs.Where(x => x.MaNhanVien == id && x.NgayChamCong.Value.Month == now.Month && x.NgayChamCong.Value.Year == now.Year).Count());
 
                 ct.MaChiTietBangLuong = "T" + now.Month.ToString() + "-" + now.Year.ToString();
                 ct.MaNhanVien = luongthang.MaNhanVien;
@@ -218,9 +220,9 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 ct.NgayNhanLuong = DateTime.Now.Date;
                 ct.TienThuong = khenthuong?.TienThuong ?? 0;
                 ct.TienPhat = kyluat?.TienKyLuat ?? 0;
-                
-                tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap +(double)ct.TienThuong - (double)ct.TienPhat;
-                ct.TongTienLuong = (tong*ngaycong).ToString();
+                var luongChamCong = ct.LuongCoBan / 25 * ngaycong;
+                tong = tong + luongChamCong - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap +(double)ct.TienThuong - (double)ct.TienPhat;
+                ct.TongTienLuong = tong.ToString();
                 if (ctl == null)
                 {
                     TempData["ok"] = "Thanh toán thành công";

@@ -45,11 +45,11 @@
                     </a>
                     <ul class="dropdown-menu">
                         @*<li>
-                                <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                            </li>*@
+                        <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                    </li>*@
                         @*<li>
-                                <a href="#"><i class="fa fa-exchange"></i>  Đổi mật khẩu</a>
-                            </li>*@
+                        <a href="#"><i class="fa fa-exchange"></i>  Đổi mật khẩu</a>
+                    </li>*@
                         <li>
                             <a href="@Url.Action("Index", "Newsfeed",new {area=""})"><i class="fa fa-fw fa-hacker-news"></i> Newsfeed</a>
                         </li>
@@ -73,40 +73,93 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav" id="activeMenu">
                     <li class="active">
-                        <a href="@Url.Action("index","Admin")"><i class="fa fa-dashboard"></i> Tổng quan</a>
+                        <a href="@Url.Action("index","Admin")">
+                            <i class="fa fa-dashboard"></i> Tổng quan
+                        </a>
                     </li>
+
+                    <!-- Nhân Viên with Dropdown -->
                     <li>
-                        <a href="@Url.Action("index","QuanLyUser")"><i class="fa fa-fw fa-user"></i> Nhân Viên</a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#nhanVienMenu">
+                            <i class="fa fa-fw fa-user"></i> Quản lý Nhân Viên <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul id="nhanVienMenu" class="collapse">
+                            <li>
+                                <a href="@Url.Action("index","QuanLyUser")">
+                                    <i class="fa fa-fw fa-user"></i> Nhân Viên
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="@Url.Action("index","HoSoNhanVien")">
+                                    <i class="fa fa-credit-card"></i> Hồ sơ nhân Viên
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index","HopDong")">
+                                    <i class="fa fa-file"></i> Hợp đồng nhân viên
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
+                    <!-- Other menu items -->
+
                     <li>
-                        <a href="@Url.Action("index","HoSoNhanVien")"><i class="fa fa-credit-card"></i> Hồ sơ nhân Viên</a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#danhMucMenu">
+                            <i class="fa fa-tasks"></i> Quản lý Danh mục <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul id="danhMucMenu" class="collapse">
+                            <li>
+                                <a href="@Url.Action("index", "QuanLyPhongBan")">
+                                    <i class="fa fa-tasks"></i> Phòng ban
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index","QuanLyChucVu")">
+                                    <i class="fa fa-database"></i> Chức vụ
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index","QuanLyHocVan")">
+                                    <i class="fa fa-mortar-board"></i> Học vấn
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index","QuanLyChuyenNganh")">
+                                    <i class="fa fa-suitcase"></i> Chuyên ngành
+                                </a>
+                            </li>
+
+                        </ul>
                     </li>
+
                     <li>
-                        <a href="@Url.Action("index","HopDong")"><i class="fa fa-file"></i> Hợp đồng nhân viên</a>
-                    </li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#LuongMenu">
+                            <i class="fa fa-fw fa-user"></i> Quản lý Lương <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul id="LuongMenu" class="collapse">
+                            <li>
+                                <a href="@Url.Action("index","QuanLyLuong")">
+                                    <i class="fa fa-money"></i> Lương nhân viên
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index","KhenThuong")">
+                                    <i class="fa fa-dollar"></i> Khen thưởng
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index","KyLuat")">
+                                    <i class="fa fa-warning"></i> Kỷ luật
+                                </a>
+                            </li>
+                        </ul>
+                    </li>                                          
                     <li>
-                        <a href="@Url.Action("index", "QuanLyPhongBan")"><i class="fa fa-tasks"></i> Phòng ban</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("index","QuanLyChucVu")"><i class="fa fa-database"></i> Chức vụ</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("index","QuanLyHocVan")"><i class="fa fa-mortar-board"></i> Học vấn</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("index","QuanLyChuyenNganh")"><i class="fa fa-suitcase"></i> Chuyên ngành</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("index","QuanLyLuong")"><i class="fa fa-money"></i> Lương nhân viên</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("QuanLyChamCong","QuanLyChamCong")"><i class="fa fa-book"></i> Bảng chấm công</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("index","KhenThuong")"><i class="fa fa-money"></i> Khen thưởng</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("index","KyLuat")"><i class="fa fa-warning"></i> Kỷ luật</a>
+                        <a href="@Url.Action("QuanLyChamCong","QuanLyChamCong")">
+                            <i class="fa fa-book"></i> Bảng chấm công
+                        </a>
                     </li>
 
                     @*<li>
@@ -121,14 +174,14 @@
             </ul>
         </li>*@
                 </ul>
-            </div>
+</div>
             <!-- /.navbar-collapse -->
         </nav>
         <div id="page-wrapper">
             @RenderBody()
             <hr />
             <footer>
-                <p>&copy; @DateTime.Now.Year - Admin</p>
+                <p>&copy; <span id="currentTime"></span> - Quản lý nhân sự - Admin</p>
 
             </footer>
         </div>
@@ -148,6 +201,7 @@
     @Scripts.Render("~/bundles/jquery1")
     @Scripts.Render("~/bundles/datatable")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/Scripts.js"></script>
     @RenderSection("scripts", required: false)
  
     <script>
@@ -164,6 +218,26 @@
         });
         $('#top').on('click', function (e) {
             $('html,body').animate({ scrollTop: 0 }, "slow");
+        });
+
+        $(document).ready(function () {
+            // Check local storage for dropdown state
+            var openDropdown = localStorage.getItem('openDropdown');
+            if (openDropdown) {
+                $(openDropdown).collapse('show'); // Show the previously opened dropdown
+            }
+
+            // Handle dropdown click
+            $('.nav > li > a[data-toggle="collapse"]').on('click', function () {
+                var target = $(this).data('target');
+
+                // Check if the dropdown is already open
+                if ($(target).hasClass('in')) {
+                    localStorage.removeItem('openDropdown'); // Remove from local storage if collapsing
+                } else {
+                    localStorage.setItem('openDropdown', target); // Set the current dropdown in local storage
+                }
+            });
         });
     </script>
 </body>

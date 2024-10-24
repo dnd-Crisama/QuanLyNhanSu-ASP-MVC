@@ -165,7 +165,23 @@
                                 <p class="mt-3" style="padding-top:5px;">@post.Content</p>
                                 @if (!string.IsNullOrEmpty(post.ImageURL))
                                 {
-                                    <img src="@post.ImageURL" class="img-fluid post-image" />
+                                    
+                                    var fileExtension = Path.GetExtension(post.ImageURL).ToLower();
+                                    if (fileExtension == ".mp4" || fileExtension == ".avi" || fileExtension == ".mov")
+                                    {
+                                        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                            <video controls controlsList="nodownload noplaybackrate" autoplay muted class="img-fluid post-image" style="max-width: 100%; height: auto;">
+                                                <source src="@post.ImageURL" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </div>
+                                    }
+                                    else if (fileExtension == ".jpg" || fileExtension == ".jpeg" || fileExtension == ".png" || fileExtension == ".gif")
+                                    {
+                                        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                            <img src="@post.ImageURL" class="img-fluid post-image" style="max-width: 100%; height: auto;" />
+                                        </div>
+                                    }
                                 }
                             </div>
                             <!-- Like and Comment Section -->

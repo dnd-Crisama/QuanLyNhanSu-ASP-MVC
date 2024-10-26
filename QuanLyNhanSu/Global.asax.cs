@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -23,6 +24,7 @@ namespace QuanLyNhanSu
             Application.Add("HitCounter", s);
             //Application["HitCounter"] = 0;
             Application["Online"] = 0;
+            GlobalHost.Configuration.MaxIncomingWebSocketMessageSize = null;
 
         }
         void Session_Start(object sender, EventArgs e)

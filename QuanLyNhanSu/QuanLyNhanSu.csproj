@@ -219,10 +219,12 @@
     <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\VoiceChannelController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\Chat.cs" />
+    <Compile Include="Hubs\VoiceChatHub.cs" />
     <Compile Include="Models\BangChamCong.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
@@ -332,6 +334,8 @@
     <Compile Include="Models\TrinhDoHocVan.cs">
       <DependentUpon>QuanLyNhanSuModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Channel.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserValidate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -665,6 +669,7 @@
     <Content Include="Areas\admin\Views\QuanLyChamCong\QuanLyChamCong.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chat.js" />
+    <Content Include="Scripts\voiceProcessor.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
@@ -712,6 +717,8 @@
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Newsfeed\Index.cshtml" />
     <Content Include="Views\ChamCong\NhapMaChamCong.cshtml" />
+    <Content Include="Views\VoiceChannel\Index.cshtml" />
+    <Content Include="Views\VoiceChannel\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

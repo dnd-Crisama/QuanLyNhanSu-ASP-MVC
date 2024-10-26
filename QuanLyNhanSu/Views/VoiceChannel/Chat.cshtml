@@ -1,0 +1,712 @@
+﻿@{
+    ViewBag.Title = "Voice Chat";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Chat</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <style>
+        :root {
+            --bg-primary: #36393f;
+            --bg-secondary: #2f3136;
+            --bg-tertiary: #202225;
+            --accent-color: #7289da;
+            --text-primary: #ffffff;
+            --text-secondary: #dcddde;
+            --danger-color: #ed4245;
+            --success-color: #43b581;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .channel-list {
+            width: 240px;
+            background: var(--bg-secondary);
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .users-list {
+            width: 240px;
+            background: var(--bg-secondary);
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 240px;
+            right: 240px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-button {
+            background: var(--bg-primary);
+            border: none;
+            color: var(--text-primary);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+            .control-button:hover {
+                background: var(--accent-color);
+            }
+
+            .control-button.active {
+                background: var(--danger-color);
+            }
+
+            .control-button i {
+                font-size: 20px;
+            }
+
+        .volume-control {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #volumeControl {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            background: var(--bg-primary);
+            border-radius: 2px;
+        }
+
+            #volumeControl::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 16px;
+                height: 16px;
+                background: var(--accent-color);
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+        .channel {
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .channel:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .channel.active {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .channel i {
+                color: var(--text-secondary);
+            }
+
+        .user-item {
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .user-item[data-channel] {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .user-item.speaking {
+                animation: pulse 1s infinite;
+            }
+
+        .user-status {
+            margin-left: auto;
+            display: flex;
+            gap: 4px;
+        }
+
+            .user-status i {
+                color: var(--text-secondary);
+            }
+
+        @@keyframes pulse {
+            0% {
+                background-color: rgba(67, 181, 129, 0.2);
+            }
+
+            50% {
+                background-color: rgba(67, 181, 129, 0.4);
+            }
+
+            100% {
+                background-color: rgba(67, 181, 129, 0.2);
+            }
+        }
+
+        #debugInfo {
+            position: fixed;
+            top: 10px;
+            right: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .main-content {
+            flex: 1;
+            background: var(--bg-primary);
+            position: relative;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .users-list {
+            width: 240px;
+            background: var(--bg-secondary);
+            padding: 16px;
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 240px;
+            right: 240px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="channel-list">
+            <h3>Channels</h3>
+            <div id="channels">
+                <div class="channel" data-channel="General">
+                    <i class="fas fa-hashtag"></i>
+                    General
+                </div>
+                <div class="channel" data-channel="Gaming">
+                    <i class="fas fa-hashtag"></i>
+                    Gaming
+                </div>
+                <div class="channel" data-channel="Music">
+                    <i class="fas fa-hashtag"></i>
+                    Music
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <div class="controls">
+                <button id="muteBtn" class="control-button" title="Toggle Mute">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button id="deafenBtn" class="control-button" title="Toggle Deafen">
+                    <i class="fas fa-headphones"></i>
+                </button>
+                <div class="volume-control">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" id="volumeControl" min="0" max="100" value="100">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+        </div>
+    <div class="users-list">
+        <h3>Users</h3>
+        <div id="users"></div>
+    </div>
+    <div id="debugInfo"></div>
+
+    <script>
+        function floatToInt16Array(floatArray) {
+            const int16Array = new Int16Array(floatArray.length);
+            for (let i = 0; i < floatArray.length; i++) {
+                const s = Math.max(-1, Math.min(1, floatArray[i]));
+                int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+            }
+            return int16Array;
+        }
+
+        function createAudioBuffer(context, int16Data) {
+            const audioBuffer = context.createBuffer(1, int16Data.length, context.sampleRate);
+            const channelData = audioBuffer.getChannelData(0);
+
+            // Convert Int16 back to Float32
+            for (let i = 0; i < int16Data.length; i++) {
+                channelData[i] = int16Data[i] / 0x8000;
+            }
+
+            return audioBuffer;
+        }
+        function createWavHeader(sampleRate, bitsPerSample, numberOfChannels, dataLength) {
+            const wavHeader = new ArrayBuffer(44);
+            const view = new DataView(wavHeader);
+
+            // RIFF identifier 'RIFF'
+            view.setUint8(0, 0x52); // R
+            view.setUint8(1, 0x49); // I
+            view.setUint8(2, 0x46); // F
+            view.setUint8(3, 0x46); // F
+
+            // File length minus RIFF identifier length and file description length
+            view.setUint32(4, 36 + dataLength, true);
+
+            // WAVE identifier 'WAVE'
+            view.setUint8(8, 0x57);  // W
+            view.setUint8(9, 0x41);  // A
+            view.setUint8(10, 0x56); // V
+            view.setUint8(11, 0x45); // E
+
+            // Format chunk identifier 'fmt '
+            view.setUint8(12, 0x66); // f
+            view.setUint8(13, 0x6D); // m
+            view.setUint8(14, 0x74); // t
+            view.setUint8(15, 0x20); // space
+
+            // Format chunk length
+            view.setUint32(16, 16, true);
+            // Sample format (raw)
+            view.setUint16(20, 1, true);
+            // Channel count
+            view.setUint16(22, numberOfChannels, true);
+            // Sample rate
+            view.setUint32(24, sampleRate, true);
+            // Byte rate (sample rate * block align)
+            view.setUint32(28, sampleRate * numberOfChannels * (bitsPerSample / 8), true);
+            // Block align (channel count * bytes per sample)
+            view.setUint16(32, numberOfChannels * (bitsPerSample / 8), true);
+            // Bits per sample
+            view.setUint16(34, bitsPerSample, true);
+
+            // Data chunk identifier 'data'
+            view.setUint8(36, 0x64); // d
+            view.setUint8(37, 0x61); // a
+            view.setUint8(38, 0x74); // t
+            view.setUint8(39, 0x61); // a
+
+            // Data chunk length
+            view.setUint32(40, dataLength, true);
+
+            return wavHeader;
+        }
+let audioContext;
+let gainNode;
+let mediaStream;
+let currentChannel = null;
+let username;
+
+// Initialize audio context and gain node
+        async function initializeAudioSystem() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)({
+                    sampleRate: 48000,
+                    latencyHint: 'interactive'
+                });
+
+                gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(1.0, audioContext.currentTime);
+                gainNode.connect(audioContext.destination);
+
+                return true;
+            } catch (error) {
+                console.error('Error initializing audio system:', error);
+                return false;
+            }
+        }
+
+// Setup voice capture with proper error handling
+        async function setupVoiceCapture(hub) {
+            try {
+                if (!audioContext) {
+                    await initializeAudioSystem();
+                }
+
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true,
+                        sampleRate: 48000,
+                        channelCount: 1
+                    }
+                });
+
+                if (audioContext.state === 'suspended') {
+                    await audioContext.resume();
+                }
+
+                await audioContext.audioWorklet.addModule('/Scripts/voiceProcessor.js');
+                const streamSource = audioContext.createMediaStreamSource(mediaStream);
+                const workletNode = new AudioWorkletNode(audioContext, 'voice-processor');
+
+                streamSource.connect(workletNode);
+
+                workletNode.port.onmessage = (event) => {
+                    if (currentChannel && !$(`.user-item[data-username="${username}"]`).hasClass('muted')) {
+                        const floatArray = event.data;
+                        const int16Data = floatToInt16Array(floatArray);
+
+                        // Send the raw Int16 data
+                        hub.server.broadcastVoiceData(Array.from(int16Data));
+                    }
+                };
+
+                updateDebug('Voice capture setup complete');
+            } catch (err) {
+                updateDebug(`Error setting up voice capture: ${err.message}`);
+                console.error(err);
+            }
+        }
+
+
+// Main initialization
+$(function () {
+    const hub = $.connection.voiceChatHub;
+    username = '@ViewBag.Username'; // Assign to global variable
+
+    // SignalR client methods
+    hub.client.initializeUserList = function (users) {
+        $('#users').empty();
+        users.forEach(function(user) {
+            addUserToList(user.username, user.channel, user.isMuted, user.isDeafened);
+        });
+        updateUsersList();
+    };
+    hub.client.userConnected = function (user) {
+        updateDebug(`User connected: ${user.username}`);
+        addUserToList(user.username, user.channel, user.isMuted, user.isDeafened);
+        updateUsersList();
+    };
+
+    hub.client.userDisconnected = function (username) {
+        updateDebug(`User disconnected: ${username}`);
+        $(`.user-item[data-username="${username}"]`).remove();
+        updateUsersList();
+    };
+
+    hub.client.userJoinedChannel = function (user) {
+        updateDebug(`User ${user.username} joined channel: ${user.channel}`);
+        const userElement = $(`.user-item[data-username="${user.username}"]`);
+        if (userElement.length) {
+            userElement.attr('data-channel', user.channel);
+            if (user.isMuted) userElement.addClass('muted');
+            if (user.isDeafened) userElement.addClass('deafened');
+        } else {
+            addUserToList(user.username, user.channel, user.isMuted, user.isDeafened);
+        }
+        updateUsersList();
+    };
+
+    hub.client.userLeftChannel = function (user) {
+        updateDebug(`User ${user.username} left channel: ${user.channel}`);
+        const userElement = $(`.user-item[data-username="${user.username}"]`);
+        if (userElement.length) {
+            userElement.removeAttr('data-channel');
+        }
+        updateUsersList();
+    };
+
+    // Voice data handling
+    hub.client.receiveVoiceData = async function (user, voiceData) {
+        if (!$(`.user-item[data-username="${username}"]`).hasClass('deafened') &&
+            voiceData && voiceData.length > 0 && audioContext) {
+            try {
+                // Convert received data back to Int16Array
+                const int16Data = new Int16Array(voiceData);
+
+                // Create audio buffer from the data
+                const audioBuffer = createAudioBuffer(audioContext, int16Data);
+
+                // Create and configure source
+                const source = audioContext.createBufferSource();
+                source.buffer = audioBuffer;
+
+                // Create gain node for this audio chunk
+                const userGain = audioContext.createGain();
+                userGain.gain.value = $('#volumeControl').val() / 100;
+
+                // Connect nodes
+                source.connect(userGain);
+                userGain.connect(gainNode);
+
+                // Start playback with a small delay
+                const startTime = audioContext.currentTime + 0.005;
+                source.start(startTime);
+
+                // Visual feedback
+                $(`.user-item[data-username="${user}"]`).addClass('speaking');
+                setTimeout(() => {
+                    $(`.user-item[data-username="${user}"]`).removeClass('speaking');
+                }, 150);
+
+            } catch (error) {
+                console.error('Error processing voice data:', error);
+                updateDebug(`Audio processing error: ${error.message}`);
+            }
+        }
+    };
+
+    // Update your volume control handler
+    $('#volumeControl').on('input', function () {
+        const volume = $(this).val() / 100;
+        if (gainNode) {
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+        }
+    });
+
+    // Connect to SignalR hub
+    $.connection.hub.qs = { 'username': username };
+    $.connection.hub.start().done(async function () {
+        updateDebug('Connected to SignalR hub');
+        await setupVoiceCapture(hub);
+    }).fail(function(error) {
+        updateDebug(`Connection failed: ${error}`);
+    });
+
+    // UI Event Handlers
+    $('.channel').click(function () {
+        const channelName = $(this).data('channel');
+        $('.channel').removeClass('active');
+        $(this).addClass('active');
+        currentChannel = channelName;
+        hub.server.joinChannel(channelName);
+        updateDebug(`Joined channel: ${channelName}`);
+    });
+
+    $('#muteBtn').click(async function() {
+        if (audioContext && audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
+        hub.server.toggleMute();
+        $(this).toggleClass('active');
+        updateDebug('Toggled mute');
+    });
+
+    $('#deafenBtn').click(function() {
+        hub.server.toggleDeafen();
+        $(this).toggleClass('active');
+        updateDebug('Toggled deafen');
+    });
+
+    $('#volumeControl').on('input', function() {
+        if (gainNode) {
+            const volume = $(this).val() / 100;
+            gainNode.gain.value = volume;
+        }
+    });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', function() {
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+        }
+        if (audioContext) {
+            audioContext.close();
+        }
+    });
+});
+
+// Helper functions
+function updateDebug(message) {
+    $('#debugInfo').append(`<div>${new Date().toISOString()}: ${message}</div>`);
+    if ($('#debugInfo div').length > 10) {
+        $('#debugInfo div:first').remove();
+    }
+}
+
+        function addUserToList(username, channel, isMuted, isDeafened) {
+            // Remove existing user element if it exists
+            $(`.user-item[data-username="${username}"]`).remove();
+
+            const userDiv = $(`<div class="user-item" data-username="${username}">${username}</div>`);
+            if (channel) userDiv.attr('data-channel', channel);
+            if (isMuted) userDiv.addClass('muted');
+            if (isDeafened) userDiv.addClass('deafened');
+            $('#users').append(userDiv);
+        }
+
+        function updateUsersList() {
+            const users = $('.user-item').get();
+            users.sort((a, b) => {
+                const aChannel = $(a).attr('data-channel');
+                const bChannel = $(b).attr('data-channel');
+                const aUsername = $(a).data('username');
+                const bUsername = $(b).data('username');
+
+                // Sort by channel first
+                if (aChannel && !bChannel) return -1;
+                if (!aChannel && bChannel) return 1;
+                if (aChannel !== bChannel) return (aChannel || '').localeCompare(bChannel || '');
+
+                // Then by username
+                return aUsername.localeCompare(bUsername);
+            });
+
+            $('#users').empty().append(users);
+        }
+
+function visualizeSpeaking(audioData) {
+    const sum = audioData.reduce((a, b) => a + Math.abs(b), 0);
+    const average = sum / audioData.length;
+    if (average > 0.01) {
+        $(`.user-item[data-username="${username}"]`).addClass('speaking');
+    } else {
+        $(`.user-item[data-username="${username}"]`).removeClass('speaking');
+    }
+        }
+        function createWavHeader(sampleRate, bitsPerSample, numberOfChannels, dataLength) {
+            const byteRate = (sampleRate * numberOfChannels * bitsPerSample) / 8;
+            const blockAlign = (numberOfChannels * bitsPerSample) / 8;
+            const buffer = new ArrayBuffer(44);
+            const view = new DataView(buffer);
+
+            // RIFF identifier
+            writeString(view, 0, 'RIFF');
+            // File length minus RIFF header
+            view.setUint32(4, 36 + dataLength, true);
+            // RIFF type
+            writeString(view, 8, 'WAVE');
+            // Format chunk identifier
+            writeString(view, 12, 'fmt ');
+            // Format chunk length
+            view.setUint32(16, 16, true);
+            // Sample format (raw)
+            view.setUint16(20, 1, true);
+            // Channel count
+            view.setUint16(22, numberOfChannels, true);
+            // Sample rate
+            view.setUint32(24, sampleRate, true);
+            // Byte rate (sample rate * block align)
+            view.setUint32(28, byteRate, true);
+            // Block align (channel count * bytes per sample)
+            view.setUint16(32, blockAlign, true);
+            // Bits per sample
+            view.setUint16(34, bitsPerSample, true);
+            // Data chunk identifier
+            writeString(view, 36, 'data');
+            // Data chunk length
+            view.setUint32(40, dataLength, true);
+
+            return buffer;
+        }
+
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+        function updateButtonStates(isMuted, isDeafened) {
+            const muteBtn = $('#muteBtn');
+            const deafenBtn = $('#deafenBtn');
+
+            if (isMuted) {
+                muteBtn.addClass('active');
+                muteBtn.find('i').removeClass('fa-microphone').addClass('fa-microphone-slash');
+            } else {
+                muteBtn.removeClass('active');
+                muteBtn.find('i').removeClass('fa-microphone-slash').addClass('fa-microphone');
+            }
+
+            if (isDeafened) {
+                deafenBtn.addClass('active');
+                deafenBtn.find('i').removeClass('fa-headphones').addClass('fa-headphones-slash');
+                muteBtn.addClass('active');
+                muteBtn.find('i').removeClass('fa-microphone').addClass('fa-microphone-slash');
+            } else {
+                deafenBtn.removeClass('active');
+                deafenBtn.find('i').removeClass('fa-headphones-slash').addClass('fa-headphones');
+            }
+        }
+
+        function addUserToList(username, channel, isMuted, isDeafened) {
+            $(`.user-item[data-username="${username}"]`).remove();
+
+            const userDiv = $('<div>', {
+                class: 'user-item',
+                'data-username': username
+            }).append(
+                $('<i>', { class: 'fas fa-user' }),
+                $('<span>').text(username),
+                $('<div>', { class: 'user-status' })
+            );
+
+            if (channel) {
+                userDiv.attr('data-channel', channel);
+            }
+
+            const statusDiv = userDiv.find('.user-status');
+            if (isMuted) {
+                statusDiv.append($('<i>', { class: 'fas fa-microphone-slash' }));
+            }
+            if (isDeafened) {
+                statusDiv.append($('<i>', { class: 'fas fa-headphones-slash' }));
+            }
+
+            $('#users').append(userDiv);
+            updateUsersList();
+        }
+
+        // Add this new handler for user state changes
+        hub.client.userStateChanged = function (user) {
+            if (user.username === username) {
+                updateButtonStates(user.isMuted, user.isDeafened);
+            }
+            addUserToList(user.username, user.channel, user.isMuted, user.isDeafened);
+        };
+
+        // Update your existing click handlers
+        $('#muteBtn').click(function () {
+            hub.server.toggleMute();
+        });
+
+        $('#deafenBtn').click(function () {
+            hub.server.toggleDeafen();
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin;
 using Owin;
 
 [assembly: OwinStartupAttribute(typeof(QuanLyNhanSu.Startup))]
@@ -10,6 +11,8 @@ namespace QuanLyNhanSu
         {
             ConfigureAuth(app);
             app.MapSignalR();
+            GlobalHost.Configuration.MaxIncomingWebSocketMessageSize = null; // For large audio packets
+
         }
     }
 }

@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Voice Chat Login";
+}
+
+<div class="login-container">
+    @using (Html.BeginForm("Chat", "VoiceChannel", FormMethod.Get))
+    {
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" required class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Join Chat</button>
+    }
+</div>

@@ -108,7 +108,7 @@
                                 @string.Format("{0:#,#}", @item.ThueThuNhap).Replace(",", ",")
                             </td>
                             <td>
-                                @{ var tienthuong = db.KhenThuongs.Where(k => k.MaNhanVien == item.MaNhanVien).FirstOrDefault();
+                                @{ var tienthuong = db.KhenThuongs.Where(k => k.MaNhanVien == item.MaNhanVien && k.TrangThai == false).FirstOrDefault();
                                     if (tienthuong != null)
                                     {
                                         tienthuongne = string.Format("{0:#,#}", @tienthuong.TienThuong).Replace(",", ",") + " VND";
@@ -120,7 +120,7 @@
                                 } @tienthuongne
                             </td>
                             <td>
-                                @{ var tienphat = db.KyLuats.Where(k => k.MaNhanVien == item.MaNhanVien).FirstOrDefault();
+                                @{ var tienphat = db.KyLuats.Where(k => k.MaNhanVien == item.MaNhanVien && k.TrangThai == false).FirstOrDefault();
                                     if (tienphat != null)
                                     {
                                         tienphatne = string.Format("{0:#,#}", @tienphat.TienKyLuat).Replace(",", ",") + " VND";

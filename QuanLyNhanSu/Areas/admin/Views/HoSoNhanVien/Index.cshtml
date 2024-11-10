@@ -28,13 +28,16 @@
 <div>
     <div style="padding:10px">
         @* <a class="btn btn-primary" href="@Url.Action("ThemUser", "QuanLyUser")">
-                Thêm nhân viên
-            </a>
+            Thêm nhân viên
+        </a>
 
-            <a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
-                Xuất danh sách nhân viên
-            </a>
+        <a class="btn btn-primary " href="@Url.Action("XuatFileExel", "QuanLyUser")">
+            Xuất danh sách nhân viên
+        </a>
         *@
+        <a class="btn btn-success" href="@Url.Action("XuatTatCaFile", "HoSoNhanVien")">
+            <i class="fa fa-address-book"></i> Xuất tất cả hồ sơ
+        </a>
     </div>
 </div>
 
@@ -118,6 +121,9 @@
                         <td>
                             <a class="btn btn-primary" href="@Url.Action("Detail", "HoSoNhanVien", new { id = item.MaNhanVien})">
                                 <i class="fa fa-address-book"></i> Chi tiết hồ sơ
+                            </a>
+                            <a class="btn btn-success" href="@Url.Action("XuatFile", "HoSoNhanVien", new { id = item.MaNhanVien})">
+                                <i class="fa fa-address-book"></i> Xuất hồ sơ
                             </a>
                             <a class="btn btn-danger" href="@Url.Action("Delete", "HopDong", new { id = item.MaHopDong })">
                                 <i class="fa fa-trash-o"></i> Hủy hợp đồng

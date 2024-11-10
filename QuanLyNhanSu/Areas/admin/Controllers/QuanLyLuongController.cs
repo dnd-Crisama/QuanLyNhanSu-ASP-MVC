@@ -1,4 +1,5 @@
-﻿using QuanLyNhanSu.Models;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using QuanLyNhanSu.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -249,58 +250,65 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         }
         public ActionResult XuatFileLuong(String id)
         {
-            //var l = db.ChiTietLuongs.Where(n => n.MaChiTietBangLuong == id).ToList();
             var ds = db.ChiTietLuongs.ToList();
-            //===================================================
+
             DataTable dt = new DataTable();
-            //Add Datacolumn
-            DataColumn workCol = dt.Columns.Add("Mã nhân viên", typeof(String));
+            dt.Columns.Add("Mã nhân viên", typeof(String));
+            dt.Columns.Add("Mã chi tiết lương", typeof(String));
+            dt.Columns.Add("Tên nhân viên", typeof(String));
             dt.Columns.Add("Lương cơ bản", typeof(String));
             dt.Columns.Add("BHXH", typeof(String));
             dt.Columns.Add("Phụ cấp", typeof(String));
             dt.Columns.Add("Thuế thu nhập", typeof(String));
+            dt.Columns.Add("Ngày công", typeof(String));
             dt.Columns.Add("Ngày nhận lương", typeof(String));
             dt.Columns.Add("Thực lãnh", typeof(String));
 
-            //Add in the datarow
-
-
             foreach (var item in ds)
             {
+                var hoten = db.NhanViens.SingleOrDefault(x => x.MaNhanVien == item.MaNhanVien)?.HoTen;
                 DataRow newRow = dt.NewRow();
+                var ngaycong = db.BangChamCongs.Where(x => x.MaNhanVien == item.MaNhanVien && x.NgayChamCong.Value.Month == item.NgayNhanLuong.Month && x.NgayChamCong.Value.Year == item.NgayNhanLuong.Year).Count();
                 newRow["Mã nhân viên"] = item.MaNhanVien;
+                newRow["Mã chi tiết lương"] = item.MaChiTietBangLuong;
+                newRow["Tên nhân viên"] = hoten;
                 newRow["Lương cơ bản"] = item.LuongCoBan;
                 newRow["BHXH"] = item.BHXH;
                 newRow["Phụ cấp"] = item.PhuCap;
                 newRow["Thuế thu nhập"] = item.ThueThuNhap;
+                newRow["Ngày công"] = ngaycong;
                 newRow["Ngày nhận lương"] = item.NgayNhanLuong;
                 newRow["Thực lãnh"] = item.TongTienLuong;
-
 
                 dt.Rows.Add(newRow);
             }
 
-            //====================================================
-            var gv = new GridView();
-            //gv.DataSource = ds;
-            gv.DataSource = dt;
+            var gv = new GridView
+            {
+                DataSource = dt
+            };
             gv.DataBind();
+
             Response.ClearContent();
             Response.Buffer = true;
 
+            // Add encoding to handle Vietnamese characters
             Response.AddHeader("content-disposition", "attachment; filename=danh-sach-luong.xls");
-            Response.ContentType = "application/ms-excel";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            Response.Charset = "UTF-8";
 
-            Response.Charset = "";
             StringWriter objStringWriter = new StringWriter();
             HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
 
             gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write("\uFEFF"); // Add BOM for UTF-8
             Response.Output.Write(objStringWriter.ToString());
             Response.Flush();
             Response.End();
             return Redirect("/admin/QuanLyLuong");
         }
+
 
 
         public ActionResult QuaTrinhTangLuong(String id)

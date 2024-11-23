@@ -133,7 +133,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                     .Select(x => x.TienKyLuat)
                     .FirstOrDefault() ?? 0;
 
-                var ngaycong = (db.BangChamCongs.Where(x => x.MaNhanVien == ctl.MaNhanVien && x.NgayChamCong.Value.Month == now.Month && x.NgayChamCong.Value.Year == now.Year).Count()) ;
+                var ngaycong = (db.BangChamCongs.Where(x => x.MaNhanVien == ct.MaNhanVien && x.NgayChamCong.Value.Month == now.Month && x.NgayChamCong.Value.Year == now.Year).Count()) ;
 
                 var luongChamCong = ct.LuongCoBan / 25 * ngaycong;
 

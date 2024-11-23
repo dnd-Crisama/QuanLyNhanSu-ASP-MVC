@@ -13,7 +13,7 @@ namespace QuanLyNhanSu.Controllers
         public ActionResult Index()
         {
             var id = Session["MaNhanVien"] as string;
-            var chitiet = db.ChiTietLuongs.Where(n => n.MaNhanVien == id).ToList();
+            var chitiet = db.ChiTietLuongs.Where(n => n.MaNhanVien == id).OrderByDescending(n=>n.NgayNhanLuong.Month).ToList();
             return View(chitiet);
         }
         public ActionResult FooterPartial()

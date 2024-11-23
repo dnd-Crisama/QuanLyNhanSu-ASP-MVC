@@ -2,8 +2,10 @@
 
 @{
     ViewBag.Title = "Chi tiết lương";
+    QuanLyNhanSu.Models.QuanLyNhanSuEntities db = new QuanLyNhanSu.Models.QuanLyNhanSuEntities();
 }
-<div class="content-wrapper">
+
+<div class="content-wrapper" style="min-height:50vh">
     <table class="table table-bordered table-striped table-hover">
         <thead>
             <tr class="success">
@@ -34,6 +36,9 @@
                     <th>
                         Tiền phạt
                     </th>
+                <th>
+                    số ngày công
+                </th>
                 <th>
                     Ngày nhận lương
                 </th>
@@ -76,13 +81,19 @@
 
                     </td>
                     <td>
-                            @String.Format("{0:#,#}", @item.TienThuong).Replace(",", ",")
+                        @String.Format("{0:#,#}", @item.TienThuong).Replace(",", ",")
 
-                        </td>
-                        <td>
-                            @String.Format("{0:#,#}", @item.TienPhat).Replace(",", ",")
+                    </td>
+                    <td>
+                        @String.Format("{0:#,#}", @item.TienPhat).Replace(",", ",")
 
-                        </td>
+                    </td>
+                    
+                    <td>
+                        @db.BangChamCongs.Where(x => x.MaNhanVien == item.MaNhanVien && x.NgayChamCong.Value.Month == item.NgayNhanLuong.Month).Count()
+
+                    </td>
+                    
                     <td>
                         @String.Format("{0:dd/MM/yyyy}", @item.NgayNhanLuong)
 
